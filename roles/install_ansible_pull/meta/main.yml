@@ -1,0 +1,6 @@
+---
+
+# Ensure ansible & dependencies are pre-installed
+
+dependencies:
+  - { role: install_ansible }
