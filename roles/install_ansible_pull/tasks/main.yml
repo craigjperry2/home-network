@@ -34,3 +34,11 @@
     create: yes
     regexp: '^ansible'
     line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+
+- name: Install ansible pull-mode crontab entry
+  cron:
+    name: "ansible pull"
+    state: present
+    user: ansible
+    special_time: hourly
+    job: "ansible-pull -U https://github.com/craigjperry2/home-network -i hosts > $HOME/ansible-pull.$$.cron.log 2>&1"
