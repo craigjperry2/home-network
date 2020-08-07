@@ -20,16 +20,16 @@ DEST=$2
 
 # 10 day's worth of daily snapshots
 
-echo rm -rf $DEST/daily.9
+rm -rf $DEST/daily.9
 
-echo mv $DEST/daily.8 $DEST/daily.9
-echo mv $DEST/daily.7 $DEST/daily.8
-echo mv $DEST/daily.6 $DEST/daily.7
-echo mv $DEST/daily.5 $DEST/daily.6
-echo mv $DEST/daily.4 $DEST/daily.5
-echo mv $DEST/daily.3 $DEST/daily.4
-echo mv $DEST/daily.2 $DEST/daily.3
-echo mv $DEST/daily.1 $DEST/daily.2
-echo mv $DEST/daily.0 $DEST/daily.1
+mv $DEST/daily.8 $DEST/daily.9
+mv $DEST/daily.7 $DEST/daily.8
+mv $DEST/daily.6 $DEST/daily.7
+mv $DEST/daily.5 $DEST/daily.6
+mv $DEST/daily.4 $DEST/daily.5
+mv $DEST/daily.3 $DEST/daily.4
+mv $DEST/daily.2 $DEST/daily.3
+mv $DEST/daily.1 $DEST/daily.2
+mv $DEST/daily.0 $DEST/daily.1
 
-echo rsync -a --delete --link-dest=../daily.1 $SOURCE/ $DEST/daily.0/
+rsync -a --delete --link-dest=../daily.1 $SOURCE/ $DEST/daily.0/
