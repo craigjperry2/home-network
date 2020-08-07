@@ -1,0 +1,19 @@
+---
+- hosts: all
+  tasks:
+    - group_by: key=user_{{ ansible_user_id }}
+      changed_when: False
+
+# Invoked as root user
+- hosts: user_root
+  gather_facts: no
+  sudo: no
+  roles:
+    - install_ansible_pull
+
+# Invoked as non-root user, requires sudo
+- hosts: "!user_root"
+  gather_facts: no
+  sudo: yes
+  roles:
+    - install_ansible_pull
