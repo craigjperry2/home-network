@@ -1,0 +1,18 @@
+# By location
+
+[onprem]
+nas.home.craigjperry.com
+desktop.home.craigjperry.com
+
+[roaming]
+laptop.home.craigjperry.com
+
+
+# By capability
+
+[graphical]
+desktop.home.craigjperry.com
+laptop.home.craigjperry.com
+
+[headless]
+nas.home.craigjperry.com
