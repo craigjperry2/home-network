@@ -1,0 +1,26 @@
+---
+
+# Preserve snapshots of the NAS share dir
+
+- name: Install snapshot script
+  copy:
+    src: snapshot.sh
+    dest: /usr/local/bin/snapshot.sh
+    owner: root
+    group: root
+    mode: a=rx
+
+- name: Ensure snapshot dir exists
+  file:
+    path: "{{ dest_dir }}"
+    state: directory
+    mode: '0700'
+
+- name: Install snapshot cron
+  cron:
+    name: "snapshots"
+    state: present
+    user: root
+    cron_file: snapshots 
+    special_time: hourly
+    job: "/usr/local/bin/snapshot.sh {{ source_dir }} {{ dest_dir }} > $HOME/snapshot.$$.cron.log"

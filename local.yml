@@ -3,3 +3,4 @@
   gather_facts: no
   roles:
     - { role: install_ansible_pull, become: yes }
+    - { role: snapshots, become: yes }
