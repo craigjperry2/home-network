@@ -1,4 +1,5 @@
 ---
 
+name: ansible
 source_dir: /home/ansible
 dest_dir: /home/snapshots
