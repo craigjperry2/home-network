@@ -4,5 +4,6 @@
   roles:
     - { role: install_ansible_pull, become: yes }
     - { role: snapshots, become: yes, name: ansible, source_dir: /home/ansible, dest_dir: /home/snapshots }
+    - { role: snapshots, become: yes, name: plex, source_dir: /home/plex, dest_dir: /home/snapshots2 }
     - { role: podman, become: yes }
 
