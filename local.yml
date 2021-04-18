@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: no
   vars:
-    snapshot-dirs:
+    snapshots:
       - name: ansible
         source_dir: /home/ansible
         dest_dir: /home/snapshots
