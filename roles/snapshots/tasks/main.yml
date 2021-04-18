@@ -18,10 +18,11 @@
 
 - name: Install snapshot cron
   cron:
-    name: "snapshots-{{ name }}"
+    name: "snapshots-{{ item.name }}"
     state: present
     user: root
-    cron_file: snapshots-{{ name }}
+    cron_file: snapshots-{{ item.name }}
     special_time: daily
-    job: "/usr/local/bin/snapshot.sh {{ source_dir }} {{ dest_dir }} > $HOME/logs/snapshot-{{ name }}.$$.cron.log"
+    job: "/usr/local/bin/snapshot.sh {{ item.source_dir }} {{ item.dest_dir }} > $HOME/logs/snapshot-{{ item.name }}.$$.cron.log"
+  loop: "{{ snapshot-dirs }}"
 
