@@ -22,5 +22,6 @@
     state: present
     user: root
     cron_file: snapshots 
-    special_time: hourly
-    job: "/usr/local/bin/snapshot.sh {{ source_dir }} {{ dest_dir }} > $HOME/snapshot.$$.cron.log"
+    special_time: daily
+    job: "/usr/local/bin/snapshot.sh {{ source_dir }} {{ dest_dir }} > $HOME/logs/snapshot.$$.cron.log"
+
