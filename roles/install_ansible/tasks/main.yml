@@ -1,10 +1,13 @@
 ---
 # Install ansible and dependencies
 
-- name: Install ansible and dependencies
-  dnf:
-    state: present
+- name: Install ansible and dependencies (FreeBSD)
+  community.general.pkgng:
     pkg: "{{ item }}"
+    state: present
   loop:
+    - sudo
     - git
-    - ansible
+    - python{{ freebsd_python_version }}
+    - py{{ freebsd_python_version }}-ansible-{{ freebsd_ansible_version }}
+

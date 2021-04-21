@@ -1,16 +1,4 @@
 ---
-- hosts: localhost
-  gather_facts: no
-  vars:
-    snapshots:
-      - name: ansible
-        source_dir: /home/ansible
-        dest_dir: /home/snapshots
-      - name: plex
-        source_dir: /home/plex
-        dest_dir: /home/snapshots2
-  roles:
-    - { role: install_ansible_pull, become: yes }
-    - { role: snapshots, become: yes }
-    - { role: podman, become: yes }
+
+- import_playbook: bootstrap.yml
 
