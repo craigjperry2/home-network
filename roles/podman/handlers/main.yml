@@ -1,3 +1,0 @@
----
-- name: podman migrate
-  command: podman system migrate
