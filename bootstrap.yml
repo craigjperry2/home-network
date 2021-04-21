@@ -22,14 +22,12 @@
 
 # root user, create ansible user and install ansible-pull cronjob.
 - hosts: user_root
-  gather_facts: no
   become: no
   roles:
     - install_ansible_pull
 
 # Non-root, use sudo to create or maintain ansible user & cronjob.
 - hosts: '!user_root'
-  gather_facts: no
   become: yes
   roles:
     - install_ansible_pull
