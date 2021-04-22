@@ -1,0 +1,26 @@
+---
+
+- name: Ensure craig account is present
+  ansible.builtin.user:
+    name: craig
+    comment: Craig Perry
+    shell: /usr/local/bin/zsh
+    group: craig
+    groups: wheel
+    append: yes
+    generate_ssh_key: yes
+
+- name: Add Public SSH Keys from Github             
+  authorized_key:                                   
+    user: craig                                   
+    state: present                                  
+    key: "https://github.com/craigjperry2.keys"
+
+- name: Allow "wheel" group to have passwordless sudo
+  lineinfile:
+    dest: /usr/local/etc/sudoers
+    state: present
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -c"
+

@@ -2,3 +2,8 @@
 
 - import_playbook: bootstrap.yml
 
+- hosts: 'all:!localhost'
+  become: yes
+  roles:
+    - users
+

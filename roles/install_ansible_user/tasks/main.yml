@@ -18,6 +18,7 @@
     path: /usr/local/etc/sudoers.d/ansible
     state: present
     create: yes
+    mode: 0440
     regexp: '^#'
     line: '## Managed by Ansible, Manual Changes Will Be Lost!'
 
