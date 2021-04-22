@@ -10,13 +10,5 @@
   command: ansible-galaxy collection install community.general
   when: not community_general_collection.stat.exists
 
-- name: Install ansible and dependencies (FreeBSD)
-  community.general.pkgng:
-    pkg: "{{ item }}"
-    state: present
-  loop:
-    - sudo
-    - git
-    - python{{ freebsd_python_version }}
-    - py{{ freebsd_python_version }}-ansible-{{ freebsd_ansible_version }}
+- import_tasks: freebsd.yml
 
