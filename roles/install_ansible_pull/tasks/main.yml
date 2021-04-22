@@ -1,38 +1,5 @@
 ---
 
-# Install (or maintain) ansible pull mode
-
-- name: Create ansible user
-  ansible.builtin.user:
-    name: ansible
-    system: yes
-    generate_ssh_key: yes
-    comment: 'Ansible Configuration Management'
-
-- name: Add warning comment to ansible sudoers file
-  ansible.builtin.lineinfile:
-    path: /usr/local/etc/sudoers.d/ansible
-    state: present
-    create: yes
-    regexp: '^#'
-    line: '## Managed by Ansible, Manual Changes Will Be Lost!'
-
-- name: Disable requiretty restriction on ansible user
-  ansible.builtin.lineinfile:
-    path: /usr/local/etc/sudoers.d/ansible
-    state: present
-    create: yes
-    regexp: '^Defaults'
-    line: 'Defaults: ansible !requiretty'
-
-- name: Allow ansible user full sudo privs
-  ansible.builtin.lineinfile:
-    path: /usr/local/etc/sudoers.d/ansible
-    state: present
-    create: yes
-    regexp: '^ansible'
-    line: 'ansible ALL=(ALL) NOPASSWD: ALL'
-
 - name: Ensure logs dir is present
   ansible.builtin.file:
     path: /home/ansible/logs

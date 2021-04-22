@@ -20,32 +20,26 @@
     - group_by: key=user_{{ ansible_user_id }}
       changed_when: False
 
-# root user, create ansible user and install ansible-pull cronjob.
+# If running as root user
 - hosts: user_root
+  gather_facts: no
   become: no
   roles:
-    - install_ansible_pull
-    - install_ansible_galaxy
     - install_ansible
+    - install_ansible_user
 
-# Non-root, create ansible user
+# If running as non-root user
 - hosts: '!user_root'
+  gather_facts: no
   become: yes
-  become_user: root
-  roles:
-    - install_ansible_pull
-
-# Non-root, install dependency galaxy modules in ansible account
-- hosts: '!user_root'
-  become: yes
-  become_user: ansible
-  roles:
-    - install_ansible_galaxy
-
-# Non-root, install ansible packages
-- hosts: '!user_root'
-  become: yes
-  become_user: root
   roles:
     - install_ansible
+    - install_ansible_user
+
+- hosts: all
+  gather_facts: yes
+  remote_user: ansible
+  roles:
+    - install_ansible_galaxy_deps
+    - install_ansible_pull
 
