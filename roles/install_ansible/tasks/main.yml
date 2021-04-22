@@ -11,4 +11,5 @@
   when: not community_general_collection.stat.exists
 
 - import_tasks: freebsd.yml
+  when: community_general_collection.stat.exists
 
