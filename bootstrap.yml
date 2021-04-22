@@ -24,18 +24,28 @@
 - hosts: user_root
   become: no
   roles:
-    - install_ansible_galaxy
     - install_ansible_pull
-
-# Non-root, use sudo to create or maintain ansible user & cronjob.
-- hosts: '!user_root'
-  become: no
-  roles:
     - install_ansible_galaxy
+    - install_ansible
 
-# Non-root, use sudo to create or maintain ansible user & cronjob.
+# Non-root, create ansible user
 - hosts: '!user_root'
   become: yes
+  become_user: root
   roles:
     - install_ansible_pull
+
+# Non-root, install dependency galaxy modules in ansible account
+- hosts: '!user_root'
+  become: yes
+  become_user: ansible
+  roles:
+    - install_ansible_galaxy
+
+# Non-root, install ansible packages
+- hosts: '!user_root'
+  become: yes
+  become_user: root
+  roles:
+    - install_ansible
 
