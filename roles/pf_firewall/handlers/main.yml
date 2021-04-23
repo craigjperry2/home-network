@@ -1,0 +1,12 @@
+---
+
+- name: Restart net interface
+  service:
+    name: netif
+    state: restarted
+
+- name: Restart routing
+  service:
+    name: routing
+    state: restarted
+
