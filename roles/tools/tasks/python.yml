@@ -6,4 +6,6 @@
   loop:
     - pipx
     - poetry
+  tags:
+  - pip
 
