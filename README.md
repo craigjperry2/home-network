@@ -43,4 +43,7 @@ Some notes to remind me of the rare occassions i treated a box as a pet.
     * python3.7 -m ensurepip
     * Add ssh public key to craig's auth keys
   * Bootstrap to Ansible control from remote node over ssh as craig
+  * Other tweaks
+    * Install rust toolchain https://rustup.rs/
+    * cargo install fd-find ripgrep xsv
 
