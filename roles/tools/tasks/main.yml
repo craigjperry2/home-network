@@ -15,3 +15,15 @@
     # Needed for shell history etc.
     - fzf
 
+    # General comfort
+    - htop
+    - tmux
+    - lsof
+    - nmap
+
+    # js
+    - node
+    - npm
+
+- import_tasks: python.yml
+

@@ -1,0 +1,9 @@
+---
+
+- name: Pip dependencies
+  pip:
+    name={{ item }}
+  loop:
+    - pipx
+    - poetry
+
