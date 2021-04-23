@@ -11,5 +11,5 @@
 - hosts: firewall
   become: yes
   roles:
-    - pf_firewall
+    - network
 

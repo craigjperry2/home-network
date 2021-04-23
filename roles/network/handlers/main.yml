@@ -10,3 +10,8 @@
     name: routing
     state: restarted
 
+- name: Start dnsmasq
+  service:
+    name: dnsmasq
+    state: started
+
