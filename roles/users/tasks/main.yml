@@ -24,3 +24,57 @@
     line: "%wheel ALL=(ALL) NOPASSWD: ALL"
     validate: "visudo -c"
 
+- name: Checkout my dotfiles
+  ansible.builtin.git:
+    repo: https://github.com/craigjperry2/dotfiles.git
+    dest: /home/craig/Code/github.com/craigjperry2/dotfiles
+  notify:
+  - Fix Code Permissions
+
+- name: Checkout p10k
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /home/craig/Code/github.com/romkatv/powerlevel10k
+  notify:
+  - Fix Code Permissions
+
+- name: Link gitconfig
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/gitconfig
+    dest: /home/craig/.gitconfig
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link zshrc
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/zshrc
+    dest: /home/craig/.zshrc
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link ssh_config
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/ssh_config
+    dest: /home/craig/.ssh_config
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link tmux.conf
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.conf
+    dest: /home/craig/.tmux.conf
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link neovim init.vim
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/init.vim
+    dest: /home/craig/.config/nvim/init.vim
+    state: link
+    owner: craig
+    group: craig
+

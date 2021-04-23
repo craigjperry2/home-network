@@ -1,0 +1,9 @@
+---
+
+- name: Fix Code Permissions
+  file:
+    path: /home/craig/Code
+    owner: craig
+    group: craig
+    recurse: yes
+
