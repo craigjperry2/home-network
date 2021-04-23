@@ -25,11 +25,11 @@ Some notes to remind me of the rare occassions i treated a box as a pet.
       * Guided ZFS on root: select all 6 drives, raidz2 scheme, 4G swap per drive, 24G(!) total swap
       * Default 3 partition scheme on all HDDs:
         * p1: 512k, stage 1 boot loader
-	* p2: 4G, swap (choose non-mirrored to permit crashdumps)
-	* p3: 2.7-3.6Tb depending on disk, ZFS
+        * p2: 4G, swap (choose non-mirrored to permit crashdumps)
+        * p3: 2.7-3.6Tb depending on disk, ZFS
       * Services
         * sshd
-	* ntpdate (on boot)
+        * ntpdate (on boot)
       * Create "craig" user, additionally a "wheel" member
       * Selective hardening:
         * Clear /tmp on boot
