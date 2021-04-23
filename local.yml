@@ -12,4 +12,5 @@
   become: yes
   roles:
     - network
+    - dns
 

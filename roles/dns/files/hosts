@@ -1,0 +1,6 @@
+::1                     localhost localhost.home.craigjperry.com
+127.0.0.1               localhost localhost.home.craigjperry.com
+
+192.168.1.254           router.home.craigjperry.com	router
+192.168.1.253           nas.home.craigjperry.com	nas
+
