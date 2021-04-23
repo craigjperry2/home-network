@@ -6,4 +6,5 @@
   become: yes
   roles:
     - users
+    - tools
 
