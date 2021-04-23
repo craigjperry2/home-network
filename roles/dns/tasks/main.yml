@@ -11,6 +11,16 @@
     pkg: dnsmasq
     state: present
 
+- name: Configure Ad blocklists
+  copy:
+    src: dnsmasq.conf.d
+    dest: /usr/local/etc
+
+- name: Configure Ad host lists
+  copy:
+    src: hosts.d
+    dest: /usr/local/etc
+
 - name: Configure Local DNS Server
   copy:
     src: dnsmasq.conf
