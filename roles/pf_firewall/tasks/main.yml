@@ -1,7 +1,5 @@
 ---
 
-# TODO: vbotka.freebsd_pf
-
 - name: Configure static IP
   ansible.builtin.lineinfile:
     path: /etc/rc.conf
@@ -19,4 +17,24 @@
     line: "defaultrouter=\"192.168.1.254\""
   notify:
     - Restart routing
+
+- name: Add warning comment to resolv.conf
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    state: present
+    insertbefore: BOF
+    regexp: '^#'
+    line: '# Managed by Ansible, Manual Changes Will Be Lost!'
+
+- name: Configure DNS Search Domain
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    regexp: "^search"
+    line: "search home.craigjperry.com"
+
+- name: Configure DNS Resolver
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    regexp: "^nameserver"
+    line: "nameserver 1.1.1.1"
 
