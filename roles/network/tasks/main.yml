@@ -1,11 +1,20 @@
 ---
 
-- name: Configure static IP
+- name: Configure static IP on private side
   ansible.builtin.lineinfile:
     path: /etc/rc.conf
     backup: yes
     regexp: "^ifconfig_msk0="
-    line: "ifconfig_msk0=\"inet 192.168.1.253 netmask 255.255.255.0\""
+    line: "ifconfig_msk0=\"inet 192.168.0.254 netmask 255.255.255.0\""
+  notify:
+    - Restart net interface
+
+- name: Configure DHCP on public side
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    backup: yes
+    regexp: "^ifconfig_msk1="
+    line: "ifconfig_msk1=\"DHCP\""
   notify:
     - Restart net interface
 
@@ -15,6 +24,15 @@
     backup: yes
     regexp: "^defaultrouter"
     line: "defaultrouter=\"192.168.1.254\""
+  notify:
+    - Restart routing
+
+- name: Configure IPv4 Forwarding
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    backup: yes
+    regexp: "^gateway_enable"
+    line: "gateway_enable=\"YES\""
   notify:
     - Restart routing
 
