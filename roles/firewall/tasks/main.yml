@@ -1,0 +1,32 @@
+---
+
+- name: Configure PF Firewall
+  copy:
+    src: pf.conf
+    dest: /etc/pf.conf
+    owner: root
+    group: wheel
+    mode: 0444
+  notify:
+    - Restart pf
+
+- name: Enable PF Firewall
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^pf_enable"
+    line: "pf_enable=\"YES\""
+  notify:
+    - Start pf
+
+- name: Enable PFLog
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^pflog_enable"
+    line: "pflog_enable=\"YES\""
+  notify:
+    - Start pflog
+

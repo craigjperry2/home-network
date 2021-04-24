@@ -1,0 +1,17 @@
+---
+
+- name: Start pf
+  service:
+    name: pf
+    state: started
+
+- name: Restart pf
+  service:
+    name: pf
+    state: restarted
+
+- name: Start pflog
+  service:
+    name: pflog
+    state: started
+
