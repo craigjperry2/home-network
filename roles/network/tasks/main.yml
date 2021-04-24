@@ -1,24 +1,26 @@
 ---
 
-- name: Configure static IP on private side
-  ansible.builtin.lineinfile:
+- name: Configure static IP on private interface
+  lineinfile:
     path: /etc/rc.conf
     backup: yes
     regexp: "^ifconfig_msk0="
     line: "ifconfig_msk0=\"inet 192.168.0.254 netmask 255.255.255.0\""
+    validate: "sysrc -f %s -c ifconfig_msk0"
   notify:
     - Restart net interface
 
-- name: Configure DHCP on public side
-  ansible.builtin.lineinfile:
+- name: Configure DHCP on public interface
+  lineinfile:
     path: /etc/rc.conf
     backup: yes
     regexp: "^ifconfig_msk1="
     line: "ifconfig_msk1=\"DHCP\""
+    validate: "sysrc -f %s -c ifconfig_msk1"
   notify:
     - Restart net interface
 
-- name: Configure DHCP Client
+- name: Configure DHCP client to preserve ns & search in resolv.conf
   copy:
     src: dhclient.conf
     dest: /etc/dhclient.conf
@@ -26,40 +28,22 @@
     - Restart dhclient
 
 - name: Configure default route
-  ansible.builtin.lineinfile:
+  lineinfile:
     path: /etc/rc.conf
     backup: yes
     regexp: "^defaultrouter"
     line: "defaultrouter=\"192.168.1.254\""
+    validate: "sysrc -f %s -c defaultrouter"
   notify:
     - Restart routing
 
 - name: Configure IPv4 Forwarding
-  ansible.builtin.lineinfile:
+  lineinfile:
     path: /etc/rc.conf
     backup: yes
     regexp: "^gateway_enable"
     line: "gateway_enable=\"YES\""
+    validate: "sysrc -f %s -c gateway_enable"
   notify:
     - Restart routing
-
-- name: Add warning comment to resolv.conf
-  ansible.builtin.lineinfile:
-    path: /etc/resolv.conf
-    state: present
-    insertbefore: BOF
-    regexp: '^#'
-    line: '# Managed by Ansible, Manual Changes Will Be Lost!'
-
-- name: Configure DNS Search Domain
-  ansible.builtin.lineinfile:
-    path: /etc/resolv.conf
-    regexp: "^search"
-    line: "search home.craigjperry.com"
-
-- name: Configure DNS Resolver
-  ansible.builtin.lineinfile:
-    path: /etc/resolv.conf
-    regexp: "^nameserver"
-    line: "nameserver 1.1.1.1"
 
