@@ -1,0 +1,4 @@
+---
+
+dnsmasq_conf_root: /usr/local/etc
+

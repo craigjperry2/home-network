@@ -7,26 +7,26 @@
     backup: yes
 
 - name: Install dnsmasq
-  community.general.pkgng:
+  pkgng:
     pkg: dnsmasq
     state: present
 
 - name: Configure Ad blocklists
   copy:
     src: dnsmasq.conf.d
-    dest: /usr/local/etc
+    dest: "{{ dnsmasq_conf_root }}"
 
 - name: Configure Ad host lists
   copy:
     src: hosts.d
-    dest: /usr/local/etc
+    dest: "{{ dnsmasq_conf_root }}"
 
 - name: Configure Local DNS Server
   copy:
     src: dnsmasq.conf
-    dest: /usr/local/etc/dnsmasq.conf
+    dest: "{{ dnsmasq_conf_root }}/dnsmasq.conf"
     backup: yes
-    # TODO: Unbelievably, ansible requires %s in the validate command (?!) AND dnsmasq rejects anything beyond --test as "junk found in command line"!
+    # TODO: Unbelievably, ansible REQUIRES %s in the validate command (?!) AND dnsmasq rejects anything beyond --test as "junk found in command line"!
     # validate: "dnsmasq --test  # %s"
   notify:
     - Restart dnsmasq
@@ -38,6 +38,7 @@
     state: present
     regexp: "^dnsmasq_enable"
     line: "dnsmasq_enable=\"YES\""
+    validate: "sysrc -f %s -c dnsmasq_enable"
   notify:
     - Start dnsmasq
 
