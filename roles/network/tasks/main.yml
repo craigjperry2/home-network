@@ -18,6 +18,13 @@
   notify:
     - Restart net interface
 
+- name: Configure DHCP Client
+  copy:
+    src: dhclient.conf
+    dest: /etc/dhclient.conf
+  notify:
+    - Restart dhclient
+
 - name: Configure default route
   ansible.builtin.lineinfile:
     path: /etc/rc.conf

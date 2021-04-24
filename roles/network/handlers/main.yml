@@ -10,3 +10,9 @@
     name: routing
     state: restarted
 
+- name: Restart dhclient
+  service:
+    name: dhclient
+    state: restarted
+    args: msk1
+
