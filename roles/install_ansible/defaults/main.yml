@@ -1,5 +1,4 @@
 ---
 
 freebsd_python_version: "37"
-freebsd_ansible_version: "2.9.7"
 
