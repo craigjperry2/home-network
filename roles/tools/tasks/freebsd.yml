@@ -1,0 +1,29 @@
+---
+
+- name: Install build tools
+  pkgng:
+    pkg: "{{ item }}"
+    state: present
+  loop:
+
+    # Needed to build https://github.com/jarun/nnn
+    #   gmake O_NERD=1 CPPFLAGS="-I/usr/local/include -DNERD" LDFLAGS=-L/usr/local/lib
+    - gmake
+    - readline
+    - pkgconf
+
+    # Needed for shell history etc.
+    - fzf
+
+    # General comfort
+    - htop
+    - tmux
+    - lsof
+    - nmap
+
+    # js
+    - node
+    - npm
+
+- import_tasks: python-common.yml
+
