@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure craig account is present
-  ansible.builtin.user:
+  user:
     name: craig
     comment: Craig Perry
     shell: /usr/local/bin/zsh
@@ -22,17 +22,17 @@
     state: present
     regexp: "^%wheel"
     line: "%wheel ALL=(ALL) NOPASSWD: ALL"
-    validate: "visudo -c"
+    validate: "visudo -f %s -c"
 
 - name: Checkout my dotfiles
-  ansible.builtin.git:
+  git:
     repo: https://github.com/craigjperry2/dotfiles.git
     dest: /home/craig/Code/github.com/craigjperry2/dotfiles
   notify:
   - Fix Code Permissions
 
 - name: Checkout p10k
-  ansible.builtin.git:
+  git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: /home/craig/Code/github.com/romkatv/powerlevel10k
   notify:
