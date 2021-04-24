@@ -7,6 +7,7 @@
     owner: root
     group: wheel
     mode: 0444
+    validate: "pfctl -n -f %s"
   notify:
     - Restart pf
 
@@ -17,6 +18,7 @@
     state: present
     regexp: "^pf_enable"
     line: "pf_enable=\"YES\""
+    validate: "sysrc -f %s -c pf_enable"
   notify:
     - Start pf
 
@@ -27,6 +29,7 @@
     state: present
     regexp: "^pflog_enable"
     line: "pflog_enable=\"YES\""
+    validate: "sysrc -f %s -c pflog_enable"
   notify:
     - Start pflog
 
