@@ -7,7 +7,7 @@
     owner: root
     group: wheel
     mode: 0444
-    validate: "pfctl -n -f %s"
+    validate: "/sbin/pfctl -n -f %s"
   notify:
     - Restart pf
 
