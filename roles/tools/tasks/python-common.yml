@@ -1,11 +1,22 @@
 ---
 
+# Workaround ansible continually polling pypi on FreeBSD
+
+- name: Check if pipx already installed (workaround)
+  stat:
+    path: /usr/local/lib/python3.7/site-packages/pipx/__init__.py
+  register: pipx_installed
+
+- name: Check if poetry already installed (workaround)
+  stat:
+    path: /usr/local/lib/python3.7/site-packages/poetry/__init__.py
+  register: poetry_installed
+
 - name: Pip dependencies
   pip:
     name={{ item }}
   loop:
     - pipx
     - poetry
-  tags:
-  - pip
+  when: not pipx_installed.stat.exists and not poetry_installed.stat.exists
 
