@@ -4,9 +4,9 @@
   lineinfile:
     path: /etc/rc.conf
     backup: yes
-    regexp: "^ifconfig_msk0="
-    line: "ifconfig_msk0=\"inet 192.168.0.254 netmask 255.255.255.0\""
-    validate: "sysrc -f %s -c ifconfig_msk0"
+    regexp: "^ifconfig_msk1="
+    line: "ifconfig_msk1=\"inet 192.168.0.254 netmask 255.255.255.0\""
+    validate: "sysrc -f %s -c ifconfig_msk1"
   notify:
     - Restart net interface
 
@@ -14,9 +14,9 @@
   lineinfile:
     path: /etc/rc.conf
     backup: yes
-    regexp: "^ifconfig_msk1="
-    line: "ifconfig_msk1=\"DHCP\""
-    validate: "sysrc -f %s -c ifconfig_msk1"
+    regexp: "^ifconfig_msk0="
+    line: "ifconfig_msk0=\"DHCP\""
+    validate: "sysrc -f %s -c ifconfig_msk0"
   notify:
     - Restart net interface
 
