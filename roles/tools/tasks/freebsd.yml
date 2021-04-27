@@ -20,6 +20,7 @@
     - tmux
     - lsof
     - nmap
+    - sqlite3
 
     # js
     - node
