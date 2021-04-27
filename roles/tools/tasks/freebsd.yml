@@ -21,6 +21,7 @@
     - lsof
     - nmap
     - sqlite3
+    - lnav
 
     # js
     - node
