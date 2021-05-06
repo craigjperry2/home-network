@@ -14,5 +14,5 @@
   service:
     name: dhclient
     state: restarted
-    args: msk0
+    args: igb0
 
