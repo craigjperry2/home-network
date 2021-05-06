@@ -9,6 +9,7 @@ account after an unfortunate mistake with 2FA :-)
 1. Install Ansible on the bootstrap host (a WSL2 VM in my case) `pip3 install --user ansible`
 1. Configure the host details in `hosts`
 1. Read the comments in `bootstrap.yml` and decide which strategy you'll run
+  1. E.g. to install on nas i did, as root, ansible-pull -U https://github.com/craigjperry2/home-network -i localhost,  # localhost only matches the bootstrap playbook
 
 # Pets or Cattle
 
@@ -38,12 +39,16 @@ Some notes to remind me of the rare occassions i treated a box as a pet.
     * freebsd-update install
     * pkg update
     * pkg upgrade
-    * pkg install -y sudo neovim zsh zsh-completions git python37 py37-ansible-2.9.7
-    * visudo - enable wheel
+    * pkg install -y sudo neovim zsh zsh-completions git python37 py37-ansible
     * python3.7 -m ensurepip
-    * Add ssh public key to craig's auth keys
-  * Bootstrap to Ansible control from remote node over ssh as craig
-  * Other tweaks
+    * python3.7 -m pip install -U pip
+    * neovim setup:
+      * mkdir -p ~/.config/nvim
+      * sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      * vim +PlugInstall
+    * nnn build & install:
+      * gmake O_NERD=1 CPPFLAGS="-I/usr/local/include -DNERD" LDFLAGS=-L/usr/local/lib
+      * sudo gmake install
     * Install rust toolchain https://rustup.rs/
-    * cargo install fd-find ripgrep xsv
+      * cargo install --locked fd-find ripgrep xsv deno
 
