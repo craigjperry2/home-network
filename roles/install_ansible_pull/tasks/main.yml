@@ -50,5 +50,5 @@
     name: "ansible pull"
     user: ansible
     special_time: hourly
-    job: "ansible-pull -U https://github.com/craigjperry2/home-network -i hosts > $HOME/logs/ansible-pull.$$.cron.log 2>&1"
+    job: "ansible-pull -U https://github.com/craigjperry2/home-network > $HOME/logs/ansible-pull.$$.cron.log 2>&1"
 
