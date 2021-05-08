@@ -12,6 +12,6 @@
   become: yes
   roles:
     - network
-    - dns
+    - dns-dhcp-pxe
     - firewall
 
