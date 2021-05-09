@@ -161,6 +161,13 @@
     owner: nobody
     group: nobody
 
+- name: Install PXELinux - Splashscreen
+  copy:
+    src: background.jpg
+    dest: /var/tftpd/pxelinux.cfg/background.jpg
+    owner: nobody
+    group: nobody
+
 - name: Enable dnsmasq
   lineinfile:
     dest: /etc/rc.conf
