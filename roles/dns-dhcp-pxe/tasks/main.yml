@@ -31,6 +31,136 @@
   notify:
     - Restart dnsmasq
 
+- name: Prepare TFTP Server Dir
+  file:
+    path: /var/tftpd
+    state: directory
+    owner: root
+    group: wheel
+    mode: '0755'
+
+- name: Ensure /usr/local/src dir is present
+  file:
+    path: /usr/local/src
+    state: directory
+    owner: root
+    group: wheel
+    mode: '0755'
+
+- name: Check if PXELinux syslinux.efi already installed
+  stat:
+    path: /var/tftpd/syslinux.efi
+  register: syslinux_installed
+
+- name: Check if PXELinux ldloader.e64 already installed
+  stat:
+    path: /var/tftpd/ldlinux.e64
+  register: ldloader_installed
+
+- name: Check if PXELinux vesamenu already installed
+  stat:
+    path: /var/tftpd/vesamenu.c32
+  register: vesamenu_installed
+
+- name: Check if PXELinux libcom32 already installed
+  stat:
+    path: /var/tftpd/libcom32.c32
+  register: libcom32_installed
+
+- name: Check if PXELinux libutil already installed
+  stat:
+    path: /var/tftpd/libutil.c32
+  register: libutil_installed
+
+- name: Check if PXELinux memdisk already installed
+  stat:
+    path: /var/tftpd/memdisk
+  register: memdisk_installed
+
+- name: Unpack PXELinux
+  unarchive:
+    src: https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.xz
+    remote_src: yes
+    dest: /usr/local/src
+    owner: root
+    group: wheel
+  when:
+    - not syslinux_installed.stat.exists or
+      not ldloader_installed.stat.exists or
+      not vesamenu_installed.stat.exists or
+      not libcom32_installed.stat.exists or
+      not libutil_installed.stat.exists or
+      not memdisk_installed.stat.exists
+
+- name: Install PXELinux - syslinux.efi
+  copy:
+    src: /usr/local/src/syslinux-6.03/efi64/efi/syslinux.efi
+    remote_src: yes
+    dest: /var/tftpd/syslinux.efi
+    owner: nobody
+    group: nobody
+  when: not syslinux_installed.stat.exists
+
+- name: Install PXELinux - ldlinux.e64
+  copy:
+    src: /usr/local/src/syslinux-6.03/efi64/com32/elflink/ldlinux/ldlinux.e64
+    remote_src: yes
+    dest: /var/tftpd/ldlinux.e64
+    owner: nobody
+    group: nobody
+  when: not ldloader_installed.stat.exists
+
+- name: Install PXELinux - vesamenu
+  copy:
+    src: /usr/local/src/syslinux-6.03/efi64/com32/menu/vesamenu.c32
+    remote_src: yes
+    dest: /var/tftpd/vesamenu.c32
+    owner: nobody
+    group: nobody
+  when: not vesamenu_installed.stat.exists
+
+- name: Install PXELinux - libcom32
+  copy:
+    src: /usr/local/src/syslinux-6.03/efi64/com32/lib/libcom32.c32
+    remote_src: yes
+    dest: /var/tftpd/libcom32.c32
+    owner: nobody
+    group: nobody
+  when: not libcom32_installed.stat.exists
+
+- name: Install PXELinux - libutil
+  copy:
+    src: /usr/local/src/syslinux-6.03/efi64/com32/libutil/libutil.c32
+    remote_src: yes
+    dest: /var/tftpd/libutil.c32
+    owner: nobody
+    group: nobody
+  when: not libutil_installed.stat.exists
+
+- name: Install PXELinux - memdisk
+  copy:
+    src: /usr/local/src/syslinux-6.03/bios/memdisk/memdisk
+    remote_src: yes
+    dest: /var/tftpd/memdisk
+    owner: nobody
+    group: nobody
+  when: not memdisk_installed.stat.exists
+
+- name: Prepare PXELinux Config Dir
+  file:
+    path: /var/tftpd/pxelinux.cfg
+    state: directory
+    owner: root
+    group: wheel
+    mode: '0755'
+
+- name: Install PXELinux - Menu
+  copy:
+    src: pxelinux.cfg
+    dest: /var/tftpd/pxelinux.cfg/default
+    owner: nobody
+    group: nobody
+
 - name: Enable dnsmasq
   lineinfile:
     dest: /etc/rc.conf

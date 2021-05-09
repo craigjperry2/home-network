@@ -13,5 +13,6 @@
   roles:
     - network
     - dns-dhcp-pxe
+    - http-server
     - firewall
 

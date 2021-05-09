@@ -1,0 +1,62 @@
+variant: fcos
+version: 1.3.0
+passwd:
+  users:
+    - name: craig
+      groups:
+        - wheel
+        - sudo
+        - docker
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDM9Rft+Op+5VDFBR989z/iY4pr/fVpAbzNmHM3b8badQwDKukcCbYwMWtke4d0/AxeBcK+uoTJHN7ebQewKqm/N7fGpEOrNRBjRLLiOnN6wpUeO06LbEido+lnt3Pf9MHW1W3sorxfpl97CtRuLYtpyBR5i+FowZssyKqAGOntXldEkBB+oK4hQbmVArt76JOIWwNueO9TY3qQGFlKm24qP2JVQN2zFW3pCWJgfeTUITAsEFDg7xhDKWEwN0srf70slc06QvBon4D4afgovkcdFb4vvgw4ucx+6+BnydzLxFa0iEx69aFOnhuMAItFRFxyfRicJYBms2pCUE5Q3lmakr8e6cVz/dxi6a9PDFBkW/n53QhTgzIoKy1z/45ofolzkaeCozMgre/SJNONXHBJwX5yuZjWxkYU0EAOfEDtzBYFVowHMg8UJ3I8QJIiC+cAolmEFhZiAR3nvFEipRqBIZ+EEht53YZdh2cZVyS8r0haq15lDFAGDzFY2w0qO8k=
+        - ssh-rsa AAAB3NzaC1yc2EAAAADAQABAAABgQD4ZmHOMpCTEd9BkgxjFRdynF93hAJzzCXLtIlVLnp+1YAzy1N8xllASb4xADVQ4DIh6ZRHFejbyDDKzYketvcVuQPDULXcYrZPRPf2oiLP1qp0eF8BP1DXs0RfDJ95S4f4UxwdQi74x8rAN+akchEDdkdC9DTXUAkC5ry7vdJkADvXtO/AtlI6Mext998YGW+1nvd4qH3VEiJgXIvOdOHHUcLGOhdP9xMTk0nYBTb4ttRvrW+t9AgGTyOHBRM9KTd6oFKqlbwQVLnSeAOB5ywM2XRSsEVrpYSVJtBwOi9WyOynqAHKmbgCzfGN2mhfQ/bxnOLb4nzqfgERGz1TYAmv1/MBPzxqbb+K7CJyABERiuyLJ1OVX4fG5d5vGa+3pLO8mWtD8bHQDbQGALX6YtJtURsXDIdIB7P/paO3gMlvpHG+0wnuELAdejOujdYlMznzeo7rsTR1L2UPPgWLWLv54IgsvZAiZxqpdo/PAO9xIyAoQe9ohwZ1fc+A+kRcjfE=
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCvrVYKEtdgry5/mIRhn0TBsq/VdyqBcWumyRkwtQFWmseIWqbC7HQDx62Lsg21N2ZouRT+1ZFBufkf8SAXIbJb+61qj9Anne1DiqmQZesCQiMjE5zrMpGSorP+U0D49+wLi2tLAhI5sbAqY0AL94Y017TlAviwYRwk4Ue9vDJUSC/KOcbsw61DQvIfXsc08DIW6zdUs71cbA6Fh8U5tgU4h6Uat729mMCdmRBRAMCEALnfZxAQY/GaTi9kIXBUdUfw1VV0gD/W0K8ihmNfBERwbeEZ2/vmsPCVnBC8TRt4eLigc2Aq3LN+NmCBL5Awaz5ZRG7CYWCZ5Q1X4zTQQZK9
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDB3F+PViWUn4cyM+sVF6F41bmHULDrPPLa/pdJG9kZtdCJwW3MkWS5VtGo5eMyycNlXDoxVEabmKwFqK4NhC3ztjMCxxToG1DJxNL0uFhAOBZsIhq7rycgk+MApwB4RFajpdGsRY9wXqRzV26iIwAT7Rq6ZiDueUSq5CRiBzGsW1Mcj+nyWiU8kAirHkeK+mxXQmfkSPdW7EEmt1qRfV1HdXro0NCGLCFqSH7vx8em+7jzZjR5D4eXHqtd49OattF4Y9IVJO0HfRYE7UELF+V3UAqTn7RlL5LnwGJ4yxuuOIdvDnR2uHsvOq6ubbTdHRhfN8lxe+dCHt1TTZRxuYmjnYD5afnmZUbO6giOHCQuQ6nGtS69ksyv2h8FaXQabn7hKAURyGfKswpGyeUikd39CMtB8OLyDgFvXeDpBTkC6e+pvfNtXu3+BR8TwbUKa1NmPoBOingeYe4lKXENMBwQLRmHFMDHY6oBk3FxvFZwzpzoglo0kEkGwtv/OhfE53U=
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDT4zIEXBfxTG6rQhvG+Lr+Zqj9Ac7QnP0d88ugJbpFdgs2S+G+6fx8SrdsYPKmrgRawytnbYWaWXqqoF9DnURLC8P+i3rxIuguB/YzTNAO+CNol2nciAdU6HgXCTqDMllM3l5bCTSX/8LmyVGQuIlPjaHvecLZwKWFQ9HwuRyZpBwgJNhVl6/+RGHK6OTJQi9j4EWzqmMyscsHVhNozeGCePQ9TqiOcZrLKJY1tSTve/eU5azEpzo2XBw8dKEpP4F9IhLt0xfPLJ8VA6a/7trCjTrwaaekX7DsC9XVocaLxKaYTbTU3eZq3S17emEot9ODHSWVt+G76EWPPQdUs2ufXOAo2o72ym/zGYVp04PfWAb6VZnzNnLaNVELNL1aYS9tni+tTEcoRAhuJEExyKW6bk6CRCb7JxdOwP6M9eGNGGHO8vty1sMh+/FuHZ/DSMSkuT1KPlZ2dDB8NQvgB0CRd5t+tKStIm5PBuGJM+QQYC2lwvOOUmdOVwhDyyk48PgmDWWwboYWYMYbOHdZZVP6YFahkCHsnD3/ir/0LFkX1DFrya4GLuE7hlqRGwkKukLF9h419oov/0rvhuIIP6OWMvM7hGhq39o7BlAqUwTmmgSqw++l3HQ+ZK+hEfCUD/zQoQEvd4uT3HqrOCuOOSvHkyPIXaaNU3dpjffhRXzqHw==
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6dYzExVGahFu9xKFHn/pI0KKDWk4gx8Zlfcp7kzummuQzLuTiq7VHX/K0PGZ04yJBmBHz5qFtxhRtXPvetogmdtq+CS24gWScbZ/P3l6MahYSca5450bEE6Xf5Z23pHUgwp1C68RNZdVOyER8srpSdjEIl8DYg6YVAIdvD5+1l9LPhu6xh8rjrt3ek42gLRVMYuw599M9xxE5jsjKLpF4ZqkfsI2XgVm8uzU2R4+0wp1VGLbIVNCbXm0Akeuw26/uKdTPc7W6fAlfJrXFcQ2fs8XzIMTbpcHBrF5adZ3FT5O/Rx3H97lo3tK7MJBNyR7FKnIhaWsMtXRj+yi8E0jbA
+boot_device:
+  mirror:
+    devices:
+      - /dev/sda
+      - /dev/sdb
+storage:
+  disks:
+    - device: /dev/sda
+      wipe_table: true
+      partitions:
+        - label: root-1
+          size_mib: 32768
+        - label: var-1
+    - device: /dev/sdb
+      wipe_table: true
+      partitions:
+        - label: root-2
+          size_mib: 32768
+        - label: var-2
+  raid:
+    - name: md-var
+      level: raid0
+      devices:
+        - /dev/disk/by-partlabel/var-1
+        - /dev/disk/by-partlabel/var-2
+  filesystems:
+      - device: /dev/md/md-var
+        path: /var
+        label: var
+        format: xfs
+        wipe_filesystem: true
+        with_mount_unit: true
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: |
+          worker3
+    - path: /etc/sysctl.d/20-silence-audit.conf
+      mode: 0644
+      contents:
+        inline: |
+          # Raise console message logging level from DEBUG (7) to WARNING (4)
+          # to hide audit messages from the interactive console
+          kernel.printk=4
+

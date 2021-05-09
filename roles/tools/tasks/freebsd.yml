@@ -12,6 +12,9 @@
     - readline
     - pkgconf
 
+    # Needed for pxelinux extraction
+    - gtar
+
     # Needed for shell history etc.
     - fzf
 

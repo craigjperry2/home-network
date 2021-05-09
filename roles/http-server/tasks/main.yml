@@ -1,0 +1,25 @@
+---
+
+- name: Install dnsmasq
+  pkgng:
+    pkg: nginx
+    state: present
+
+- name: Setup nginx Config
+  copy:
+    src: nginx.conf
+    dest: /usr/local/etc/nginx/nginx.conf
+  notify:
+    - Restart nginx
+
+- name: Enable nginx
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^nginx_enable"
+    line: "nginx_enable=\"YES\""
+    validate: "sysrc -f %s -c nginx_enable"
+  notify:
+    - Restart nginx
+
