@@ -1,0 +1,59 @@
+---
+
+# network handlers
+
+- name: Restart net interface
+  service:
+    name: netif
+    state: restarted
+
+- name: Restart routing
+  service:
+    name: routing
+    state: restarted
+
+- name: Restart dhclient
+  service:
+    name: dhclient
+    state: restarted
+    args: igb0
+
+
+# dnsmasq handlers
+
+- name: Start dnsmasq
+  service:
+    name: dnsmasq
+    state: started
+
+- name: Restart dnsmasq
+  service:
+    name: dnsmasq
+    state: restarted
+
+
+# pf firewall handlers
+
+- name: Start pf
+  service:
+    name: pf
+    state: started
+
+- name: Restart pf
+  service:
+    name: pf
+    state: restarted
+
+- name: Start pflog
+  service:
+    name: pflog
+    state: started
+
+
+# nginx handlers
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+

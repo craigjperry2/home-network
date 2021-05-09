@@ -1,5 +1,7 @@
 ---
 
+# This is designed to give me many options to hook a box into continual config management
+#
 # Bootstrapping examples:
 #
 #   Bootstrap this host:

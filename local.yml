@@ -1,18 +1,20 @@
 ---
 
+# Always maintain ansible "pull-mode" to avoid config drift over time
 - import_playbook: bootstrap.yml
 
+
+# Baseline configuration for all my hosts
 - hosts: 'all:!localhost'
   become: yes
   roles:
     - users
     - tools
 
-- hosts: firewall
+
+# Gateway, Firewall, NAS, DHCP, DNS, PXE Boot, WebServer, ...
+- hosts: homeserver
   become: yes
   roles:
-    - network
-    - dns-dhcp-pxe
-    - http-server
-    - firewall
+    - home-server
 
