@@ -47,11 +47,6 @@ storage:
         wipe_filesystem: true
         with_mount_unit: true
   files:
-    - path: /etc/hostname
-      mode: 0644
-      contents:
-        inline: |
-          worker3
     - path: /etc/sysctl.d/20-silence-audit.conf
       mode: 0644
       contents:
