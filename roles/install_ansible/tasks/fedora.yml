@@ -1,0 +1,11 @@
+---
+
+- name: Install ansible and dependencies (Fedora)
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  loop:
+    - sudo
+    - git
+    - ansible
+

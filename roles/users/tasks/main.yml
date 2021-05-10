@@ -4,7 +4,7 @@
   user:
     name: craig
     comment: Craig Perry
-    shell: /usr/local/bin/zsh
+    shell: "{{ zsh_path }}"
     group: craig
     groups: wheel
     append: yes
@@ -18,7 +18,7 @@
 
 - name: Allow "wheel" group to have passwordless sudo
   lineinfile:
-    dest: /usr/local/etc/sudoers
+    dest: "{{ sudoers_path }}"
     state: present
     regexp: "^%wheel"
     line: "%wheel ALL=(ALL) NOPASSWD: ALL"

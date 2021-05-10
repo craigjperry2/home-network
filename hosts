@@ -5,6 +5,9 @@
 [homeserver]
 s1.home.craigjperry.com
 
+[graphical]
+r2.home.craigjperry.com
+
 
 # By Operating System ##########################################################
 
@@ -13,10 +16,25 @@ s1.home.craigjperry.com
 
 [freebsd:vars]
 ansible_python_interpreter=/usr/local/bin/python3.7
+zsh_path=/usr/local/bin/zsh
+sudoers_path=/usr/local/etc/sudoers
+ansible_sudoers_file=/usr/local/etc/sudoers.d/ansible
+
+[fedora]
+r2.home.craigjperry.com
+
+[fedora:vars]
+ansible_python_interpreter=/usr/bin/python3
+zsh_path=/usr/bin/zsh
+sudoers_path=/etc/sudoers
+ansible_sudoers_file=/etc/sudoers.d/ansible
 
 
 # By Location ##################################################################
 
 [downstairs]
 s1.home.craigjperry.com
+
+[roaming]
+r2.home.craigjperry.com
 
