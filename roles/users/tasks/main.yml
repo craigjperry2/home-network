@@ -57,7 +57,7 @@
 - name: Link ssh_config
   file:
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/ssh_config
-    dest: /home/craig/.ssh_config
+    dest: /home/craig/.ssh/config
     state: link
     owner: craig
     group: craig
