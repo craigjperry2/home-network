@@ -57,3 +57,13 @@
     name: nginx
     state: restarted
 
+# samba handlers
+
+- name: Load AIO
+  command: kldload aio
+
+- name: Restart samba
+  service:
+    name: samba_server
+    state: restarted
+

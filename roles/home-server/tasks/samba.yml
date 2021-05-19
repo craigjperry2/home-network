@@ -1,0 +1,60 @@
+---
+
+- name: Enable AIO for SAMBA
+  lineinfile:
+    dest: /boot/loader.conf
+    backup: yes
+    state: present
+    regexp: "^aio_load"
+    line: "aio_load=\"YES\""
+  notify:
+    - Load AIO
+
+- name: Install samba
+  pkgng:
+    pkg: samba413
+    state: present
+
+- name: Setup media share
+  zfs:
+    name: zroot/usr/media
+    state: present
+    extra_zfs_properties:
+      snapdir: visible
+      exec: off
+      setuid: off
+      mountpoint: /usr/media
+
+# NB: remember to set a samba password:
+#   sudo pdbedit -a -u media
+- name: Create media user
+  user:
+    name: media
+    system: yes
+    comment: 'Media Share Owner'
+
+- name: Set media dir ownership
+  file:
+    path: /usr/media
+    state: directory
+    owner: media
+    group: media
+    mode: 0755
+
+- name: Setup smb4.conf
+  copy:
+    src: smb4.conf
+    dest: /usr/local/etc/smb4.conf
+    validate: testparm --suppress-prompt %s
+
+- name: Enable Samba
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^samba_server_enable"
+    line: "samba_server_enable=\"YES\""
+    validate: "sysrc -f %s -c samba_server_enable"
+  notify:
+    - Restart samba
+

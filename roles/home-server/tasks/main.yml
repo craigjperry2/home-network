@@ -3,5 +3,6 @@
 - import_tasks: network.yml
 - import_tasks: dnsmasq.yml
 - import_tasks: nginx.yml
+- import_tasks: samba.yml
 - import_tasks: pf-firewall.yml
 
