@@ -1,12 +1,39 @@
 # localhost ansible_connection=local
 
+# Naming schema: <s|r|v><serial>
+#  e.g. s1, r2, v3, ...
+#  s = server, r = roaming (phones, laptops etc.), v = virtual
+#  CNAMEs assigned for role specific stuff
+
 # By Role #####################################################################
 
 [homeserver]
 s1.home.craigjperry.com
 
-[graphical]
+[lab]
+s2.home.craigjperry.com
+s3.home.craigjperry.com
+s4.home.craigjperry.com
+
+[general]
+d1.home.craigjperry.com
+v1.home.craigjperry.com
+r1.home.craigjperry.com
 r2.home.craigjperry.com
+
+
+# By Capability ##########################################################
+
+[graphical]
+d1.home.craigjperry.com
+r1.home.craigjperry.com
+r2.home.craigjperry.com
+
+[headless]
+v1.home.craigjperry.com
+s2.home.craigjperry.com
+s3.home.craigjperry.com
+s4.home.craigjperry.com
 
 
 # By Operating System ##########################################################
@@ -20,6 +47,9 @@ zsh_path=/usr/local/bin/zsh
 sudoers_path=/usr/local/etc/sudoers
 ansible_sudoers_file=/usr/local/etc/sudoers.d/ansible
 
+[macos]
+r1.home.craigjperry.com
+
 [fedora]
 r2.home.craigjperry.com
 
@@ -29,12 +59,42 @@ zsh_path=/usr/bin/zsh
 sudoers_path=/etc/sudoers
 ansible_sudoers_file=/etc/sudoers.d/ansible
 
+[fedoracoreos]
+s2.home.craigjperry.com
+s3.home.craigjperry.com
+s4.home.craigjperry.com
+
+[fedoracoreos:vars]
+ansible_python_interpreter=/usr/bin/python3
+zsh_path=/usr/bin/zsh
+sudoers_path=/etc/sudoers
+ansible_sudoers_file=/etc/sudoers.d/ansible
+
+[ubuntu]
+v1.home.craigjperry.com
+
+[ubuntu:vars]
+ansible_python_interpreter=/usr/bin/python3
+zsh_path=/usr/bin/zsh
+sudoers_path=/etc/sudoers
+ansible_sudoers_file=/etc/sudoers.d/ansible
+
+[windows]
+d1.home.craigjperry.com
+
 
 # By Location ##################################################################
 
 [downstairs]
 s1.home.craigjperry.com
 
+[upstairs]
+d1.home.craigjperry.com
+s2.home.craigjperry.com
+s3.home.craigjperry.com
+s4.home.craigjperry.com
+
 [roaming]
+r1.home.craigjperry.com
 r2.home.craigjperry.com
 

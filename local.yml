@@ -17,6 +17,4 @@
   become: yes
   roles:
     - home-server
-  tags:
-    - dev
 
