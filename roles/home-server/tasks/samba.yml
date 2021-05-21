@@ -1,20 +1,5 @@
 ---
 
-- name: Enable AIO for SAMBA
-  lineinfile:
-    dest: /boot/loader.conf
-    backup: yes
-    state: present
-    regexp: "^aio_load"
-    line: "aio_load=\"YES\""
-  notify:
-    - Load AIO
-
-- name: Install samba
-  pkgng:
-    pkg: samba413
-    state: present
-
 - name: Setup media share
   zfs:
     name: zroot/usr/media
@@ -41,11 +26,54 @@
     group: media
     mode: 0755
 
+- name: Setup Backups share
+  zfs:
+    name: zroot/usr/backups
+    state: present
+    extra_zfs_properties:
+      exec: off
+      setuid: off
+      mountpoint: /usr/backups
+
+# NB: remember to set a samba password:
+#   sudo pdbedit -a -u backups
+- name: Create backups user
+  user:
+    name: backups
+    system: yes
+    comment: 'Backups Share Owner'
+
+- name: Set backups dir ownership
+  file:
+    path: /usr/backups
+    state: directory
+    owner: backups
+    group: backups
+    mode: 0755
+
+- name: Enable AIO for SAMBA
+  lineinfile:
+    dest: /boot/loader.conf
+    backup: yes
+    state: present
+    regexp: "^aio_load"
+    line: "aio_load=\"YES\""
+  notify:
+    - Load AIO
+
+- name: Install samba
+  pkgng:
+    pkg: samba413
+    state: present
+
 - name: Setup smb4.conf
   copy:
     src: smb4.conf
     dest: /usr/local/etc/smb4.conf
     validate: testparm --suppress-prompt %s
+  notify:
+    - Restart samba
+
 
 - name: Enable Samba
   lineinfile:
