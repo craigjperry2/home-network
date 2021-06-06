@@ -50,5 +50,5 @@ Some notes to remind me of the rare occassions i treated a box as a pet.
       * gmake O_NERD=1 CPPFLAGS="-I/usr/local/include -DNERD" LDFLAGS=-L/usr/local/lib
       * sudo gmake install
     * Install rust toolchain https://rustup.rs/
-      * cargo install --locked fd-find ripgrep xsv deno
+      * cargo install --locked fd-find ripgrep xsv deno bat du-dust
 
