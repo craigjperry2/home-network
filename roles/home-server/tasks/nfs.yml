@@ -1,0 +1,65 @@
+---
+
+- name: Enable RPC Bind
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^rpcbind_enable"
+    line: "rpcbind_enable=\"YES\""
+    validate: "sysrc -f %s -c rpcbind_enable"
+  notify:
+    - Restart rpcbind
+
+- name: Enable RPC Statd
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^rpc_statd_enable"
+    line: "rpc_statd_enable=\"YES\""
+    validate: "sysrc -f %s -c rpc_statd_enable"
+  notify:
+    - Restart rpcstatd
+
+- name: Enable mountd
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^mountd_enable"
+    line: "mountd_enable=\"YES\""
+    validate: "sysrc -f %s -c mountd_enable"
+  notify:
+    - Restart mountd
+
+- name: Configure NFS Server Flags
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^nfs_server_flags"
+    line: "nfs_server_flags=\"-u -t -n 4\""
+    validate: "sysrc -f %s -c nfs_server_flags"
+  notify:
+    - Restart nfs server
+
+- name: Configure NFS Exports
+  copy:
+    src: exports
+    dest: /etc/exports
+    backup: yes
+  notify:
+    - Restart mountd
+
+- name: Enable NFS Server
+  lineinfile:
+    dest: /etc/rc.conf
+    backup: yes
+    state: present
+    regexp: "^nfs_server_enable"
+    line: "nfs_server_enable=\"YES\""
+    validate: "sysrc -f %s -c nfs_server_enable"
+  notify:
+    - Restart nfs server
+

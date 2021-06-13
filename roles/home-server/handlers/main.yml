@@ -67,3 +67,25 @@
     name: samba_server
     state: restarted
 
+# nfs handlers
+
+- name: Restart rpcbind
+  service:
+    name: rpcbind
+    state: restarted
+
+- name: Restart rpcstatd
+  service:
+    name: statd
+    state: restarted
+
+- name: Restart mountd
+  service:
+    name: mountd
+    state: restarted
+
+- name: Restart nfs server
+  service:
+    name: nfsd
+    state: restarted
+
