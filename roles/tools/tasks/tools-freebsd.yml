@@ -37,6 +37,8 @@
 
     # jdk, clojure
     - openjdk11
+    - clojure
+    - leiningen
 
 - import_tasks: python-common.yml
 
