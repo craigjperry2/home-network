@@ -35,5 +35,8 @@
 
     # rust - see README.md
 
+    # jdk, clojure
+    - openjdk11
+
 - import_tasks: python-common.yml
 
