@@ -5,16 +5,8 @@
 
 
 # Baseline configuration for all my hosts
-- hosts: 'all:!localhost'
-  become: yes
-  roles:
-    - users
-    - tools
-
-
-# Gateway, Firewall, NAS, DHCP, DNS, PXE Boot, WebServer, ...
-- hosts: homeserver
-  become: yes
-  roles:
-    - home-server
+#- hosts: 'all:!localhost'
+#  become: yes
+#  roles:
+#    - users
 

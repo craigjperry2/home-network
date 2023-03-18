@@ -1,9 +1,5 @@
 ---
 
-- name: FreeBSD Ansible Install
-  import_tasks: freebsd.yml
-  when: ansible_os_family == "FreeBSD"
-
 - name: Fedora Ansible Install
   import_tasks: fedora.yml
   when: ansible_os_family == "RedHat"

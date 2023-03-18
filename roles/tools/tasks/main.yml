@@ -1,6 +1,0 @@
----
-
-- name: FreeBSD Tools
-  import_tasks: tools-freebsd.yml
-  when: ansible_os_family == "FreeBSD"
-

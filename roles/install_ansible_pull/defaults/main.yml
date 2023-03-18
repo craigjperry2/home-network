@@ -1,5 +1,5 @@
 ---
 
 github_user: craigjperry2
-ansible_sudoers_file: /usr/local/etc/sudoers.d/ansible
+ansible_sudoers_file: /etc/sudoers.d/ansible
 

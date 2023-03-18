@@ -7,9 +7,6 @@
 
 # By Role #####################################################################
 
-[homeserver]
-s1.home.craigjperry.com
-
 [lab]
 s2.home.craigjperry.com
 s3.home.craigjperry.com
@@ -17,18 +14,20 @@ s4.home.craigjperry.com
 
 [general]
 d1.home.craigjperry.com
+d2.home.craigjperry.com
+d3.home.craigjperry.com
 r1.home.craigjperry.com
-r2.home.craigjperry.com
 
 
 # By Capability ##########################################################
 
 [graphical]
+d1.home.craigjperry.com
+d2.home.craigjperry.com
+d3.home.craigjperry.com
 r1.home.craigjperry.com
-r2.home.craigjperry.com
 
 [headless]
-d1.home.craigjperry.com
 s2.home.craigjperry.com
 s3.home.craigjperry.com
 s4.home.craigjperry.com
@@ -36,33 +35,17 @@ s4.home.craigjperry.com
 
 # By Operating System ##########################################################
 
-[freebsd]
-s1.home.craigjperry.com
-
-[freebsd:vars]
-ansible_python_interpreter=/usr/local/bin/python3.7
-zsh_path=/usr/local/bin/zsh
-sudoers_path=/usr/local/etc/sudoers
-ansible_sudoers_file=/usr/local/etc/sudoers.d/ansible
-
 [macos]
+d2.home.craigjperry.com
 r1.home.craigjperry.com
 
 [fedora]
-r2.home.craigjperry.com
-
-[fedora:vars]
-ansible_python_interpreter=/usr/bin/python3
-zsh_path=/usr/bin/zsh
-sudoers_path=/etc/sudoers
-ansible_sudoers_file=/etc/sudoers.d/ansible
-
-[fedoracoreos]
+d3.home.craigjperry.com
 s2.home.craigjperry.com
 s3.home.craigjperry.com
 s4.home.craigjperry.com
 
-[fedoracoreos:vars]
+[fedora:vars]
 ansible_python_interpreter=/usr/bin/python3
 zsh_path=/usr/bin/zsh
 sudoers_path=/etc/sudoers
@@ -81,15 +64,15 @@ ansible_sudoers_file=/etc/sudoers.d/ansible
 # By Location ##################################################################
 
 [downstairs]
-s1.home.craigjperry.com
+d2.home.craigjperry.com
 
 [upstairs]
 d1.home.craigjperry.com
+d3.home.craigjperry.com
 s2.home.craigjperry.com
 s3.home.craigjperry.com
 s4.home.craigjperry.com
 
 [roaming]
 r1.home.craigjperry.com
-r2.home.craigjperry.com
 

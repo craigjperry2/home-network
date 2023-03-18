@@ -1,0 +1,15 @@
+sudo passwordless
+hostname s3.home.craigjperry.com
+disk part - stripe /srv, mirror rest
+setup ansible pull and apply lab-machine role
+
+Disable cron / pull? Or just add an adhoc playbook entrypoint
+
+User setup
+Download ssh keys
+Sudoers nopasswd
+Dotfiles - inc deps like fzf, zsh etc.
+
+Host setup
+hostname
+
