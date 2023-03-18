@@ -41,15 +41,15 @@
   git:
     repo: https://github.com/craigjperry2/dotfiles.git
     dest: /home/craig/Code/github.com/craigjperry2/dotfiles
-  notify:
-  - Fix Code Permissions
+  become: yes
+  become_user: craig
 
 - name: Checkout p10k
   git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: /home/craig/Code/github.com/romkatv/powerlevel10k
-  notify:
-  - Fix Code Permissions
+  become: yes
+  become_user: craig
 
 - name: Link gitconfig
   file:
