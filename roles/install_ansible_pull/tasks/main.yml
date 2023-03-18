@@ -45,6 +45,15 @@
     owner: ansible
     group: ansible
 
+- name: Ensure cron is installed
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  loop:
+    - cronie
+    - cronie-anacron
+  when: ansible_os_family == "RedHat"
+
 - name: Install ansible pull-mode crontab entry
   cron:
     name: "ansible pull"

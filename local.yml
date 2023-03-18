@@ -1,8 +1,12 @@
 ---
 
 # Always maintain ansible "pull-mode" to avoid config drift over time
-- import_playbook: bootstrap.yml
-
+- hosts: 'localhost'
+  gather_facts: no
+  become: yes
+  roles:
+    - install_ansible
+    - install_ansible_pull
 
 # Baseline configuration for all my hosts
 #- hosts: 'all:!localhost'

@@ -5,7 +5,6 @@
     pkg: "{{ item }}"
     state: present
   loop:
-    - sudo
     - git
     - ansible
 
