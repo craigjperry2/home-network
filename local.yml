@@ -2,7 +2,6 @@
 
 # Always maintain ansible "pull-mode" to avoid config drift over time
 - hosts: 'localhost'
-  gather_facts: no
   become: yes
   roles:
     - install_ansible
