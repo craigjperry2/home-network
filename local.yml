@@ -1,7 +1,7 @@
 ---
 
 # Always maintain ansible "pull-mode" to avoid config drift over time
-- hosts: 'localhost'
+- hosts: 'all:!localhost'
   become: yes
   roles:
     - install_ansible
