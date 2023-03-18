@@ -1,10 +1,23 @@
 ---
 
+- name: Ensure core tools are present
+  yum:
+    pkg: "{{ item }}"
+    state: present
+  loop:
+    - zsh
+    - git
+    - fzf
+    - golang
+    - nnn
+    - neovim
+    - tmux
+
 - name: Ensure craig account is present
   user:
     name: craig
     comment: Craig Perry
-    shell: "{{ zsh_path }}"
+    shell: "/bin/zsh"
     group: craig
     groups: wheel
     append: yes
@@ -18,7 +31,7 @@
 
 - name: Allow "wheel" group to have passwordless sudo
   lineinfile:
-    dest: "{{ sudoers_path }}"
+    dest: "/etc/sudoers"
     state: present
     regexp: "^%wheel"
     line: "%wheel ALL=(ALL) NOPASSWD: ALL"
@@ -62,10 +75,18 @@
     owner: craig
     group: craig
 
+- name: Link tmux.remote.conf
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.remote.conf
+    dest: /home/craig/.tmux.remote.conf
+    state: link
+    owner: craig
+    group: craig
+
 - name: Link neovim init.vim
   file:
-    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/init.vim
-    dest: /home/craig/.config/nvim/init.vim
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/nvim
+    dest: /home/craig/.config/nvim
     state: link
     owner: craig
     group: craig

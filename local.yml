@@ -8,8 +8,8 @@
     - install_ansible_pull
 
 # Baseline configuration for all my hosts
-#- hosts: 'all:!localhost'
-#  become: yes
-#  roles:
-#    - users
+- hosts: 'all:!localhost'
+  become: yes
+  roles:
+    - users
 
