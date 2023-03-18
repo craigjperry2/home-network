@@ -83,6 +83,12 @@
     owner: craig
     group: craig
 
+- name: Config directory
+  file:
+    path: /home/craig/.config
+    state: directory
+    mode: 0755
+
 - name: Link neovim init.vim
   file:
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/nvim
