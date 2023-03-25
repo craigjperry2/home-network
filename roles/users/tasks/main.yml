@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure core tools are present
-  yum:
+  dnf:
     pkg: "{{ item }}"
     state: present
   loop:
@@ -12,6 +12,7 @@
     - nnn
     - neovim
     - tmux
+    - '@Development tools'
 
 - name: Ensure craig account is present
   user:
