@@ -51,14 +51,14 @@
   git:
     repo: https://github.com/craigjperry2/dotfiles.git
     dest: /home/craig/Code/github.com/craigjperry2/dotfiles
-  become: yes
+  become: true
   become_user: craig
 
 - name: Checkout p10k
   git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: /home/craig/Code/github.com/romkatv/powerlevel10k
-  become: yes
+  become: true
   become_user: craig
 
 - name: Link gitconfig
@@ -106,4 +106,3 @@
     state: link
     owner: craig
     group: craig
-
