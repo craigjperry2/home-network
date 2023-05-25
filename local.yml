@@ -13,3 +13,8 @@
   roles:
     - users
 
+# Gateway configuration
+- hosts: d3.home.craigjperry.com
+  become: yes
+  roles:
+    - wireguard
