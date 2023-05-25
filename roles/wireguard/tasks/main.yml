@@ -32,7 +32,7 @@
 - name: Maintain wireguard config
   vars:
     # private_key: "{{ lookup('file', '/etc/wireguard/privatekey') }}"
-    private_key: private_key_contents.stdout
+    private_key: "{{ private_key_contents.stdout }}"
     r1_public_key: "wTnhdg3jdL0fJfYQBAI4V1WsJxvLoOim5PTTYHXqC1Q="
   template:
     src: wg0.conf.j2
