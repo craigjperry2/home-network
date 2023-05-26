@@ -1,0 +1,8 @@
+---
+
+- name: reload wireguard interface
+  command: "{{ item }}"
+  with_items:
+    - nmcli connection delete wg0
+    - nmcli device delete wg0
+    - nmcli con import type wireguard file /etc/wireguard/wg0.conf
