@@ -33,16 +33,10 @@
   vars:
     # private_key: "{{ lookup('file', '/etc/wireguard/privatekey') }}"
     private_key: "{{ private_key_contents.stdout }}"
-    r1_public_key: "wTnhdg3jdL0fJfYQBAI4V1WsJxvLoOim5PTTYHXqC1Q="
   template:
     src: wg0.conf.j2
     dest: /etc/wireguard/wg0.conf
     owner: root
     group: root
     mode: 0600
-
-- name: Start wireguard on boot
-  systemd:
-    name: wg-quick@wg0
-    enabled: yes
-    state: started
+  notify: reload wireguard interface
