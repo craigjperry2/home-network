@@ -4,9 +4,9 @@
   dnf:
     pkg: "{{ item }}"
     state: present
-    with_items:
-      - wireguard-tools
-      - mosh
+  loop:
+    - wireguard-tools
+    - mosh
 
 - name: Add wireguard firewall rule
   ansible.posix.firewalld:
