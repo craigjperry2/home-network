@@ -13,15 +13,7 @@
     - neovim
     - tmux
     - '@Development tools'
-    - 'dotnet-sdk-7.0'
-
-- name: Ensure libstdc++ is findable by dotnet
-  file:
-    src: /usr/lib64/libstdc++.so.6
-    dest: /usr/lib64/libstdc++.so
-    owner: root
-    group: root
-    state: link
+    - gh
 
 - name: Ensure craig account is present
   user:
