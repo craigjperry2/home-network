@@ -8,6 +8,8 @@
       - fzf
       - golang
       - rust
+      - cargo
+      - clippy
       - python3
       - nnn
       - neovim
