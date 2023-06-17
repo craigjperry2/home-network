@@ -18,6 +18,31 @@
       - gh
     state: present
 
+- name: Install core tools from cargo
+  community.general.cargo:
+    name:
+      - bandwhich
+      - bat
+      - broot
+      - bottom
+      - git-delta
+      # - deno
+      - diskonaut
+      - du-dust
+      - exa
+      - fd-find
+      - gping
+      - grex
+      - hyperfine
+      # - procs
+      - ripgrep
+      - sd
+      - tokei
+      - xh
+      - xsv
+      - ytop
+    state: present
+
 - name: Ensure craig account is present
   user:
     name: craig
