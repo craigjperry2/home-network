@@ -42,8 +42,7 @@
       - xsv
       - ytop
     state: present
-    become: true
-    become_user: craig
+    path: /usr/local
 
 - name: Ensure craig account is present
   user:
