@@ -2,18 +2,19 @@
 
 - name: Ensure core tools are present
   dnf:
-    pkg: "{{ item }}"
+    name:
+      - zsh
+      - git
+      - fzf
+      - golang
+      - rust
+      - python3
+      - nnn
+      - neovim
+      - tmux
+      - '@Development tools'
+      - gh
     state: present
-  loop:
-    - zsh
-    - git
-    - fzf
-    - golang
-    - nnn
-    - neovim
-    - tmux
-    - '@Development tools'
-    - gh
 
 - name: Ensure craig account is present
   user:
