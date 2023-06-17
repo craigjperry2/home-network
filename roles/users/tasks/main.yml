@@ -42,6 +42,8 @@
       - xsv
       - ytop
     state: present
+    become: true
+    become_user: craig
 
 - name: Ensure craig account is present
   user:
