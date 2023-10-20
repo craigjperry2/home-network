@@ -18,6 +18,7 @@
       - gh
     state: present
 
+# sudo cargo install --force --root /usr/local bandwhich bat broot bottom git-delta diskonaut du-dust eza fd-find gping grex hyperfine ripgrep sd tokei xh xsv ytop
 - name: Install core tools from cargo
   community.general.cargo:
     name:
