@@ -89,6 +89,7 @@
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/gitconfig
     dest: /home/craig/.gitconfig
     state: link
+    force: yes
     owner: craig
     group: craig
 
@@ -97,6 +98,7 @@
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/zshrc
     dest: /home/craig/.zshrc
     state: link
+    force: yes
     owner: craig
     group: craig
 
@@ -105,6 +107,7 @@
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.conf
     dest: /home/craig/.tmux.conf
     state: link
+    force: yes
     owner: craig
     group: craig
 
@@ -113,6 +116,7 @@
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.remote.conf
     dest: /home/craig/.tmux.remote.conf
     state: link
+    force: yes
     owner: craig
     group: craig
 
@@ -127,6 +131,7 @@
     src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/nvim
     dest: /home/craig/.config/nvim
     state: link
+    force: yes
     owner: craig
     group: craig
 
