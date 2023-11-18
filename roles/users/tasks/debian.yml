@@ -7,7 +7,8 @@
       - git
       - fzf
       - golang
-      # - rust-all # too old, curl https://sh.rustup.rs -sSf | sh
+        # - rust-all # too old, use offline installer, system-wide: 
+        # wget https://static.rust-lang.org/dist/rust-1.74.0-aarch64-unknown-linux-gnu.tar.gz
       - nnn
       - neovim
       - tmux
