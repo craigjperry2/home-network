@@ -7,7 +7,7 @@
       - git
       - fzf
       - golang
-      - rust-all
+      # - rust-all # too old, curl https://sh.rustup.rs -sSf | sh
       - nnn
       - neovim
       - tmux
