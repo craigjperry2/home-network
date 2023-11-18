@@ -19,7 +19,7 @@
       # sudo alternatives --config javac
     state: present
 
-# sudo cargo install --force --root /usr/local bandwhich bat bottom git-delta diskonaut du-dust eza fd-find gping grex hyperfine ripgrep sd tokei xh xsv ytop
+# sudo cargo install --force --root /usr/local bandwhich bat bottom git-delta diskonaut du-dust eza fd-find grex hyperfine ripgrep sd tokei xh xsv ytop
 - name: Install core tools from cargo
   community.general.cargo:
     name:
@@ -33,7 +33,7 @@
       - du-dust
       - eza
       - fd-find
-      - gping
+      # - gping
       - grex
       - hyperfine
       # - procs
