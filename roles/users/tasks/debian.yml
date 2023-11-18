@@ -9,6 +9,7 @@
       - golang
         # - rust-all # too old, use offline installer, system-wide: 
         # wget https://static.rust-lang.org/dist/rust-1.74.0-aarch64-unknown-linux-gnu.tar.gz
+        # sudo ln -s /usr/local/rust/rustc/bin/rustc rustc ...
       - nnn
       - neovim
       - tmux
