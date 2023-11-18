@@ -17,6 +17,7 @@ d1.home.craigjperry.com
 d2.home.craigjperry.com
 d3.home.craigjperry.com
 r1.home.craigjperry.com
+s1.home.craigjperry.com
 
 
 # By Capability ##########################################################
@@ -28,6 +29,7 @@ d3.home.craigjperry.com
 r1.home.craigjperry.com
 
 [headless]
+s1.home.craigjperry.com
 s2.home.craigjperry.com
 s3.home.craigjperry.com
 s4.home.craigjperry.com
@@ -53,6 +55,7 @@ ansible_sudoers_file=/etc/sudoers.d/ansible
 
 [ubuntu]
 d1.home.craigjperry.com
+s1.home.craigjperry.com
 
 [ubuntu:vars]
 ansible_python_interpreter=/usr/bin/python3
@@ -69,6 +72,7 @@ d2.home.craigjperry.com
 [upstairs]
 d1.home.craigjperry.com
 d3.home.craigjperry.com
+s1.home.craigjperry.com
 s2.home.craigjperry.com
 s3.home.craigjperry.com
 s4.home.craigjperry.com
