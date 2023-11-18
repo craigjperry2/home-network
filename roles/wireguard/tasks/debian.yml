@@ -1,0 +1,47 @@
+---
+
+- name: Install wireguard
+  apt:
+    state: present
+    name:
+      - wireguard-tools
+      - mosh
+
+- name: Check if keypair exists
+  stat:
+    path: /etc/wireguard/privatekey
+  register: keypair
+
+- name: Generate keypair
+  shell: "umask 0266 ; wg genkey | tee /etc/wireguard/privatekey | wg pubkey > /etc/wireguard/publickey"
+  when: keypair.stat.exists == false
+
+# Can't use: private_key: "{{ lookup('file', '/etc/wireguard/privatekey') }}"
+# in a vars: block in the Maintain wireguard config block below because that
+# file is owned by root and chmod 0400 - this module runs as root so i find this
+# unexpected... maybe i've misunderstood the error i was getting?
+- name: Extract wireguard private key
+  command: cat /etc/wireguard/privatekey
+  register: private_key_contents
+
+- name: Maintain wireguard config
+  vars:
+    # private_key: "{{ lookup('file', '/etc/wireguard/privatekey') }}"
+    private_key: "{{ private_key_contents.stdout }}"
+  template:
+    src: wg0.conf.debian.j2
+    dest: /etc/wireguard/wg0.conf
+    owner: root
+    group: root
+    mode: 0600
+  notify: reload debian wireguard interface
+
+- name: Maintain wireguard interface
+  template:
+    src: interfaces.wg0.j2
+    dest: /etc/network/interfaces.d/wg0
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload debian wireguard interface
+

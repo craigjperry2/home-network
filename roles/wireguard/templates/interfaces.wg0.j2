@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+
+# indicate that wg0 should be created when the system boots, and on ifup -a
+auto wg0
+
+# describe wg0 as an IPv4 interface with static address
+iface wg0 inet static
+
+    # static IP address 
+    address 192.168.17.254/24
+
+    # before ifup, create the device with this ip link command
+    pre-up ip link add $IFACE type wireguard
+
+    # before ifup, set the WireGuard config from earlier
+    pre-up wg setconf $IFACE /etc/wireguard/$IFACE.conf
+
+    # after ifdown, destroy the wg0 interface
+    post-down ip link del $IFACE
+

@@ -6,3 +6,10 @@
     - nmcli connection delete wg0
     # - nmcli device delete wg0
     - nmcli con import type wireguard file /etc/wireguard/wg0.conf
+
+- name: reload debian wireguard interface
+  command: "{{ item }}"
+  with_items:
+    - ifdown wg0
+    - ifup wg0
+
