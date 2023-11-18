@@ -1,0 +1,133 @@
+---
+
+- name: Ensure core tools are present
+  dnf:
+    name:
+      - zsh
+      - git
+      - fzf
+      - golang
+      - rust
+      - cargo
+      - clippy
+      - python3
+      - nnn
+      - neovim
+      - tmux
+      - '@Development tools'
+      - gh
+      - java-latest-openjdk-devel
+      # sudo alternatives --config javac
+    state: present
+
+# sudo cargo install --force --root /usr/local bandwhich bat broot bottom git-delta diskonaut du-dust eza fd-find gping grex hyperfine ripgrep sd tokei xh xsv ytop
+- name: Install core tools from cargo
+  community.general.cargo:
+    name:
+      - bandwhich
+      - bat
+      - broot
+      - bottom
+      - git-delta
+      # - deno
+      - diskonaut
+      - du-dust
+      - exa
+      - fd-find
+      - gping
+      - grex
+      - hyperfine
+      # - procs
+      - ripgrep
+      - sd
+      - tokei
+      - xh
+      - xsv
+      - ytop
+    state: present
+    path: /usr/local
+
+- name: Ensure craig account is present
+  user:
+    name: craig
+    comment: Craig Perry
+    shell: "/bin/zsh"
+    group: craig
+    groups: wheel
+    append: yes
+    generate_ssh_key: yes
+
+- name: Add Public SSH Keys from Github             
+  authorized_key:                                   
+    user: craig                                   
+    state: present                                  
+    key: "https://github.com/craigjperry2.keys"
+
+- name: Allow "wheel" group to have passwordless sudo
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: present
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -f %s -c"
+
+- name: Checkout my dotfiles
+  git:
+    repo: https://github.com/craigjperry2/dotfiles.git
+    dest: /home/craig/Code/github.com/craigjperry2/dotfiles
+  become: true
+  become_user: craig
+
+- name: Checkout p10k
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /home/craig/Code/github.com/romkatv/powerlevel10k
+  become: true
+  become_user: craig
+
+- name: Link gitconfig
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/gitconfig
+    dest: /home/craig/.gitconfig
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link zshrc
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/zshrc
+    dest: /home/craig/.zshrc
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link tmux.conf
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.conf
+    dest: /home/craig/.tmux.conf
+    state: link
+    owner: craig
+    group: craig
+
+- name: Link tmux.remote.conf
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/tmux.remote.conf
+    dest: /home/craig/.tmux.remote.conf
+    state: link
+    owner: craig
+    group: craig
+
+- name: Config directory
+  file:
+    path: /home/craig/.config
+    state: directory
+    mode: 0755
+
+- name: Link neovim init.vim
+  file:
+    src: /home/craig/Code/github.com/craigjperry2/dotfiles/dotfiles/nvim
+    dest: /home/craig/.config/nvim
+    state: link
+    owner: craig
+    group: craig
+
