@@ -16,6 +16,8 @@
       - build-essential
       - gh
       - default-jdk
+      - podman
+      - buildah
       # sudo alternatives --config javac
     state: present
 

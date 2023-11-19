@@ -17,6 +17,8 @@
       - '@Development tools'
       - gh
       - java-latest-openjdk-devel
+      - podman
+      - buildah
       # sudo alternatives --config javac
     state: present
 
