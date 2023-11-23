@@ -18,6 +18,7 @@
       - default-jdk
       - podman
       - buildah
+      - postgresql-client
       # sudo alternatives --config javac
     state: present
 
