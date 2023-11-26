@@ -79,6 +79,7 @@
     dest: /home/craig/Code/github.com/craigjperry2/dotfiles
   become: true
   become_user: craig
+  update: no
 
 - name: Checkout p10k
   git:
@@ -86,6 +87,7 @@
     dest: /home/craig/Code/github.com/romkatv/powerlevel10k
   become: true
   become_user: craig
+  update: no
 
 - name: Link gitconfig
   file:
