@@ -1,0 +1,10 @@
+---
+
+# - name: Fedora Postgres Setup
+#   import_tasks: fedora.yml
+#   when: ansible_os_family == "RedHat"
+
+- name: Debian Postgres Setup
+  import_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+

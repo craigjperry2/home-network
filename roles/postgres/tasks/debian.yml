@@ -1,0 +1,17 @@
+---
+
+- name: Install Postgres
+  apt:
+    state: present
+    name:
+      - postgresql
+      - postgresql-client
+      - libpq-dev
+      - postgresql-contrib
+
+- name: Start and enable service
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: true
+

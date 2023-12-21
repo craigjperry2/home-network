@@ -22,4 +22,6 @@
   become: yes
   roles:
     - wireguard
+    - postgres
+    # k3s install via https://github.com/k3s-io/k3s-ansible
 
