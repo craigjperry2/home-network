@@ -77,17 +77,17 @@
   git:
     repo: https://github.com/craigjperry2/dotfiles.git
     dest: /home/craig/Code/github.com/craigjperry2/dotfiles
+    update: no
   become: true
   become_user: craig
-  update: no
 
 - name: Checkout p10k
   git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: /home/craig/Code/github.com/romkatv/powerlevel10k
+    update: no
   become: true
   become_user: craig
-  update: no
 
 - name: Link gitconfig
   file:
