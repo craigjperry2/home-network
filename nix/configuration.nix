@@ -10,29 +10,23 @@
       ./hardware-configuration.nix
     ];
 
-  # luks setup
   boot.initrd = {
       luks.devices = {
         luksCrypted = {
-          device = "/dev/nvme0n1p2"; # Replace with your UUID
-          preLVM = true; # Unlock before activating LVM
-          allowDiscards = true; # Allow TRIM commands for SSDs
+          device = "/dev/nvme0n1p2";
+          preLVM = true;
+          allowDiscards = true;
         };
       };
-      #lvm.devices = [ "/dev/mapper/luksCrypted" ]; # Activate LVM after decryption
   };
 
-  # Use the GRUB bootloader
-  boot.loader.grub.enable = true;  # Enable GRUB as the bootloader
-  boot.loader.grub.device = "nodev";  # Install GRUB on the EFI system partition
-  boot.loader.grub.copyKernels = true;  # Activate automatic copying of kernel files
-  boot.loader.grub.efiSupport = true;  # Enable EFI support for GRUB
-  boot.loader.grub.enableCryptodisk = true ; # Enable GRUB support for encrypted disks
-  # themes = [ "/boot/grub/themes/your-theme" ]; # Path to your GRUB theme
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";  # Mount point of the EFI system partition
-  boot.loader.efi.canTouchEfiVariables = true;  # Allow GRUB to modify EFI variables for boot entry management
-  
-  # Adds custom menu entries for reboot and poweroff
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.copyKernels = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.enableCryptodisk = true ;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.extraEntries = ''
       menuentry "Reboot" {
           reboot
@@ -45,65 +39,32 @@
   # Specify the Zen kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # Add GRUB theme (example using 'sleek-grub-theme')
-  boot.loader.grub.sleekTheme.enable = true;
-  boot.loader.grub.sleekTheme.themeName = "dark";  # Replace with the desired theme name ('dark', 'light', 'orange', 'bigsur')
+  networking.hostName = "r3";
+  networking.networkmanager.enable = true;
 
-
-
-
-  networking.hostName = "r3"; # Define your hostname.
-  # Pick only one of the below networking options.
-
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
-  # Set your time zone.
   time.timeZone = "Europe/London";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
-  #  keyMap = "us-colemak-dh";
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # Enable the X11 windowing system
   services.xserver.enable = true;
 
   # Set XKB keyboard layout options
   services.xserver.xkb = {
     layout = "gb";                          # Set the keyboard layout to US
-    #variant = "colemak_dh";                 # Use the Colemak DH variant
-    #options = "caps:escape, compose:ralt, terminate:ctrl_alt_bksp";  # Set additional XKB options
+    # variant = "colemak_dh";                 # Use the Colemak DH variant
+    # options = "caps:escape, compose:ralt, terminate:ctrl_alt_bksp";  # Set additional XKB options
     # options = "misc:extend,lv5:caps_switch_lock,compose:menu";  # Alternative XKB options (commented out)
   };
 
-  # Enable the SDDM display manager
   services.displayManager.sddm.enable = true;
-  # services.displayManager.defaultSession = "plasma";  # Set the default session to Plasma Wayland
-  # services.displayManager.autoLogin.enable = true;  # Enable auto-login (commented out)
-  # services.displayManager.autoLogin.user = "alice";  # Set the auto-login user to 'alice' (commented out)
 
   programs.hyprland.enable = true;
   environment.sessionVariables.NIX_OZONE_WL = "i";
 
-  # Set GTK/Qt themes
-  #qt.enable = true;                 # Enable Qt integration
-  #qt.platformTheme = "gtk2";        # Set the platform theme to GTK2
-  #qt.style = "gtk2";                # Set the style to GTK2
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -111,8 +72,6 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-
-
 
   # Set the default shell for all users to zsh
   # users.defaultShell = pkgs.zsh;
@@ -133,23 +92,22 @@
   # List packages installed in systVem profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    firefox # favorite browser
+    firefox
     kitty 
-    neovim # editor of choice
+    neovim
     # emacs
     dolphin
     wofi
-    wget # wget is better than curl because it will resume with exponential backoff
-    curl # curl is better than wget because it supports more protocols
-    git # git version control
-    #btrfs-progs # package for the btrfs filesystem
-    sleek-grub-theme
+    wget
+    curl
+    git
   ];
 
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
+
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
