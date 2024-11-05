@@ -1,7 +1,8 @@
 * {
     border: none;
     border-radius: 0;
-    /* `otf-font-awesome` is required to be installed for icons */
+    /* `font-awesome` and noto-fonts are required to be installed for icons */
+    /* font-family: JetBrainsMono Nerd Font; */
     font-family: Liberation Mono;
     min-height: 20px;
 }
@@ -16,6 +17,7 @@ window#waybar.hidden {
 
 #workspaces {
     margin-right: 8px;
+    padding-right: 8px;
     border-radius: 10px;
     transition: none;
     background: #383c4a;

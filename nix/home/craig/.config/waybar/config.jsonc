@@ -7,6 +7,7 @@
     "spacing": 4, // Gaps between modules (4px)
     "margin": "10 10 0 10",
     // Choose the order of the modules
+    "mode": "dock",
     "modules-left": [
         "hyprland/workspaces"
         // "sway/mode",
@@ -25,7 +26,7 @@
         "cpu",
         "memory",
         "temperature",
-        // "backlight",
+        "backlight",
         // "keyboard-state",
         // "sway/language",
         "battery",
@@ -38,17 +39,17 @@
         "disable-scroll": true,
         "all-outputs": true,
         "warp-on-scroll": false,
-	"persistent_workspaces": {
+	"persistent-workspaces": {
             "1": [],
             "2": [],
             "3": []
 	},
         "format": "{name}: {icon}",
         "format-icons": {
-             "1": "",
+             "1": " ",
         //     "2": "",
-	     "2": "",
-             "3": "",
+	     "2": " ",
+             "3": " ",
         //     "4": "",
         //     "5": "",
              "urgent": "",
