@@ -69,7 +69,7 @@
 
   users.users.craig = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     initialPassword = "changeme01";
     shell = pkgs.zsh;
 
@@ -130,9 +130,13 @@
       package = pkgs.nnn.override ({ withNerdIcons = true; });
       bookmarks = {
         l = "~/Code/local";
-	r = "~/Code/github.com";
-	d = "~/Code/github.com";
+      	r = "~/Code/github.com";
+      	d = "~/Code/github.com";
       };
+    };
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
     };
     programs.neovim = {
       enable = true;
@@ -142,37 +146,37 @@
       plugins = with pkgs.vimPlugins; [
         vim-nix
         vim-surround
-	vim-unimpaired
-	vim-sneak
-	fzfWrapper
-	fzf-vim
+        vim-unimpaired
+        vim-sneak
+        fzfWrapper
+        fzf-vim
         {
-	  plugin = nnn-vim;
+          plugin = nnn-vim;
           config = ''
             let g:nnn#layout = {'window': {'width':0.9, 'height':0.6, 'highlight':'Debug'}}
             let g:nnn#action = {'<c-x>': 'split', '<c-v>': 'vsplit'}
-	  '';
+          '';
         }
         {
-	  plugin = vim-colors-solarized;
+          plugin = vim-colors-solarized;
           config = ''
             colorscheme solarized
-	  '';
+          '';
         }
         {
-	  plugin = lualine-nvim;
+          plugin = lualine-nvim;
           config = ''
             lua << END
             require('lualine').setup({options={theme='solarized_dark'}})
 END
-	  '';
+          '';
         }
-	nvim-web-devicons
+        nvim-web-devicons
       ];
       extraConfig = ''
         autocmd!
         set nocompatible
-        set number
+        set relativenumber
         syntax enable
         set encoding=utf-8
         scriptencoding utf-8
@@ -193,7 +197,7 @@ END
         set tabstop=2
         set shiftwidth=2
         set ai
-        set si
+        " set si
         set nowrap
         set backspace=start,eol,indent
         
@@ -236,7 +240,7 @@ END
         autocmd FileType yaml setlocal shiftwidth=2 tabstop=2
 
         " fzf plugin
-	nnoremap <leader>zr :Rg 
+      	nnoremap <leader>zr :Rg 
         nnoremap <leader>zl :Lines<CR>
         nnoremap <leader>zm :Marks<CR>
         nnoremap <leader>zf :Files<CR>
@@ -278,9 +282,6 @@ END
         " Map Y like D, C etc. behave (to end of line)
         nnoremap Y  y$
         
-        " Save with root permission
-        command! W w !sudo tee > /dev/null %
-                
         " Move lines up or down
         nnoremap <A-j> :m .+1<CR>==
         nnoremap <A-k> :m .-2<CR>==
@@ -306,8 +307,7 @@ END
         # vi mode keybindings
         bindkey -v
         
-        # Emacs/readline & vi style history searching
-        #bindkey ^R history-incremental-search-backward
+        # vi style history searching
         bindkey -M vicmd '?' history-incremental-search-backward
         bindkey -M vicmd '/' history-incremental-search-forward
         
@@ -335,8 +335,8 @@ END
         bindkey -M vicmd '^X' decarg
         
         # When v mode isn't enough, edit cmdline in vim
-	autoload -Uz edit-command-line
-	zle -N edit-command-line
+	      autoload -Uz edit-command-line
+      	zle -N edit-command-line
         bindkey -M vicmd "^V" edit-command-line
         
         # Pause 10ms (minimum) before entering cmd mode
@@ -345,8 +345,8 @@ END
         # Escape takes wayyyy too long to process in some terminals, ctrl+[ is a chord and i'm a vim user, so...
         bindkey -M viins 'jk' vi-cmd-mode
 
-	# nnn integration
-	n ()
+      	# nnn integration
+      	n ()
         {
             if [ -n $NNNLVL ] && [ "''${NNNLVL:-0}" -ge 1 ]; then
                 echo "nnn is already running"
@@ -381,9 +381,12 @@ END
 
         ls = "eza";
         l = "eza --git --grid --across --icons -l --header";
-	ll = "eza --git -l --colour=always --tree --level=2 --sort time --icons --header";
+        ll = "eza --git -l --colour=always --tree --level=2 --sort time --icons --header";
 
         mkdir = "mkdir -p";
+
+        sec = "sudoedit /etc/nixos/configuration.nix";
+        sns = "sudo nixos-rebuild switch";
       };
     };
     programs.emacs = {
@@ -449,8 +452,8 @@ END
         ;; (unless package-archive-contents
         ;;   (package-refresh-contents))
 
-	(eval-when-compile
-	  (require 'use-package))
+	      (eval-when-compile
+	        (require 'use-package))
         
         ;; Great looking theme
         (use-package modus-themes
@@ -527,14 +530,14 @@ END
         add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`";
       };
       extraConfig = {
-	color.ui = "auto";
-	core.editor = "code --wait";
-	diff.tool = "vscode";
-	difftool."vscode".cmd = "code --wait --diff \"$LOCAL\" \"$REMOTE\"";
+        color.ui = "auto";
+        core.editor = "code --wait";
+        diff.tool = "vscode";
+        difftool."vscode".cmd = "code --wait --diff \"$LOCAL\" \"$REMOTE\"";
         init.defaultBranch = "main";
-	merge.tool = "vscode";
-	mergetool."vscode".cmd = "code --wait \"$MERGED\"";
-	pull.ff = "only";
+        merge.tool = "vscode";
+        mergetool."vscode".cmd = "code --wait \"$MERGED\"";
+        pull.ff = "only";
       };
     };
     programs.kitty = {
@@ -551,15 +554,19 @@ END
     home.stateVersion = "24.05";
   };
 
+  nix.settings.trusted-users = [ "root" "craig" ];
+
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     brightnessctl
+    cachix
     # Download tarball from citrix, 24.2.0.64.tar.gz
     # then: nix-prefetch-url file://$PWD/linuxx64-22.12.0.12.tar.gz
     # then: add to configuration.nix and switch
     # then: wfica <launch.ica> file
     citrix_workspace
-    docker-compose
+    devenv
+    dive
     dolphin
     dunst
     firefox
@@ -568,6 +575,8 @@ END
     kitty 
     networkmanagerapplet
     pavucontrol
+    podman-compose
+    podman-tui
     waybar
     zsh
   ];
@@ -581,8 +590,14 @@ END
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.daemon.settings.data-root = "/var/lib/docker";
+  virtualisation.containers.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
