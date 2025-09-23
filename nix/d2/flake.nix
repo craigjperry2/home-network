@@ -35,7 +35,9 @@
       homebrew = {
           enable = true;
           taps = [];
-          brews = [];
+          brews = [
+            "imessage-exporter"
+          ];
           casks = [
             "audacity"
             "chatgpt"

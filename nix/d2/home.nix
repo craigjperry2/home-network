@@ -15,13 +15,25 @@
     dust
     eza
     fd
+    ffmpeg
+    flac
     gh
+    iperf3
     jq
+    kubectl
     lazygit
+    libwebp
+    nmap
     nodejs
+    opencode
+    procs
     python3
     ripgrep
     sqlite
+    tokei
+    uv
+    wget
+    yt-dlp
   ];
 
   home.sessionVariables = {
@@ -286,8 +298,8 @@ END
 
       mkdir = "mkdir -p";
 
-      sec = "sudoedit /etc/nix-darwin/flake.nix";
-      seh = "sudoedit /etc/nix-darwin/home.nix";
+      sec = "nvim /etc/nix-darwin/flake.nix";
+      seh = "nvim /etc/nix-darwin/home.nix";
       sns = "( cd /etc/nix-darwin ; sudo darwin-rebuild switch )";
 
       uu = "( cd /etc/nix-darwin ; sudo nix flake update ); sns";
