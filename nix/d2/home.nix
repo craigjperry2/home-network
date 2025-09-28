@@ -34,6 +34,7 @@
     uv
     wget
     yt-dlp
+    zellij
   ];
 
   home.sessionVariables = {
