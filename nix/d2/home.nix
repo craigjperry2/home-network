@@ -274,6 +274,8 @@ END
       cdr = "cd ~/Code/github.com/craigjperry2";
       cdd = "cd ~/Code/github.com/craigjperry2/dotfiles/dotfiles";
 
+      ckill = "ps -ef | awk \"/501.*Citrix/{print $2}\" | xargs kill";
+
       find = "fd";
       grep = "rg";
 
