@@ -29,7 +29,8 @@
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       environment.systemPackages = [
-        pkgs.vim
+        pkgs.neovim
+        pkgs.mas
       ];
 
       system.primaryUser = "craig";
@@ -60,7 +61,63 @@
             "obsidian"
             "visual-studio-code"
           ];
+          masApps = {
+            "AdGuard for Safari" = 1440147259;
+            "Affinity Designer 2" = 1616831348;
+            "Affinity Photo 2" = 1616822987;
+            "Affinity Publisher 2" = 1606941598;
+            "Darkroom" = 953286746;
+            "Home Assistant" = 1099568401;
+            "keymapp" = 6472865291;
+            "Microsoft Excel" = 462058435;
+            "Microsoft OneNote" = 784801555;
+            "Microsoft PowerPoint" = 462062816;
+            "Microsoft To Do" = 1274495053;
+            "Microsoft Word" = 462054704;
+            "OneDrive" = 823766827;
+            "SponsorBlock" = 1573461917;
+            "Tailscale" = 1475387142;
+            "Telegram" = 747648890;
+            "Userscripts" = 1463298887;
+            "Vimlike" = 1584519802;
+          };
       };
+
+      # not in 25.05 yet
+      # networking.applicationFirewall.enable = true;
+      # networking.applicationFirewall.enableStealthMode = true;
+      networking.computerName = "r2";
+      networking.dns = ["1.1.1.1"];
+      networking.hostName = "r2";
+      networking.knownNetworkServices = [
+        "Wi-Fi"
+      ];
+
+      security.pam.services.sudo_local.touchIdAuth = true;
+
+      system.defaults.CustomUserPreferences = {
+        "com.apple.Safari" = {
+          "AlwaysRestoreSessionAtLaunch" = true;
+          "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
+          # Haven't figured out the defaults read com.apple.Safari keys for enable web dev tools, above not working on macos 26...
+          # "IncludeDevelopMenu" = true;
+          # "WebKitDeveloperExtrasEnabledPreferenceKey" = true;
+          # "WebKitPreferences.developerExtrasEnabled" = true;
+        };
+      };
+
+      system.defaults.NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
+      system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
+      system.defaults.NSGlobalDomain.AppleShowAllFiles = true;
+      system.defaults.NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
+      system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+      system.defaults.NSGlobalDomain."com.apple.keyboard.fnState" = true;
+      system.defaults.NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
+      system.defaults.dock.minimize-to-application = true;
+      system.defaults.dock.orientation = "left";
+      system.defaults.finder.ShowHardDrivesOnDesktop = true;
+      system.defaults.finder.ShowMountedServersOnDesktop = true;
+      system.defaults.finder.ShowPathbar = true;
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
