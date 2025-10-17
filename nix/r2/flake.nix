@@ -59,6 +59,7 @@
             "istat-menus@6"
             "lm-studio"
             "obsidian"
+            "petrichor"
             "visual-studio-code"
           ];
           masApps = {
