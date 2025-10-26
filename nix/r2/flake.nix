@@ -44,14 +44,17 @@
           };
           taps = [];
           brews = [
+            "gemini-cli"
             "imessage-exporter"
           ];
           casks = [
-            "aldente"
+            # "aldente"
             "audacity"
             "chatgpt"
             # "citrix-workspace"
             "claude"
+            "claude-code"
+            "codex"
             "docker-desktop"
             "font-jetbrains-mono-nerd-font"
             "firefox@developer-edition"
