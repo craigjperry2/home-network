@@ -119,6 +119,7 @@
       system.defaults.finder.ShowHardDrivesOnDesktop = true;
       system.defaults.finder.ShowMountedServersOnDesktop = true;
       system.defaults.finder.ShowPathbar = true;
+      system.defaults.loginwindow.LoginwindowText = "Owner: craigp84@gmail.com";
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
