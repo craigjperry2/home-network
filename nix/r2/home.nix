@@ -35,6 +35,7 @@
     wget
     yt-dlp
     zellij
+    zulu
   ];
 
   home.sessionVariables = {
