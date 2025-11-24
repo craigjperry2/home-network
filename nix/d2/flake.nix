@@ -46,6 +46,7 @@
           brews = [
             "gemini-cli"
             "imessage-exporter"
+            "opencode"
           ];
           casks = [
             # "aldente"

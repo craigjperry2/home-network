@@ -25,7 +25,6 @@
     libwebp
     nmap
     nodejs
-    opencode
     procs
     python3
     ripgrep

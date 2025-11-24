@@ -46,6 +46,7 @@
           brews = [
             "gemini-cli"
             "imessage-exporter"
+            "opencode"
           ];
           casks = [
             # "aldente"
@@ -73,7 +74,7 @@
             "Affinity Photo 2" = 1616822987;
             "Affinity Publisher 2" = 1606941598;
             "Darkroom" = 953286746;
-            "Eero" = 1023499075;
+            # "Eero" = 1023499075;
             "Gyroflow" = 6447994244;
             "Home Assistant" = 1099568401;
             "keymapp" = 6472865291;
