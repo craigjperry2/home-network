@@ -49,7 +49,8 @@
             "opencode"
           ];
           casks = [
-            # "aldente"
+            "aldente"
+            "antigravity"
             "audacity"
             "chatgpt"
             # "citrix-workspace"
