@@ -46,6 +46,10 @@
           brews = [
             "gemini-cli"
             "imessage-exporter"
+            {
+              name = "nodejs";
+              link = false;
+            }
             "opencode"
           ];
           casks = [
@@ -60,6 +64,7 @@
             # "docker-desktop"
             "font-jetbrains-mono-nerd-font"
             "firefox@developer-edition"
+            "google-chrome"
             "iina"
             "istat-menus@6"
             "lm-studio"
