@@ -1,0 +1,75 @@
+tap "homebrew/cask"
+tap "homebrew/core"
+brew "gemini-cli"
+brew "imessage-exporter"
+brew "mas"
+brew "opencode"
+cask "aldente"
+cask "antigravity"
+cask "audacity"
+cask "chatgpt"
+cask "claude"
+cask "claude-code"
+cask "codex"
+cask "firefox@developer-edition"
+cask "font-jetbrains-mono-nerd-font"
+cask "google-chrome"
+cask "iina"
+cask "istat-menus@6"
+cask "lm-studio"
+cask "obsidian"
+cask "orbstack"
+cask "petrichor"
+cask "steam"
+cask "visual-studio-code"
+mas "AdGuard for Safari", id: 1440147259
+mas "Affinity Designer 2", id: 1616831348
+mas "Affinity Photo 2", id: 1616822987
+mas "Affinity Publisher 2", id: 1606941598
+mas "Darkroom", id: 953286746
+mas "Gyroflow", id: 6447994244
+mas "Home Assistant", id: 1099568401
+mas "keymapp", id: 6472865291
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft OneNote", id: 784801555
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft To Do", id: 1274495053
+mas "Microsoft Word", id: 462054704
+mas "OneDrive", id: 823766827
+mas "SponsorBlock", id: 1573461917
+mas "Tailscale", id: 1475387142
+mas "Telegram", id: 747648890
+mas "Userscripts", id: 1463298887
+mas "Vimlike", id: 1584519802
+vscode "anthropic.claude-code"
+vscode "bradlc.vscode-tailwindcss"
+vscode "charliermarsh.ruff"
+vscode "dbaeumer.vscode-eslint"
+vscode "esbenp.prettier-vscode"
+vscode "fill-labs.dependi"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.remotehub"
+vscode "google.gemini-cli-vscode-ide-companion"
+vscode "google.geminicodeassist"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-ossdata.vscode-pgsql"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode.azure-repos"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-repositories"
+vscode "openai.chatgpt"
+vscode "redhat.vscode-yaml"
+vscode "sonarsource.sonarlint-vscode"
+vscode "sourcegraph.sourcegraph"
+vscode "svelte.svelte-vscode"
+vscode "tamasfe.even-better-toml"
+vscode "usernamehw.errorlens"
+vscode "vscode-icons-team.vscode-icons"
+vscode "vscodevim.vim"
