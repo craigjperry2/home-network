@@ -61,6 +61,7 @@
             "claude"
             "claude-code"
             "codex"
+            "copilot-cli"
             # "docker-desktop"
             "font-jetbrains-mono-nerd-font"
             "firefox@developer-edition"
