@@ -73,6 +73,7 @@
             "orbstack"
             "petrichor"
             "steam"
+            "transmission"
             "visual-studio-code"
           ];
           masApps = {
