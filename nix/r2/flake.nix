@@ -123,6 +123,33 @@
           # "WebKitDeveloperExtrasEnabledPreferenceKey" = true;
           # "WebKitPreferences.developerExtrasEnabled" = true;
         };
+        "NSGlobalDomain" = {
+          "NSUserKeyEquivalents" = {
+            "Window->Centre" = "~\\Uf715";
+            "Window->Fill" = "\\Uf715";
+            "Window->Move &amp; Resize->Bottom" = "~^\\Uf715";
+            "Window->Move &amp; Resize->Bottom Left" = "^$\\Uf715";
+            "Window->Move &amp; Resize->Bottom Right" = "@$\\Uf715";
+            "Window->Move &amp; Resize->Left" = "^\\Uf715";
+            "Window->Move &amp; Resize->Right" = "@\\Uf715";
+            "Window->Move &amp; Resize->Top" = "@~\\Uf715";
+            "Window->Move &amp; Resize->Top Left" = "$\\Uf715";
+            "Window->Move &amp; Resize->Top Right" = "~$\\Uf715";
+          };
+        };
+      };
+
+      launchd.user.agents.capslockf18 = {
+        serviceConfig = {
+          Label = "com.local.KeyRemapping";
+          ProgramArguments = [
+            "/usr/bin/hidutil"
+            "property"
+            "--set"
+            "{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\": 30064771129, \"HIDKeyboardModifierMappingDst\": 30064771181}]}"
+          ];
+          RunAtLoad = true;
+        };
       };
 
       system.defaults.NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
