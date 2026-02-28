@@ -146,7 +146,7 @@
             "/usr/bin/hidutil"
             "property"
             "--set"
-            "{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\": 30064771129, \"HIDKeyboardModifierMappingDst\": 30064771181}]}"
+            "{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\": 0x700000039, \"HIDKeyboardModifierMappingDst\": 0x70000006D}]}"
           ];
           RunAtLoad = true;
         };
