@@ -25,7 +25,7 @@
     libwebp
     nmap
     nodejs
-    opencode
+    pnpm
     procs
     python3
     ripgrep
@@ -35,6 +35,7 @@
     wget
     yt-dlp
     zellij
+    zulu
   ];
 
   home.sessionVariables = {

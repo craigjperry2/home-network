@@ -46,25 +46,35 @@
           brews = [
             "gemini-cli"
             "imessage-exporter"
+            {
+              name = "nodejs";
+              link = false;
+            }
             "opencode"
           ];
           casks = [
             # "aldente"
+            "antigravity"
             "audacity"
             "chatgpt"
             # "citrix-workspace"
             "claude"
             "claude-code"
             "codex"
+            "codex-app"
+            "copilot-cli"
             # "docker-desktop"
             "font-jetbrains-mono-nerd-font"
             "firefox@developer-edition"
+            "google-chrome"
             "iina"
             "istat-menus@6"
             "lm-studio"
             "obsidian"
             "orbstack"
             "petrichor"
+            # "steam"
+            "transmission"
             "visual-studio-code"
           ];
           masApps = {
@@ -73,6 +83,8 @@
             "Affinity Photo 2" = 1616822987;
             "Affinity Publisher 2" = 1606941598;
             "Darkroom" = 953286746;
+            # "Eero" = 1023499075;
+            "Gyroflow" = 6447994244;
             "Home Assistant" = 1099568401;
             "keymapp" = 6472865291;
             "Microsoft Excel" = 462058435;
@@ -86,6 +98,7 @@
             "Telegram" = 747648890;
             "Userscripts" = 1463298887;
             "Vimlike" = 1584519802;
+            # "Xcode" = 497799835;
           };
       };
 
@@ -109,6 +122,33 @@
           # "IncludeDevelopMenu" = true;
           # "WebKitDeveloperExtrasEnabledPreferenceKey" = true;
           # "WebKitPreferences.developerExtrasEnabled" = true;
+        };
+        "NSGlobalDomain" = {
+          "NSUserKeyEquivalents" = {
+            "Window->Centre" = "~\\Uf715";
+            "Window->Fill" = "\\Uf715";
+            "Window->Move &amp; Resize->Bottom" = "~^\\Uf715";
+            "Window->Move &amp; Resize->Bottom Left" = "^$\\Uf715";
+            "Window->Move &amp; Resize->Bottom Right" = "@$\\Uf715";
+            "Window->Move &amp; Resize->Left" = "^\\Uf715";
+            "Window->Move &amp; Resize->Right" = "@\\Uf715";
+            "Window->Move &amp; Resize->Top" = "@~\\Uf715";
+            "Window->Move &amp; Resize->Top Left" = "$\\Uf715";
+            "Window->Move &amp; Resize->Top Right" = "~$\\Uf715";
+          };
+        };
+      };
+
+      launchd.user.agents.capslockf18 = {
+        serviceConfig = {
+          Label = "com.local.KeyRemapping";
+          ProgramArguments = [
+            "/usr/bin/hidutil"
+            "property"
+            "--set"
+            "{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\": 0x700000039, \"HIDKeyboardModifierMappingDst\": 0x70000006D}]}"
+          ];
+          RunAtLoad = true;
         };
       };
 
