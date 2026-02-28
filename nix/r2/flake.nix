@@ -25,6 +25,7 @@
 
   outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, nix-homebrew, homebrew-core, homebrew-cask, ... }:
   let
+    esc = "\\x1b";
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -125,16 +126,16 @@
         };
         "NSGlobalDomain" = {
           "NSUserKeyEquivalents" = {
-            "Window->Centre" = "~\\Uf715";
-            "Window->Fill" = "\\Uf715";
-            "Window->Move &amp; Resize->Bottom" = "~^\\Uf715";
-            "Window->Move &amp; Resize->Bottom Left" = "^$\\Uf715";
-            "Window->Move &amp; Resize->Bottom Right" = "@$\\Uf715";
-            "Window->Move &amp; Resize->Left" = "^\\Uf715";
-            "Window->Move &amp; Resize->Right" = "@\\Uf715";
-            "Window->Move &amp; Resize->Top" = "@~\\Uf715";
-            "Window->Move &amp; Resize->Top Left" = "$\\Uf715";
-            "Window->Move &amp; Resize->Top Right" = "~$\\Uf715";
+            "${esc}Window${esc}Centre" = "~\\Uf715";
+            "${esc}Window${esc}Fill" = "\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Bottom" = "~^\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Bottom Left" = "^$\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Bottom Right" = "@$\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Left" = "^\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Right" = "@\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Top" = "@~\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Top Left" = "$\\Uf715";
+            "${esc}Window${esc}Move &amp; Resize${esc}Top Right" = "~$\\Uf715";
           };
         };
       };
