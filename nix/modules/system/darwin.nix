@@ -1,7 +1,7 @@
 { config, pkgs, inputs, ... }:
 
 let
-  esc = "\x1b";
+  esc = "\\x1b";
 in
 {
   environment.systemPackages = [
