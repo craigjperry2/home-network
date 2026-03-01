@@ -13,7 +13,7 @@ there are only 3 steps to a fully configured host:
    fact that `dscl` is just awkward to automate (e.g. securetoken not created)
    nix-darwin will adopt the created accounts to perform all remaining config
 2. Install nix from determinate systems, NB: choose vanilla nix in the installer
-3. Clone this repo to `/etc/nix-darwin` then `sudo darwin-rebuild switch`
+3. Clone this repo then `sudo darwin-rebuild switch --flake .#r2` assuming on r2 host
 
 This will then:
 

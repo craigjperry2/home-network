@@ -18,7 +18,7 @@ in
       cleanup = "uninstall";
       upgrade = true;
     };
-    taps = [];
+    taps = builtins.attrNames config.nix-homebrew.taps;
   };
 
   security.pam.services.sudo_local.touchIdAuth = true;
