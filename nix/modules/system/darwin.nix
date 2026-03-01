@@ -30,16 +30,16 @@ in
     };
     "NSGlobalDomain" = {
       "NSUserKeyEquivalents" = {
-        "${esc}Window${esc}Centre" = "~\Uf715";
-        "${esc}Window${esc}Fill" = "\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom" = "~^\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Left" = "^$\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Right" = "@$\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Left" = "^\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Right" = "@\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top" = "@~\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top Left" = "$\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top Right" = "~$\Uf715";
+        "${esc}Window${esc}Centre" = "~\\Uf715";
+        "${esc}Window${esc}Fill" = "\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Bottom" = "~^\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Left" = "^$\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Right" = "@$\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Left" = "^\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Right" = "@\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Top" = "@~\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Top Left" = "$\\Uf715";
+        "${esc}Window${esc}Move &amp; Resize${esc}Top Right" = "~$\\Uf715";
       };
     };
   };
