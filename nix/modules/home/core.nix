@@ -1,16 +1,10 @@
 { config, pkgs, inputs, ... }:
 
 {
-  # Basic user info
-  home.username = "craig";
-  home.homeDirectory = "/home/craig";
-  home.stateVersion = "25.05";
-
-  # User packages (separate from system packages)
+  # Core user packages
   home.packages = with pkgs; [
     bat
     bun
-    delta
     duckdb
     dust
     eza
@@ -40,6 +34,16 @@
     defaultCommand = "fd --type f";
   };
 
+  programs.nnn = {
+    enable = true;
+    package = pkgs.nnn.override ({ withNerdIcons = true; });
+    bookmarks = {
+      l = "~/Code/local";
+      r = "~/Code/github.com";
+      d = "~/Code/github.com";
+    };
+  };
+
   # Git configuration
   programs.git = {
     enable = true;
@@ -48,7 +52,7 @@
     extraConfig = {
       color.ui = "auto";
       core.pager = "delta";
-      delta.navigate = true;  # use n and N to move between diff sections
+      delta.navigate = true;
       delta.line-numbers = true;
       delta.side-by-side = true;
       delta.hyperlinks = true;
@@ -76,19 +80,8 @@
       ctop = "!git log | grep Author | sort | uniq -c | sort -rn";
       ltop = "!git ls-files | xargs -n1 git blame --line-porcelain HEAD | grep '^author ' | sort | uniq -c | sort -nr";
       find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | fzf -m | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f";
-      # edit conflicted file on merge
       edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`";
-      # add conflicted file on merge
       add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`";
-    };
-  };
-
-  programs.nnn = {
-    enable = true;
-    package = pkgs.nnn.override ({ withNerdIcons = true; });
-    bookmarks = {
-      l = "~/Code/local";
-      r = "~/Code/github.com";
     };
   };
 
@@ -151,7 +144,6 @@ END
       set tabstop=2
       set shiftwidth=2
       set ai
-      " set si
       set nowrap
       set backspace=start,eol,indent
       
@@ -164,7 +156,6 @@ END
       
       " Toggle paste mode
       nnoremap <F2> :set invpaste paste?<CR>
-      "set pastetoggle=<F2>
       
       " Add asterisks in block comments
       set formatoptions+=r
@@ -175,18 +166,13 @@ END
       
       " Restore last cursor position on re-opening a file & scroll to middle of screen
       autocmd BufReadPost *
-        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`\""
+        \ if line("'"") >= 1 && line("'"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g`""
         \ |   exe "normal! zz"
         \ | endif
       
-      " JavaScript
       au BufNewFile,BufRead *.es6 setf javascript
-      
-      " TypeScript
       au BufNewFile,BufRead *.tsx setf typescriptreact
-              
-      " Markdown
       au BufNewFile,BufRead *.md set filetype=markdown
       au BufNewFile,BufRead *.mdx set filetype=markdown
       
@@ -209,13 +195,6 @@ END
       set splitbelow
       nnoremap <leader>- :new<CR>
       nnoremap <leader>\| :vnew<CR>
-      
-      " Navigate windows
-      " map sh <C-w>h
-      " map sk <C-w>k
-      " map sj <C-w>j
-      " map sl <C-w>l
-      " map sd <C-w>q
       
       " Resize windows
       nmap <C-S-left> <C-w><
@@ -273,11 +252,11 @@ END
       gdt = "g dt";
       gds = "g ds";
       gdst = "g dst";
-      gl = "g show";  # was git log --oneline
+      gl = "g show";
       gll = "g l";
       gps = "g ps";
       gpl = "g pl";
-      gs = "lazygit";  # was git status for the longest time, hence gs
+      gs = "lazygit";
       gss = "g status";
       gw = "g w";
 
@@ -285,19 +264,13 @@ END
       ll = "eza --git -l --colour=always --tree --level=2 --sort time --icons --header";
 
       mkdir = "mkdir -p";
-
-      sec = "sudoedit /etc/nixos/configuration.nix";
-      seh = "sudoedit /etc/nixos/home.nix";
-      sns = "( cd /etc/nixos ; sudo nixos-rebuild switch --flake .#s1 )";
-
-      uu = "( cd /etc/nixos ; sudo nix flake update ); sns";
     };
 
     initContent = ''
       # vi mode keybindings
       bindkey -v
       
-      # vi style history searching
+      # vi style history searching
       bindkey -M vicmd '?' history-incremental-search-backward
       bindkey -M vicmd '/' history-incremental-search-forward
       
@@ -329,7 +302,7 @@ END
       zle -N edit-command-line
       bindkey -M vicmd "^V" edit-command-line
       
-      # Pause 10ms (minimum) before entering cmd mode
+      # Pause 10ms (minimum) before entering cmd mode
       export KEYTIMEOUT=1
       
       # Escape takes wayyyy too long to process in some terminals, ctrl+[ is a chord and i'm a vim user, so...
@@ -344,12 +317,6 @@ END
           fi
        
           NNN_TMPFILE="''${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-       
-          # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-          # stty start undef
-          # stty stop undef
-          # stty lwrap undef
-          # stty lnext undef
        
           nnn -c "$@"
        
@@ -366,260 +333,58 @@ END
     enable = true;
     settings = {
       add_newline = true;
-      aws = {
-        symbol = "  ";
-      };
-
-      buf = {
-        symbol = " ";
-      };
-
-      bun = {
-        symbol = " ";
-      };
-
-      c = {
-        symbol = " ";
-      };
-
-      cpp = {
-        symbol = " ";
-      };
-
-      cmake = {
-        symbol = " ";
-      };
-
-      conda = {
-        symbol = " ";
-      };
-
-      crystal = {
-        symbol = " ";
-      };
-
-      dart = {
-        symbol = " ";
-      };
-
-      deno = {
-        symbol = " ";
-      };
-
-      directory = {
-        read_only = " 󰌾";
-      };
-
-      docker_context = {
-        symbol = " ";
-      };
-
-      elixir = {
-        symbol = " ";
-      };
-
-      elm = {
-        symbol = " ";
-      };
-
-      fennel = {
-        symbol = " ";
-      };
-
-      fossil_branch = {
-        symbol = " ";
-      };
-
-      gcloud = {
-        symbol = "  ";
-      };
-
-      git_branch = {
-        symbol = " ";
-      };
-
-      git_commit = {
-        tag_symbol = "  ";
-      };
-
-      golang = {
-        symbol = " ";
-      };
-
-      guix_shell = {
-        symbol = " ";
-      };
-
-      haskell = {
-        symbol = " ";
-      };
-
-      haxe = {
-        symbol = " ";
-      };
-
-      hg_branch = {
-        symbol = " ";
-      };
-
-      hostname = {
-        ssh_symbol = " ";
-      };
-
-      java = {
-        symbol = " ";
-      };
-
-      julia = {
-        symbol = " ";
-      };
-
-      kotlin = {
-        symbol = " ";
-      };
-
-      lua = {
-        symbol = " ";
-      };
-
-      memory_usage = {
-        symbol = "󰍛 ";
-      };
-
-      meson = {
-        symbol = "󰔷 ";
-      };
-
-      nim = {
-        symbol = "󰆥 ";
-      };
-
-      nix_shell = {
-        symbol = " ";
-      };
-
-      nodejs = {
-        symbol = " ";
-      };
-
-      ocaml = {
-        symbol = " ";
-      };
-
-      os = {
-        symbols = {
-          Alpaquita = " ";
-          Alpine = " ";
-          AlmaLinux = " ";
-          Amazon = " ";
-          Android = " ";
-          Arch = " ";
-          Artix = " ";
-          CachyOS = " ";
-          CentOS = " ";
-          Debian = " ";
-          DragonFly = " ";
-          Emscripten = " ";
-          EndeavourOS = " ";
-          Fedora = " ";
-          FreeBSD = " ";
-          Garuda = "󰛓 ";
-          Gentoo = " ";
-          HardenedBSD = "󰞌 ";
-          Illumos = "󰈸 ";
-          Kali = " ";
-          Linux = " ";
-          Mabox = " ";
-          Macos = " ";
-          Manjaro = " ";
-          Mariner = " ";
-          MidnightBSD = " ";
-          Mint = " ";
-          NetBSD = " ";
-          NixOS = " ";
-          Nobara = " ";
-          OpenBSD = "󰈺 ";
-          openSUSE = " ";
-          OracleLinux = "󰌷 ";
-          Pop = " ";
-          Raspbian = " ";
-          Redhat = " ";
-          RedHatEnterprise = " ";
-          RockyLinux = " ";
-          Redox = "󰀘 ";
-          Solus = "󰠳 ";
-          SUSE = " ";
-          Ubuntu = " ";
-          Unknown = " ";
-          Void = " ";
-          Windows = "󰍲 ";
-        };
-      };
-
-      package = {
-        symbol = "󰏗 ";
-      };
-
-      perl = {
-        symbol = " ";
-      };
-
-      php = {
-        symbol = " ";
-      };
-
-      pijul_channel = {
-        symbol = " ";
-      };
-
-      pixi = {
-        symbol = "󰏗 ";
-      };
-
-      python = {
-        symbol = " ";
-      };
-
-      rlang = {
-        symbol = "󰟔 ";
-      };
-
-      ruby = {
-        symbol = " ";
-      };
-
-      rust = {
-        symbol = "󱘗 ";
-      };
-
-      scala = {
-        symbol = " ";
-      };
-
-      swift = {
-        symbol = " ";
-      };
-
-      zig = {
-        symbol = " ";
-      };
-
-      gradle = {
-        symbol = " ";
-      };
-    };
-  };
-
-  # XDG directories
-  xdg = {
-    enable = true;
-    userDirs = {
-      enable = true;
-      createDirectories = true;
+      # Base settings based on earlier configuration
+      aws.symbol = "  ";
+      buf.symbol = " ";
+      bun.symbol = " ";
+      c.symbol = " ";
+      cpp.symbol = " ";
+      cmake.symbol = " ";
+      conda.symbol = " ";
+      crystal.symbol = " ";
+      dart.symbol = " ";
+      deno.symbol = " ";
+      directory.read_only = " 󰌾";
+      docker_context.symbol = " ";
+      elixir.symbol = " ";
+      elm.symbol = " ";
+      fennel.symbol = " ";
+      fossil_branch.symbol = " ";
+      gcloud.symbol = "  ";
+      git_branch.symbol = " ";
+      git_commit.tag_symbol = "  ";
+      golang.symbol = " ";
+      guix_shell.symbol = " ";
+      haskell.symbol = " ";
+      haxe.symbol = " ";
+      hg_branch.symbol = " ";
+      hostname.ssh_symbol = " ";
+      java.symbol = " ";
+      julia.symbol = " ";
+      kotlin.symbol = " ";
+      lua.symbol = " ";
+      memory_usage.symbol = "󰍛 ";
+      meson.symbol = "󰔷 ";
+      nim.symbol = "󰆥 ";
+      nix_shell.symbol = " ";
+      nodejs.symbol = " ";
+      ocaml.symbol = " ";
+      package.symbol = "󰏗 ";
+      perl.symbol = " ";
+      php.symbol = " ";
+      pijul_channel.symbol = " ";
+      pixi.symbol = "󰏗 ";
+      python.symbol = " ";
+      rlang.symbol = "󰟔 ";
+      ruby.symbol = " ";
+      rust.symbol = "󱘗 ";
+      scala.symbol = " ";
+      swift.symbol = " ";
+      zig.symbol = " ";
+      gradle.symbol = " ";
     };
   };
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }
-
