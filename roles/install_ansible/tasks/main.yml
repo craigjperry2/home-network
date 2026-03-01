@@ -1,6 +1,0 @@
----
-
-- name: Fedora Ansible Install
-  import_tasks: fedora.yml
-  when: ansible_os_family == "RedHat"
-

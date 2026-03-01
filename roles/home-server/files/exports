@@ -1,3 +1,0 @@
-/usr/backups        -ro -mapall=backups,network 192.168.0.0/24
-/usr/media          -ro -mapall=media,network 192.168.0.0/24
-
