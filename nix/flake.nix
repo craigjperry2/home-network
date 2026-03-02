@@ -56,21 +56,6 @@
           }
         ];
       };
-
-      r3 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/r3/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.craig = import ./hosts/r3/home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          }
-        ];
-      };
     };
 
     darwinConfigurations = {
