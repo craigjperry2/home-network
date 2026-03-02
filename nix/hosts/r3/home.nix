@@ -7,7 +7,7 @@
 
   home.username = "craig";
   home.homeDirectory = "/home/craig";
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.11";
 
   home.packages = with pkgs; [
     curl
