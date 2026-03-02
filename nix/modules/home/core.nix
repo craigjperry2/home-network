@@ -1,21 +1,35 @@
 { config, pkgs, inputs, ... }:
 
 {
-  # Core user packages
   home.packages = with pkgs; [
     bat
     bun
+    delta
     duckdb
     dust
     eza
     fd
+    ffmpeg
+    flac
     gh
+    iperf3
     jq
+    kubectl
     lazygit
+    libwebp
+    nmap
     nodejs
+    pnpm
+    procs
     python3
     ripgrep
     sqlite
+    tokei
+    uv
+    wget
+    yt-dlp
+    zellij
+    zulu
   ];
 
   home.sessionVariables = {
@@ -26,6 +40,28 @@
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    stdlib = ''
+      layout_uv() {
+          if [[ -d ".venv" ]]; then
+              VIRTUAL_ENV="$(pwd)/.venv"
+          fi
+
+          if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+              log_status "No virtual environment exists. Executing `uv venv` to create one."
+              uv venv
+              VIRTUAL_ENV="$(pwd)/.venv"
+          fi
+
+          uv sync
+
+          if [ -d ".venv/bin" ]; then
+              PATH_add .venv/bin
+          fi
+
+          export UV_ACTIVE=1  # or VENV_ACTIVE=1
+          export VIRTUAL_ENV
+      }
+    '';
   };
 
   programs.fzf = {
@@ -236,6 +272,7 @@ END
       cat = "bat --pager=never";
 
       cdc = "cd ~/Code";
+      cdh = "cd ~/Code/github.com/craigjperry2/home-network";
       cdl = "cd ~/Code/github.com/craigjperry2/sandbox";
       cdr = "cd ~/Code/github.com/craigjperry2";
       cdd = "cd ~/Code/github.com/craigjperry2/dotfiles/dotfiles";

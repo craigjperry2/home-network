@@ -17,7 +17,6 @@
     racket
     unzip
     vscode.fhs
-    wget
     xan
     zip
   ];
@@ -123,8 +122,6 @@
   };
 
   programs.zsh.shellAliases = {
-    sec = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/r3/configuration.nix";
-    seh = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/r3/home.nix";
     sns = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#r3 )";
     uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
   };

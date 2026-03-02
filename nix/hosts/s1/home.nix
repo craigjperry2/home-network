@@ -9,9 +9,7 @@
   home.homeDirectory = "/home/craig";
   home.stateVersion = "25.05";
 
-  home.packages = with pkgs; [
-    delta
-  ];
+  home.packages = [ ];
 
   xdg = {
     enable = true;
@@ -22,8 +20,6 @@
   };
 
   programs.zsh.shellAliases = {
-    sec = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/s1/configuration.nix";
-    seh = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/s1/home.nix";
     sns = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#s1 )";
     uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
   };
