@@ -201,8 +201,8 @@ END
       
       " Restore last cursor position on re-opening a file & scroll to middle of screen
       autocmd BufReadPost *
-        \ if line("'"") >= 1 && line("'"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`""
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g'\""
         \ |   exe "normal! zz"
         \ | endif
       
