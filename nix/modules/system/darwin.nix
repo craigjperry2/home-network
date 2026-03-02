@@ -73,10 +73,6 @@ in
   security.pam.services.sudo_local.touchIdAuth = true;
 
   system.defaults.CustomUserPreferences = {
-    "com.apple.Safari" = {
-      "AlwaysRestoreSessionAtLaunch" = true;
-      "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
-    };
     "NSGlobalDomain" = {
       "NSUserKeyEquivalents" = {
         "${esc}Window${esc}Centre" = "~\\Uf715";
