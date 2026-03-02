@@ -29,6 +29,7 @@
       "copilot-cli"
       "font-jetbrains-mono-nerd-font"
       "firefox@developer-edition"
+      "ghostty"
       "google-chrome"
       "iina"
       "istat-menus@6"
@@ -39,6 +40,7 @@
       "steam"
       "transmission"
       "visual-studio-code"
+      "wispr-flow"
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
