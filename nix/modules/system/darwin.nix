@@ -1,7 +1,8 @@
 { config, pkgs, inputs, ... }:
 
 let
-  esc = "\\x1b";
+  esc = builtins.fromJSON ''"\u001b"'';
+  f18 = builtins.fromJSON ''"\uF715"'';
 in
 {
   environment.systemPackages = [
@@ -75,16 +76,17 @@ in
   system.defaults.CustomUserPreferences = {
     "NSGlobalDomain" = {
       "NSUserKeyEquivalents" = {
-        "${esc}Window${esc}Centre" = "~\\Uf715";
-        "${esc}Window${esc}Fill" = "\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom" = "~^\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Left" = "^$\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Bottom Right" = "@$\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Left" = "^\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Right" = "@\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top" = "@~\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top Left" = "$\\Uf715";
-        "${esc}Window${esc}Move &amp; Resize${esc}Top Right" = "~$\\Uf715";
+        "${esc}Window${esc}Centre" = "~${f18}";
+        "${esc}Window${esc}Center" = "~${f18}";
+        "${esc}Window${esc}Fill" = "${f18}";
+        "${esc}Window${esc}Move & Resize${esc}Bottom" = "~^${f18}";
+        "${esc}Window${esc}Move & Resize${esc}Bottom Left" = "^$" + f18;
+        "${esc}Window${esc}Move & Resize${esc}Bottom Right" = "@$" + f18;
+        "${esc}Window${esc}Move & Resize${esc}Left" = "^${f18}";
+        "${esc}Window${esc}Move & Resize${esc}Right" = "@${f18}";
+        "${esc}Window${esc}Move & Resize${esc}Top" = "@~${f18}";
+        "${esc}Window${esc}Move & Resize${esc}Top Left" = "$" + f18;
+        "${esc}Window${esc}Move & Resize${esc}Top Right" = "~$" + f18;
       };
     };
   };
