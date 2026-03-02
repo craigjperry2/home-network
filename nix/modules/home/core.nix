@@ -80,12 +80,11 @@
     };
   };
 
-  # Git configuration
   programs.git = {
     enable = true;
-    userName = "Craig Perry";
-    userEmail = "craigp84@gmail.com";
-    extraConfig = {
+    settings = {
+      user.name = "Craig Perry";
+      user.email = "craigp84@gmail.com";
       color.ui = "auto";
       core.pager = "delta";
       delta.navigate = true;
@@ -98,26 +97,26 @@
       merge.conflictstyle = "zdiff3";
       pull.ff = "only";
       push.autoSetupRemote = true;
-    };
-    aliases = {
-      a = "!git status --short | fzf -m | awk '{print $2}' | xargs git add";
-      ac = "!f(){ git add --all . ; git commit --all --message=\"$1\"; };f";
-      b = "!git branch -q -a --color=always | sed -e 's/^..//' -e '/->/d' | fzf --ansi --preview-window right:75% --preview 'git log -n $(( $( tput lines ) - 3 )) --color=always --pretty=reference {}' | xargs git switch";
-      cm = "commit --message";
-      d = "diff --ignore-all-space";
-      ds = "diff --staged --ignore-all-space";
-      l = "log --topo-order --first-parent --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
-      la = "log --all --topo-order --first-parent --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
-      lg = "log --all --oneline --graph --decorate";
-      ps = "!git push origin $(git symbolic-ref --short HEAD)";
-      pl = "!git pull origin $(git symbolic-ref --short HEAD)";
-      s = "status --short --branch";
-      w = "whatchanged";
-      ctop = "!git log | grep Author | sort | uniq -c | sort -rn";
-      ltop = "!git ls-files | xargs -n1 git blame --line-porcelain HEAD | grep '^author ' | sort | uniq -c | sort -nr";
-      find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | fzf -m | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f";
-      edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`";
-      add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`";
+      alias = {
+        a = "!git status --short | fzf -m | awk '{print $2}' | xargs git add";
+        ac = "!f(){ git add --all . ; git commit --all --message=\"$1\"; };f";
+        b = "!git branch -q -a --color=always | sed -e 's/^..//' -e '/->/d' | fzf --ansi --preview-window right:75% --preview 'git log -n $(( $( tput lines ) - 3 )) --color=always --pretty=reference {}' | xargs git switch";
+        cm = "commit --message";
+        d = "diff --ignore-all-space";
+        ds = "diff --staged --ignore-all-space";
+        l = "log --topo-order --first-parent --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
+        la = "log --all --topo-order --first-parent --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
+        lg = "log --all --oneline --graph --decorate";
+        ps = "!git push origin $(git symbolic-ref --short HEAD)";
+        pl = "!git pull origin $(git symbolic-ref --short HEAD)";
+        s = "status --short --branch";
+        w = "whatchanged";
+        ctop = "!git log | grep Author | sort | uniq -c | sort -rn";
+        ltop = "!git ls-files | xargs -n1 git blame --line-porcelain HEAD | grep '^author ' | sort | uniq -c | sort -nr";
+        find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | fzf -m | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f";
+        edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`";
+        add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`";
+      };
     };
   };
 
