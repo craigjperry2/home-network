@@ -14,9 +14,11 @@
     brews = [ ];
     casks = [
       "aldente"
+      "lm-studio"
       "steam"
     ];
     masApps = {
+      "keymapp" = 6472865291;
       "Xcode" = 497799835;
     };
   };

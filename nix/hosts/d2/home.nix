@@ -51,9 +51,6 @@
   '';
 
   programs.zsh.shellAliases = {
-    ckill = "ps -ef | awk \"/501.*Citrix/{print $2}\" | xargs kill";
-    sec = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/d2/configuration.nix";
-    seh = "nvim ~/Code/github.com/craigjperry2/home-network/nix/hosts/d2/home.nix";
     sns = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo darwin-rebuild switch --flake .#d2 )";
     uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
   };

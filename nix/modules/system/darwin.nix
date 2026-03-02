@@ -41,7 +41,6 @@ in
       "google-chrome"
       "iina"
       "istat-menus@6"
-      "lm-studio"
       "obsidian"
       "orbstack"
       "petrichor"
@@ -57,7 +56,6 @@ in
       "Darkroom" = 953286746;
       "Gyroflow" = 6447994244;
       "Home Assistant" = 1099568401;
-      "keymapp" = 6472865291;
       "Microsoft Excel" = 462058435;
       "Microsoft OneNote" = 784801555;
       "Microsoft PowerPoint" = 462062816;
