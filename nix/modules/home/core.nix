@@ -30,6 +30,7 @@
     yt-dlp
     zellij
     zulu
+    python3Packages.python-kasa
   ];
 
   home.sessionVariables = {
