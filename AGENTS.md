@@ -4,10 +4,6 @@
 
 * `fcos/` directory containts files relating to the Fedora CoreOS immutable
    linux distro
-* `homebrew/` directory contains a snapshot of `brew bundle` output from an old
-   machine when i was experimenting with committing to nix-darwin for host
-   configuration. That decision is finalised now so I intend to delete this soon
-* `nix/` a modular nix flake setup for all my hosts (linux & macos)
 * `AGENTS.md` this file
 * `README.md` human readable version of this file with some additional notes
    for a human using this repo
