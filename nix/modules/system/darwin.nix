@@ -70,32 +70,33 @@ in
       "Vimlike" = 1584519802;
     };
   };
-  vscode = [
-    "charliermarsh.ruff"
-    "dbaeumer.vscode-eslint"
-    "esbenp.prettier-vscode"
-    "fill-labs.dependi"
-    "github.copilot-chat"
-    "github.remotehub"
-    "jnoortheen.nix-ide"
-    "ms-azuretools.vscode-containers"
-    "ms-ossdata.vscode-pgsql"
-    "ms-python.debugpy"
-    "ms-python.python"
-    "ms-python.vscode-pylance"
-    "ms-vscode-remote.remote-containers"
-    "ms-vscode-remote.remote-ssh"
-    "ms-vscode-remote.remote-ssh-edit"
-    "ms-vscode.remote-explorer"
-    "openai.chatgpt"
-    "redhat.vscode-yaml"
-    "sonarsource.sonarlint-vscode"
-    "sourcegraph.sourcegraph"
-    "tamasfe.even-better-toml"
-    "usernamehw.errorlens"
-    "vscode-icons-team.vscode-icons"
-    "vscodevim.vim"
-  ];
+  # Not available in 25.11: https://github.com/nix-darwin/nix-darwin/pull/1222
+  # vscode = [
+  #   "charliermarsh.ruff"
+  #   "dbaeumer.vscode-eslint"
+  #   "esbenp.prettier-vscode"
+  #   "fill-labs.dependi"
+  #   "github.copilot-chat"
+  #   "github.remotehub"
+  #   "jnoortheen.nix-ide"
+  #   "ms-azuretools.vscode-containers"
+  #   "ms-ossdata.vscode-pgsql"
+  #   "ms-python.debugpy"
+  #   "ms-python.python"
+  #   "ms-python.vscode-pylance"
+  #   "ms-vscode-remote.remote-containers"
+  #   "ms-vscode-remote.remote-ssh"
+  #   "ms-vscode-remote.remote-ssh-edit"
+  #   "ms-vscode.remote-explorer"
+  #   "openai.chatgpt"
+  #   "redhat.vscode-yaml"
+  #   "sonarsource.sonarlint-vscode"
+  #   "sourcegraph.sourcegraph"
+  #   "tamasfe.even-better-toml"
+  #   "usernamehw.errorlens"
+  #   "vscode-icons-team.vscode-icons"
+  #   "vscodevim.vim"
+  # ];
 
   security.pam.services.sudo_local.touchIdAuth = true;
 
