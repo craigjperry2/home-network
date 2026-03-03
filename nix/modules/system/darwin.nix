@@ -70,7 +70,7 @@ in
       "Vimlike" = 1584519802;
     };
   };
-  vscodeExtensions = [
+  vscode = [
     "charliermarsh.ruff"
     "dbaeumer.vscode-eslint"
     "esbenp.prettier-vscode"
