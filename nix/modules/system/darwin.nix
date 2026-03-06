@@ -3,6 +3,8 @@
 let
   esc = builtins.fromJSON ''"\u001b"'';
   f18 = builtins.fromJSON ''"\uF715"'';
+  upArrow   = builtins.fromJSON ''"\uF700"'';
+  downArrow = builtins.fromJSON ''"\uF701"'';
 in
 {
   environment.systemPackages = [
@@ -114,6 +116,8 @@ in
         "${esc}Window${esc}Move & Resize${esc}Top" = "@~${f18}";
         "${esc}Window${esc}Move & Resize${esc}Top Left" = "$" + f18;
         "${esc}Window${esc}Move & Resize${esc}Top Right" = "~$" + f18;
+        "${esc}Window${esc}Move to DELL U2722DE" = "^~@" + upArrow;
+        "${esc}Window${esc}Move to Built-in Retina Display" = "^~@" + downArrow;
       };
     };
   };
