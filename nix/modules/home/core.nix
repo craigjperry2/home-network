@@ -12,6 +12,7 @@
     ffmpeg
     flac
     gh
+    gum
     iperf3
     jq
     kubectl
@@ -27,6 +28,7 @@
     tokei
     uv
     wget
+    yazi
     yt-dlp
     zellij
     zulu
