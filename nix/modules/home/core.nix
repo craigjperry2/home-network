@@ -28,6 +28,7 @@
     tokei
     uv
     wget
+    xan
     yazi
     yt-dlp
     zellij
@@ -129,25 +130,8 @@
     viAlias = true;
     vimAlias = true;
     plugins = with pkgs.vimPlugins; [
-      vim-nix
-      vim-surround
-      vim-unimpaired
-      vim-sneak
       fzfWrapper
       fzf-vim
-      {
-        plugin = nnn-vim;
-        config = ''
-          let g:nnn#layout = {'window': {'width':0.9, 'height':0.6, 'highlight':'Debug'}}
-          let g:nnn#action = {'<c-x>': 'split', '<c-v>': 'vsplit'}
-        '';
-      }
-      {
-        plugin = vim-colors-solarized;
-        config = ''
-          colorscheme solarized
-        '';
-      }
       {
         plugin = lualine-nvim;
         config = ''
@@ -156,7 +140,41 @@
 END
         '';
       }
+      # {
+      #   plugin = nnn-vim;
+      #   config = ''
+      #     let g:nnn#layout = {'window': {'width':0.9, 'height':0.6, 'highlight':'Debug'}}
+      #     let g:nnn#action = {'<c-x>': 'split', '<c-v>': 'vsplit'}
+      #   '';
+      # }
       nvim-web-devicons
+      {
+        plugin = vim-colors-solarized;
+        config = ''
+          colorscheme solarized
+        '';
+      }
+      vim-nix
+      vim-sneak
+      vim-surround
+      vim-unimpaired
+      {
+        plugin = yazi;
+        config = ''
+          vim.keymap.set("n", "<leader>-", function()
+            require("yazi").yazi()
+          end)
+
+          vim.g.loaded_netrwPlugin = 1
+          vim.api.nvim_create_autocmd("UIEnter", {
+            callback = function()
+              require("yazi").setup({
+                open_for_directories = true,
+              })
+            end,
+          })
+        '';
+      }
     ];
     extraConfig = ''
       autocmd!
@@ -274,10 +292,10 @@ END
       cat = "bat --pager=never";
 
       cdc = "cd ~/Code";
-      cdh = "cd ~/Code/github.com/craigjperry2/home-network";
-      cdl = "cd ~/Code/github.com/craigjperry2/sandbox";
-      cdr = "cd ~/Code/github.com/craigjperry2";
-      cdd = "cd ~/Code/github.com/craigjperry2/dotfiles/dotfiles";
+      cdh = "cd ~/Code/github.com/craigjperry2/home-network/";
+      cdl = "cd ~/Code/github.com/craigjperry2/";
+      cdr = "cd ~/Code/github.com/";
+      cdd = "cd ~/Code/github.com/craigjperry2/dotfiles/dotfiles/";
 
       find = "fd";
       grep = "rg";
