@@ -134,10 +134,9 @@
       fzf-vim
       {
         plugin = lualine-nvim;
+        type = "lua";
         config = ''
-          lua << END
           require('lualine').setup({options={theme='solarized_dark'}})
-END
         '';
       }
       # {
@@ -161,6 +160,7 @@ END
       vim-unimpaired
       {
         plugin = yazi-nvim;
+        type = "lua";
         config = ''
           vim.keymap.set("n", "<leader>-", function()
             require("yazi").yazi()
