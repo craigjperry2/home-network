@@ -159,7 +159,7 @@ END
       vim-surround
       vim-unimpaired
       {
-        plugin = yazi;
+        plugin = yazi-nvim;
         config = ''
           vim.keymap.set("n", "<leader>-", function()
             require("yazi").yazi()
