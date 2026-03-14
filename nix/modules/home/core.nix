@@ -148,6 +148,7 @@ END
       #   '';
       # }
       nvim-web-devicons
+      plenary-nvim
       {
         plugin = vim-colors-solarized;
         config = ''
