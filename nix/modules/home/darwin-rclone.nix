@@ -55,6 +55,7 @@
       "$local_path"
       --check-access
       --create-empty-src-dirs
+      --exclude="/Personal Vault/**"
       --modify-window
       2s
       --resilient
