@@ -132,6 +132,7 @@
       "terminal.integrated.copyOnSelection": true,
       "terminal.integrated.defaultLocation": "editor",
       "terminal.integrated.fontFamily": "JetBrainsMono NF",
+      "terminal.integrated.fontSize": 13,
       "vim.leader": "<space>",
       "vim.smartRelativeLine": true,
       "vim.sneak": true,
