@@ -33,8 +33,20 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixpkgs-darwin, home-manager, nix-darwin, nix-homebrew, homebrew-core, homebrew-cask, ... }: {
-    
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixpkgs-darwin, home-manager, nix-darwin, nix-homebrew, homebrew-core, homebrew-cask, ... }:
+  let
+    systems = [ "x86_64-linux" "aarch64-darwin" ];
+    eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs { inherit system; }));
+  in {
+
+    formatter = eachSystem (pkgs: pkgs.alejandra);
+
+    devShells = eachSystem (pkgs: {
+      default = pkgs.mkShell {
+        packages = [ pkgs.statix pkgs.deadnix ];
+      };
+    });
+
     nixosConfigurations = {
       s1 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

@@ -2,13 +2,42 @@
 
 ## Repository Layout
 
-* `fcos/` directory containts files relating to the Fedora CoreOS immutable
-   linux distro
-* `AGENTS.md` this file
-* `README.md` human readable version of this file with some additional notes
-   for a human using this repo
+* `nix/` — Nix flake configuring 3 hosts via NixOS and nix-darwin with Home Manager
+  * `flake.nix` — flake entrypoint; defines nixosConfigurations (s1), darwinConfigurations (d2, r2)
+  * `hosts/<name>/` — per-host `configuration.nix` and `home.nix`
+  * `modules/home/core.nix` — shared Home Manager config (packages, programs, shell)
+  * `modules/system/darwin.nix` — shared macOS system config
+* `nix-install/` — custom NixOS installer ISO (legacy non-flake `nix-build` workflow)
+* `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
+* `AGENTS.md` — this file
+* `README.md` — human-readable version of this file with additional notes
 
-That is all that is contained in this repo currently.
+## Nix Configuration
+
+All nix work is done from within the `nix/` directory:
+
+```bash
+cd nix
+```
+
+**Format** (alejandra):
+```bash
+nix fmt
+```
+
+**Validate** the flake (evaluates all host configurations):
+```bash
+nix flake check
+```
+
+**Lint** for anti-patterns (statix) and unused code (deadnix):
+```bash
+nix develop -c statix check
+nix develop -c deadnix
+```
+
+Always run `nix fmt` and `nix flake check` after making changes to nix files.
+`nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
 
 ## Git Repo
 
