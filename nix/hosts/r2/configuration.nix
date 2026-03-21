@@ -9,9 +9,7 @@
 
   networking = {
     computerName = "r2";
-    dns = ["1.1.1.1"];
     hostName = "r2";
-    knownNetworkServices = ["Wi-Fi"];
   };
 
   homebrew = {
