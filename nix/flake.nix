@@ -71,6 +71,7 @@
           home-manager.nixosModules.home-manager
           {
             home-manager = {
+              backupFileExtension = "bak";
               useGlobalPkgs = true;
               useUserPackages = true;
               users.craig = import ./hosts/s1/home.nix;
@@ -89,6 +90,7 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
+              backupFileExtension = "bak";
               useGlobalPkgs = true;
               useUserPackages = true;
               users.craig = import ./hosts/d2/home.nix;
@@ -107,6 +109,7 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
+              backupFileExtension = "bak";
               useGlobalPkgs = true;
               useUserPackages = true;
               users.craig = import ./hosts/r2/home.nix;
