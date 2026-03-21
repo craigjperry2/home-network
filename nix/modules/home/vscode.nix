@@ -129,7 +129,6 @@
       "vim.leader": "<space>",
       "vim.smartRelativeLine": true,
       "vim.sneak": true,
-      "vim.statusBarColorControl": true,
       "vim.useSystemClipboard": false,
       "vsicons.dontShowNewVersionMessage": true,
       "window.autoDetectColorScheme": false,
@@ -140,13 +139,6 @@
       "workbench.preferredDarkColorTheme": "Solarized Dark",
       "workbench.preferredLightColorTheme": "Solarized Light",
       "workbench.startupEditor": "none",
-      "workbench.colorCustomizations": {
-        "statusBar.background": "#5f00af",
-        "statusBar.noFolderBackground": "#5f00af",
-        "statusBar.debuggingBackground": "#5f00af",
-        "statusBar.foreground": "#ffffff",
-        "statusBar.debuggingForeground": "#ffffff"
-      },
     }
   '';
   keybindingsJson = ''
