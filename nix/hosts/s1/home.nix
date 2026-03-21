@@ -1,15 +1,19 @@
-{ config, pkgs, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ../../modules/home/core.nix
   ];
 
-  home.username = "craig";
-  home.homeDirectory = "/home/craig";
-  home.stateVersion = "25.11";
-
-  home.packages = [ ];
+  home = {
+    username = "craig";
+    homeDirectory = "/home/craig";
+    stateVersion = "25.11";
+    packages = [];
+  };
 
   xdg = {
     enable = true;

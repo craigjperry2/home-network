@@ -1,20 +1,20 @@
-{ config, pkgs, inputs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}: let
   esc = builtins.fromJSON ''"\u001b"'';
   f18 = builtins.fromJSON ''"\uF715"'';
-  upArrow   = builtins.fromJSON ''"\uF700"'';
+  upArrow = builtins.fromJSON ''"\uF700"'';
   downArrow = builtins.fromJSON ''"\uF701"'';
   leftArrow = builtins.fromJSON ''"\uF702"'';
   rightArrow = builtins.fromJSON ''"\uF703"'';
-in
-{
+in {
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
   ];
-
-  system.primaryUser = "craig";
 
   homebrew = {
     enable = true;
@@ -28,7 +28,10 @@ in
     brews = [
       "gemini-cli"
       "imessage-exporter"
-      { name = "nodejs"; link = false; }
+      {
+        name = "nodejs";
+        link = false;
+      }
       "opencode"
     ];
     casks = [
@@ -104,26 +107,51 @@ in
 
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  system.defaults.CustomUserPreferences = {
-    "NSGlobalDomain" = {
-      "NSUserKeyEquivalents" = {
-        "${esc}Window${esc}Centre" = "~${f18}";
-        "${esc}Window${esc}Center" = "~${f18}";
-        "${esc}Window${esc}Fill" = "${f18}";
-        "${esc}Window${esc}Move & Resize${esc}Bottom" = "~^${f18}";
-        "${esc}Window${esc}Move & Resize${esc}Bottom Left" = "^$" + f18;
-        "${esc}Window${esc}Move & Resize${esc}Bottom Right" = "@$" + f18;
-        "${esc}Window${esc}Move & Resize${esc}Left" = "^${f18}";
-        "${esc}Window${esc}Move & Resize${esc}Right" = "@${f18}";
-        "${esc}Window${esc}Move & Resize${esc}Top" = "@~${f18}";
-        "${esc}Window${esc}Move & Resize${esc}Top Left" = "$" + f18;
-        "${esc}Window${esc}Move & Resize${esc}Top Right" = "~$" + f18;
-        "${esc}Window${esc}Move to DELL U2722DE" = "^~@" + upArrow;
-        "${esc}Window${esc}Move to Built-in Retina Display" = "^~@" + downArrow;
-        "${esc}Window${esc}Move Window Back to Mac" = "^~@" + leftArrow;
-        "${esc}Window${esc}Move to iPad M1" = "^~@" + rightArrow;
+  system = {
+    primaryUser = "craig";
+    defaults = {
+      CustomUserPreferences = {
+        "NSGlobalDomain" = {
+          "NSUserKeyEquivalents" = {
+            "${esc}Window${esc}Centre" = "~${f18}";
+            "${esc}Window${esc}Center" = "~${f18}";
+            "${esc}Window${esc}Fill" = "${f18}";
+            "${esc}Window${esc}Move & Resize${esc}Bottom" = "~^${f18}";
+            "${esc}Window${esc}Move & Resize${esc}Bottom Left" = "^$" + f18;
+            "${esc}Window${esc}Move & Resize${esc}Bottom Right" = "@$" + f18;
+            "${esc}Window${esc}Move & Resize${esc}Left" = "^${f18}";
+            "${esc}Window${esc}Move & Resize${esc}Right" = "@${f18}";
+            "${esc}Window${esc}Move & Resize${esc}Top" = "@~${f18}";
+            "${esc}Window${esc}Move & Resize${esc}Top Left" = "$" + f18;
+            "${esc}Window${esc}Move & Resize${esc}Top Right" = "~$" + f18;
+            "${esc}Window${esc}Move to DELL U2722DE" = "^~@" + upArrow;
+            "${esc}Window${esc}Move to Built-in Retina Display" = "^~@" + downArrow;
+            "${esc}Window${esc}Move Window Back to Mac" = "^~@" + leftArrow;
+            "${esc}Window${esc}Move to iPad M1" = "^~@" + rightArrow;
+          };
+        };
       };
+      NSGlobalDomain = {
+        AppleInterfaceStyleSwitchesAutomatically = true;
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
+        NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticSpellingCorrectionEnabled = false;
+        "com.apple.keyboard.fnState" = true;
+        "com.apple.mouse.tapBehavior" = 1;
+      };
+      dock = {
+        minimize-to-application = true;
+        orientation = "left";
+      };
+      finder = {
+        ShowHardDrivesOnDesktop = true;
+        ShowMountedServersOnDesktop = true;
+        ShowPathbar = true;
+      };
+      loginwindow.LoginwindowText = "Owner: craigp84@gmail.com";
     };
+    stateVersion = 6;
   };
 
   launchd.user.agents.capslockf18 = {
@@ -139,23 +167,8 @@ in
     };
   };
 
-  system.defaults.NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
-  system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
-  system.defaults.NSGlobalDomain.AppleShowAllFiles = true;
-  system.defaults.NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
-  system.defaults.NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
-  system.defaults.NSGlobalDomain."com.apple.keyboard.fnState" = true;
-  system.defaults.NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
-  system.defaults.dock.minimize-to-application = true;
-  system.defaults.dock.orientation = "left";
-  system.defaults.finder.ShowHardDrivesOnDesktop = true;
-  system.defaults.finder.ShowMountedServersOnDesktop = true;
-  system.defaults.finder.ShowPathbar = true;
-  system.defaults.loginwindow.LoginwindowText = "Owner: craigp84@gmail.com";
-
   nix.settings.experimental-features = "nix-command flakes";
 
-  system.stateVersion = 6;
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
 

@@ -1,15 +1,18 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../../modules/home/core.nix
   ];
 
-  home.username = "craig";
-  home.homeDirectory = "/Users/craig";
-  home.stateVersion = "25.11";
-
-  home.packages = [ ];
+  home = {
+    username = "craig";
+    homeDirectory = "/Users/craig";
+    stateVersion = "25.11";
+    packages = [];
+  };
 
   programs.zsh.shellAliases = {
     sns = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo darwin-rebuild switch --flake .#r2 )";

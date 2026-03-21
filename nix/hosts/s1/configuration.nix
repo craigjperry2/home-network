@@ -1,26 +1,34 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, pkgs, inputs, unstable, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  inputs,
+  unstable,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = ["tank"];
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    supportedFilesystems = ["zfs"];
+    zfs.extraPools = ["tank"];
+  };
 
-  networking.hostName = "s1"; # Define your hostname.
-  networking.hostId = "bda8af9f";  # Derived from /etc/machine-id
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking = {
+    hostName = "s1"; # Define your hostname.
+    hostId = "bda8af9f"; # Derived from /etc/machine-id
+    # Pick only one of the below networking options.
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -39,9 +47,6 @@
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
-
-
-  
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -71,7 +76,7 @@
   # };
   users.users.craig = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = ["wheel" "networkmanager"];
     initialPassword = "changeme01";
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
@@ -80,20 +85,18 @@
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9pHorrpMijyrP4U8LMZ7oC/jFAr1me9GCNMCGjZG6eGLkLnNb58vQivTblr9JUgBHTbNHJ6TTdcNMjQICCLiQDWrtupa2HOokDEHyserwyCShGwFGEGwdprBs5r4MpRIRyoNqWlfx3IJswV8TmKReQhjShBR91OXfuikIw28A8E7Bh1qLAiDGAfAps1skmQ5aIbxBuDH/uGD0l0wQOhNVXrsQHvZSawTtthjpJ5gpURbjdZ4ZwLmLBHa4sm77/E5QGe9QFIGPoN4JZeUF5Onf1Yu4oebC2W96RRHxhfDYVmneKD7g+6IuILnIB7vVojy/1u0voaQVXVA5h7ozE/AJd+vAe8CBw0bwrmCTJtckqFyEs0+u+jN0cmu51lH+P+jjPc3REZDQKZNqZMsb1y/Zn2LJlv2dspvhi5CPVyXNr2kXXCfw2XISWT+at4vjtRHcPpQSJisq/MP81EO8JzuyXYKYcCMoH7HUkCSom0zmo1WylBPCQtXIHu75Eo8Rj+Bhocs0QHlaWyKuicjqnbWEiOHV2khQACVs9a5xTTSPpOLHNsOoCLzuFUvD9iq4moDAlI8paJaIqR6+HayeTDf6frsGWPnOwDXnG1E6Va54uRb2Rstp3aDp+ifMLSrAfF9Mh6EQky/m69b+gZucs3TtmrRfI6MVK2M4ZLkn4L28nw=="
     ];
   };
-      
 
   # programs.firefox.enable = true;
 
   programs.zsh.enable = true;
 
-  environment.shells = with pkgs; [ zsh ];
-
+  environment.shells = with pkgs; [zsh];
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
+    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #   wget
     curl
     ghostty.terminfo
     htop
@@ -118,15 +121,20 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  services.zfs.autoScrub.enable = true;
-  services.zfs.autoSnapshot.enable = true;
-  services.zfs.autoSnapshot.frequent = 4;
-  services.zfs.autoSnapshot.hourly = 24;
-  services.zfs.autoSnapshot.daily = 7;
-  services.zfs.autoSnapshot.weekly = 4;
-  services.zfs.autoSnapshot.monthly = 12;
+  services = {
+    openssh.enable = true;
+    zfs = {
+      autoScrub.enable = true;
+      autoSnapshot = {
+        enable = true;
+        frequent = 4;
+        hourly = 24;
+        daily = 7;
+        weekly = 4;
+        monthly = 12;
+      };
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -147,8 +155,8 @@
     enable = true;
     wheelNeedsPassword = false;
   };
-  
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
@@ -168,6 +176,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.05"; # Did you read the comment?
-
 }
-

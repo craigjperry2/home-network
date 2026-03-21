@@ -33,24 +33,33 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixpkgs-darwin, home-manager, nix-darwin, nix-homebrew, homebrew-core, homebrew-cask, ... }:
-  let
-    systems = [ "x86_64-linux" "aarch64-darwin" ];
-    eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs { inherit system; }));
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    nixpkgs-darwin,
+    home-manager,
+    nix-darwin,
+    nix-homebrew,
+    homebrew-core,
+    homebrew-cask,
+    ...
+  }: let
+    systems = ["x86_64-linux" "aarch64-darwin"];
+    eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs {inherit system;}));
   in {
-
     formatter = eachSystem (pkgs: pkgs.alejandra);
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [ pkgs.statix pkgs.deadnix ];
+        packages = [pkgs.statix pkgs.deadnix];
       };
     });
 
     nixosConfigurations = {
       s1 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { 
+        specialArgs = {
           inherit inputs;
           unstable = import nixpkgs-unstable {
             system = "x86_64-linux";
@@ -61,10 +70,12 @@
           ./hosts/s1/configuration.nix
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.craig = import ./hosts/s1/home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.craig = import ./hosts/s1/home.nix;
+              extraSpecialArgs = {inherit inputs;};
+            };
           }
         ];
       };
@@ -72,32 +83,36 @@
 
     darwinConfigurations = {
       d2 = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = {inherit inputs;};
         modules = [
           ./hosts/d2/configuration.nix
           home-manager.darwinModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.craig = import ./hosts/d2/home.nix;
+              extraSpecialArgs = {inherit inputs;};
+            };
             users.users.craig.home = "/Users/craig";
-            home-manager.users.craig = import ./hosts/d2/home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs; };
           }
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
 
       r2 = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = {inherit inputs;};
         modules = [
           ./hosts/r2/configuration.nix
           home-manager.darwinModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.craig = import ./hosts/r2/home.nix;
+              extraSpecialArgs = {inherit inputs;};
+            };
             users.users.craig.home = "/Users/craig";
-            home-manager.users.craig = import ./hosts/r2/home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs; };
           }
           nix-homebrew.darwinModules.nix-homebrew
         ];

@@ -1,18 +1,22 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../../modules/system/darwin.nix
   ];
 
-  networking.computerName = "d2";
-  networking.dns = ["1.1.1.1"];
-  networking.hostName = "d2";
-  networking.knownNetworkServices = [ "Wi-Fi" ];
+  networking = {
+    computerName = "d2";
+    dns = ["1.1.1.1"];
+    hostName = "d2";
+    knownNetworkServices = ["Wi-Fi"];
+  };
 
   homebrew = {
-    brews = [ ];
-    casks = [ ];
-    masApps = { };
+    brews = [];
+    casks = [];
+    masApps = {};
   };
 }
