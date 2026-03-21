@@ -5,6 +5,7 @@
 }: {
   imports = [
     ../../modules/home/core.nix
+    ../../modules/home/darwin-rclone.nix
   ];
 
   home = {
@@ -12,6 +13,11 @@
     homeDirectory = "/Users/craig";
     stateVersion = "25.11";
     packages = [];
+  };
+
+  homeNetwork.onedriveRclone = {
+    enable = true;
+    localPath = "/Volumes/d2 data/craig/onedrive-rclone";
   };
 
   programs.zsh.shellAliases = {

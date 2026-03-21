@@ -27,6 +27,42 @@ This will then:
 
 NB: tokens are not managed in this config, you'll have to manually sign in to services.
 
+#### OneDrive via `rclone`
+
+The native Mac App Store OneDrive app is still kept around during the pilot, but
+`rclone` is now configured from nix on the Darwin hosts.
+
+After `darwin-rebuild switch`, bootstrap the `rclone` remote manually:
+
+1. Run `rclone config`
+2. Create a remote named `onedrive`
+3. Complete the Microsoft login flow in your browser
+4. Verify access with `rclone lsd onedrive:`
+5. Run `rclone-onedrive-resync` once to seed the local mirror before the background
+   launch agent takes over
+
+This rollout uses `rclone bisync`, not `rclone mount`, so `macFUSE` is not
+required.
+
+The pilot sync roots are:
+
+* `d2` → `/Volumes/d2 data/craig/onedrive-rclone`
+* `r2` → `/Users/craig/onedrive-rclone`
+
+If you don't want to wait for the next scheduled run after the initial resync,
+kick the agent manually:
+
+```bash
+launchctl kickstart -k "gui/$(id -u)/org.home-network.rclone-onedrive"
+```
+
+Use `rclone authorize onedrive` only for headless setups. Local macOS hosts
+should just use `rclone config`.
+
+Because the pilot uses separate local paths, rollback is straightforward: stop
+using the `onedrive-rclone` folder and continue with the native OneDrive app
+until the `rclone` workflow has been proven.
+
 ## History
 
 It's changed over the years, Ansible was a staple tool for the longest time. It's
