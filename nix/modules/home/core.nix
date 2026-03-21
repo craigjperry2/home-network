@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}: {
+{pkgs, ...}: {
+  imports = [
+    ./vscode.nix
+  ];
+
   home.packages = with pkgs; [
     bat
     bun
