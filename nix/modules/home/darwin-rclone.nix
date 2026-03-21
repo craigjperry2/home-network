@@ -49,14 +49,16 @@
     fi
 
     ensure_local_path
-  '';
 
-  bisyncArgs = ''
-    "$remote_name:" "$local_path" \
-      --check-access \
-      --create-empty-src-dirs \
-      --modify-window 2s \
+    bisync_args=(
+      "$remote_name:"
+      "$local_path"
+      --check-access
+      --create-empty-src-dirs
+      --modify-window
+      2s
       --resilient
+    )
   '';
 
   syncScript = pkgs.writeShellApplication {
@@ -73,7 +75,7 @@
         exit 1
       fi
 
-      exec rclone bisync ${bisyncArgs}
+      exec rclone bisync "''${bisync_args[@]}"
     '';
   };
 
@@ -86,7 +88,7 @@
     text = ''
       ${commonScriptSetup}
 
-      rclone bisync ${bisyncArgs} --resync
+      rclone bisync "''${bisync_args[@]}" --resync
       touch "$bootstrap_marker"
     '';
   };
