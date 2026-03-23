@@ -134,9 +134,59 @@
       "terminal.integrated.fontFamily": "JetBrainsMono NF",
       "terminal.integrated.fontSize": 13,
       "vim.leader": "<space>",
+      "vim.normalModeKeyBindings": [
+        {
+          "before": ["<leader>", "bd"],
+          "commands": ["workbench.action.closeActiveEditor"]
+        },
+        {
+          "before": ["<leader>", "ff"],
+          "commands": ["workbench.action.quickOpen"]
+        },
+        {
+          "before": ["<leader>", "fn"],
+          "commands": ["workbench.action.files.newUntitledFile"]
+        },
+        {
+          "before": ["<leader>", "fs"],
+          "commands": ["workbench.action.files.save"]
+        },
+        {
+          "before": ["<S-h>"],
+          "commands": ["workbench.action.previousEditor"]
+        },
+        {
+          "before": ["<S-l>"],
+          "commands": ["workbench.action.nextEditor"]
+        },
+        {
+          "before": ["g", "d"],
+          "commands": ["editor.action.goToDeclaration"]
+        },
+        {
+          "before": ["g", "r"],
+          "commands": ["editor.action.goToReferences"]
+        },
+        {
+          "before": ["g", "i"],
+          "commands": ["editor.action.goToImplementation"]
+        },
+        {
+          "before": ["K"],
+          "commands": ["editor.action.showHover"]
+        },
+        {
+          "before": ["<leader>", "c", "a"],
+          "commands": ["editor.action.quickFix"]
+        },
+        {
+          "before": ["<leader>", "c", "r"],
+          "commands": ["editor.action.refactor"]
+        },
+      ],
       "vim.smartRelativeLine": true,
       "vim.sneak": true,
-      "vim.useSystemClipboard": false,
+      "vim.useSystemClipboard": true,
       "vsicons.dontShowNewVersionMessage": true,
       "window.autoDetectColorScheme": false,
       "window.restoreWindows": "none",
