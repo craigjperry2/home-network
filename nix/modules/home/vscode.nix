@@ -136,19 +136,19 @@
       "vim.leader": "<space>",
       "vim.normalModeKeyBindings": [
         {
-          "before": ["<leader>", "bd"],
+          "before": ["<leader>", "b", "d"],
           "commands": ["workbench.action.closeActiveEditor"]
         },
         {
-          "before": ["<leader>", "ff"],
+          "before": ["<leader>", "f", "f"],
           "commands": ["workbench.action.quickOpen"]
         },
         {
-          "before": ["<leader>", "fn"],
+          "before": ["<leader>", "f", "n"],
           "commands": ["workbench.action.files.newUntitledFile"]
         },
         {
-          "before": ["<leader>", "fs"],
+          "before": ["<leader>", "f", "s"],
           "commands": ["workbench.action.files.save"]
         },
         {
