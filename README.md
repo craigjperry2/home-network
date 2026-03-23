@@ -38,7 +38,9 @@ After `darwin-rebuild switch`, bootstrap the `rclone` remote manually:
 2. Create a remote named `onedrive`
 3. Complete the Microsoft login flow in your browser
 4. Verify access with `rclone lsd onedrive:`
-5. Run `rclone-onedrive-resync` once to seed the local mirror before the background
+5. Create the `RCLONE_TEST` sentinel file in the local sync root
+6. Create the same sentinel remotely with `rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST`
+7. Run `rclone-onedrive-resync` once to seed the local mirror before the background
    launch agent takes over
 
 This rollout uses `rclone bisync`, not `rclone mount`, so `macFUSE` is not
@@ -48,6 +50,19 @@ The pilot sync roots are:
 
 * `d2` → `/Volumes/d2 data/craig/onedrive-rclone`
 * `r2` → `/Users/craig/onedrive-rclone`
+
+Example bootstrap for `r2`:
+
+```bash
+cd /Users/craig/onedrive-rclone
+touch RCLONE_TEST
+rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
+rclone-onedrive-resync
+```
+
+`--check-access` expects `RCLONE_TEST` to exist on both sides before the first
+`bisync`, so this is a one-time bootstrap step rather than an indication that
+the remote auth is broken.
 
 If you don't want to wait for the next scheduled run after the initial resync,
 kick the agent manually:
