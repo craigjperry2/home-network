@@ -305,6 +305,8 @@
     }
   '';
   extensionsList = ''
+    bierner.markdown-mermaid
+    bpruitt-goddard.mermaid-markdown-syntax-highlighting
     charliermarsh.ruff
     dbaeumer.vscode-eslint
     esbenp.prettier-vscode
