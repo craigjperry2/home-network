@@ -133,11 +133,54 @@
       "terminal.integrated.defaultLocation": "editor",
       "terminal.integrated.fontFamily": "JetBrainsMono NF",
       "terminal.integrated.fontSize": 13,
+      "vim.handleKeys": {
+        "<C-s>": false,
+      },
       "vim.leader": "<space>",
       "vim.normalModeKeyBindings": [
         {
+          "before": ["<leader>", "/"],
+          "commands": ["workbench.action.findInFiles"]
+        },
+        {
+          "before": ["<leader>", "-"],
+          "commands": ["workbench.action.splitEditorDown"]
+        },
+        {
+          "before": ["<leader>", "|"],
+          "commands": ["workbench.action.splitEditorRight"]
+        },
+        {
           "before": ["<leader>", "b", "d"],
           "commands": ["workbench.action.closeActiveEditor"]
+        },
+        {
+          "before": ["<leader>", "b", "l"],
+          "commands": ["workbench.action.closeEditorsToTheLeft"]
+        },
+        {
+          "before": ["<leader>", "b", "o"],
+          "commands": ["workbench.action.closeOtherEditors"]
+        },
+        {
+          "before": ["<leader>", "b", "p"],
+          "commands": ["workbench.action.pinEditor"]
+        },
+        {
+          "before": ["<leader>", "b", "r"],
+          "commands": ["workbench.action.closeEditorsToTheRight"]
+        },
+        {
+          "before": ["<leader>", "c", "a"],
+          "commands": ["editor.action.quickFix"]
+        },
+        {
+          "before": ["<leader>", "c", "o"],
+          "commands": ["editor.action.organizeImports"]
+        },
+        {
+          "before": ["<leader>", "c", "r"],
+          "commands": ["editor.action.refactor"]
         },
         {
           "before": ["<leader>", "f", "f"],
@@ -152,6 +195,18 @@
           "commands": ["workbench.action.files.save"]
         },
         {
+          "before": ["<leader>", "f", "t"],
+          "commands": ["workbench.action.createTerminalEditor"]
+        },
+        {
+          "before": ["<leader>", "u", "w"],
+          "commands": ["editor.action.toggleWordWrap"]
+        },
+        {
+          "before": ["<leader>", "x", "q"],
+          "commands": ["workbench.actions.view.problems"]
+        },
+        {
           "before": ["<S-h>"],
           "commands": ["workbench.action.previousEditor"]
         },
@@ -160,28 +215,40 @@
           "commands": ["workbench.action.nextEditor"]
         },
         {
+          "before": ["K"],
+          "commands": ["editor.action.showHover"]
+        },
+        {
           "before": ["g", "d"],
+          "commands": ["editor.action.goToDefinition"]
+        },
+        {
+          "before": ["g", "D"],
           "commands": ["editor.action.goToDeclaration"]
+        },
+        {
+          "before": ["g", "l"],
+          "commands": ["workbench.view.scm"]
+        },
+        {
+          "before": ["g", "I"],
+          "commands": ["editor.action.goToImplementation"]
         },
         {
           "before": ["g", "r"],
           "commands": ["editor.action.goToReferences"]
         },
         {
-          "before": ["g", "i"],
-          "commands": ["editor.action.goToImplementation"]
+          "before": ["g", "y"],
+          "commands": ["editor.action.goToTypeDefinition"]
         },
         {
-          "before": ["K"],
-          "commands": ["editor.action.showHover"]
+          "before": ["[", "q"],
+          "commands": ["editor.action.marker.next"]
         },
         {
-          "before": ["<leader>", "c", "a"],
-          "commands": ["editor.action.quickFix"]
-        },
-        {
-          "before": ["<leader>", "c", "r"],
-          "commands": ["editor.action.refactor"]
+          "before": ["]", "q"],
+          "commands": ["editor.action.marker.prev"]
         },
       ],
       "vim.smartRelativeLine": true,
