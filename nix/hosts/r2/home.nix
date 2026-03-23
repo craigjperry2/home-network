@@ -18,6 +18,7 @@
   homeNetwork.onedriveRclone = {
     enable = true;
     localPath = "/Users/craig/onedrive-rclone";
+    syncIntervalSeconds = 600;
   };
 
   programs.zsh.shellAliases = {
