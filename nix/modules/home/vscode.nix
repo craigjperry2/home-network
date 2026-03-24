@@ -183,6 +183,10 @@
           "commands": ["editor.action.refactor"]
         },
         {
+          "before": ["<leader>", "e"],
+          "commands": ["workbench.view.explorer"]
+        },
+        {
           "before": ["<leader>", "f", "f"],
           "commands": ["workbench.action.quickOpen"]
         },
@@ -203,8 +207,24 @@
           "commands": ["editor.action.toggleWordWrap"]
         },
         {
-          "before": ["<leader>", "x", "q"],
+          "before": ["<leader>", "x", "x"],
           "commands": ["workbench.actions.view.problems"]
+        },
+        {
+          "before": ["<C-h>"],
+          "commands": ["workbench.action.focusLeftGroup"]
+        },
+        {
+          "before": ["<C-j>"],
+          "commands": ["workbench.action.focusBelowGroup"]
+        },
+        {
+          "before": ["<C-k>"],
+          "commands": ["workbench.action.focusAboveGroup"]
+        },
+        {
+          "before": ["<C-l>"],
+          "commands": ["workbench.action.focusRightGroup"]
         },
         {
           "before": ["<S-h>"],
