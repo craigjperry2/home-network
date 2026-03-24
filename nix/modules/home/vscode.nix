@@ -208,7 +208,7 @@
         },
         {
           "before": ["<leader>", "x", "x"],
-          "commands": ["workbench.actions.view.problems"]
+          "commands": ["workbench.panel.markers.view.focus"]
         },
         {
           "before": ["<C-h>"],
