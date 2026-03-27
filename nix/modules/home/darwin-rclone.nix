@@ -59,6 +59,8 @@
       --modify-window
       2s
       --resilient
+      --fast-list
+      --onedrive-delta
     )
   '';
 
