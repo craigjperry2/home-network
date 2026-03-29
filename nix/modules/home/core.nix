@@ -303,9 +303,6 @@
         cdr = "cd ~/Code/github.com/";
         cdd = "cd ~/Code/github.com/craigjperry2/dotfiles/dotfiles/";
 
-        find = "fd";
-        grep = "rg";
-
         g = "git";
         ga = "g a";
         gac = "g ac";
