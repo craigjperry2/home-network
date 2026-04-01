@@ -108,11 +108,9 @@ Xp/ai3sRMAGVkhEI1AIgEY//Wt6V7cPRIC2vfAVCsn2MnimMFyS/xLhlS0FCJsA=
     htop
     neovim
     p7zip
-    smartmontools
     sysstat
     unzip
     zellij
-    zfs
     zip
   ];
 
