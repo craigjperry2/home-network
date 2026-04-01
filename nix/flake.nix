@@ -31,6 +31,11 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+
+    arthur-ficial-tap = {
+      url = "github:arthur-ficial/homebrew-tap";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {

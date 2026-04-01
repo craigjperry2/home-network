@@ -26,13 +26,9 @@ in {
     taps = builtins.attrNames config.nix-homebrew.taps;
 
     brews = [
+      "arthur-ficial/homebrew-tap/apfel"
       "gemini-cli"
       "imessage-exporter"
-      {
-        name = "nodejs";
-        link = false;
-      }
-      "opencode"
     ];
     casks = [
       "antigravity"
@@ -178,6 +174,7 @@ in {
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
+      "arthur-ficial/homebrew-tap" = inputs.arthur-ficial-tap;
     };
     mutableTaps = false;
     autoMigrate = true;
