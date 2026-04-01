@@ -50,7 +50,7 @@
     homebrew-cask,
     ...
   }: let
-    systems = ["x86_64-linux" "aarch64-darwin"];
+    systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
     eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs {inherit system;}));
   in {
     formatter = eachSystem (pkgs: pkgs.alejandra);
@@ -80,6 +80,29 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users.craig = import ./hosts/s1/home.nix;
+              extraSpecialArgs = {inherit inputs;};
+            };
+          }
+        ];
+      };
+      s2 = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        specialArgs = {
+          inherit inputs;
+          unstable = import nixpkgs-unstable {
+            system = "aarch64-linux";
+            config.allowUnfree = true;
+          };
+        };
+        modules = [
+          ./hosts/s2/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              backupFileExtension = "bak";
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.craig = import ./hosts/s2/home.nix;
               extraSpecialArgs = {inherit inputs;};
             };
           }
