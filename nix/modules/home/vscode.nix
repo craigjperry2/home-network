@@ -100,7 +100,7 @@
       "python.analysis.inlayHints.functionReturnTypes": true,
       "python.analysis.languageServerMode": "full",
       "python.analysis.typeCheckingMode": "strict",
-      "python.defaultInterpreterPath": "python3",
+      "python.defaultInterpreterPath": "python",
       "python.languageServer": "Pylance",
       "pgsql.connections": [
         {
