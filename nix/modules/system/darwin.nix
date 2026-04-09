@@ -49,9 +49,9 @@ in {
       "obsidian"
       "orbstack"
       "petrichor"
+      "spokenly"
       "transmission"
       "visual-studio-code"
-      "wispr-flow"
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
