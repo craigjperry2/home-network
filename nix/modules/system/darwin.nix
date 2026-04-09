@@ -45,6 +45,7 @@ in {
       "google-chrome"
       "iina"
       "istat-menus@6"
+      "little-snitch"
       "obsidian"
       "orbstack"
       "petrichor"
