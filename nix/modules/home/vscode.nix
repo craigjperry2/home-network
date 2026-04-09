@@ -275,7 +275,7 @@
       "vim.sneak": true,
       "vim.useSystemClipboard": true,
       "vsicons.dontShowNewVersionMessage": true,
-      "window.autoDetectColorScheme": false,
+      "window.autoDetectColorScheme": true,
       "window.restoreWindows": "none",
       "workbench.colorTheme": "Solarized Dark",
       "workbench.editor.swipeToNavigate": true,
