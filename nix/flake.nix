@@ -9,10 +9,16 @@
     # Darwin packages
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
 
-    # Home Manager
+    # Home Manager (NixOS)
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Home Manager (Darwin)
+    home-manager-darwin = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     # Nix Darwin
@@ -44,6 +50,7 @@
     nixpkgs-unstable,
     nixpkgs-darwin,
     home-manager,
+    home-manager-darwin,
     nix-darwin,
     nix-homebrew,
     homebrew-core,
@@ -115,7 +122,7 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./hosts/d2/configuration.nix
-          home-manager.darwinModules.home-manager
+          home-manager-darwin.darwinModules.home-manager
           {
             home-manager = {
               backupFileExtension = "bak";
@@ -134,7 +141,7 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./hosts/r2/configuration.nix
-          home-manager.darwinModules.home-manager
+          home-manager-darwin.darwinModules.home-manager
           {
             home-manager = {
               backupFileExtension = "bak";
