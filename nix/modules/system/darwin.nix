@@ -49,6 +49,7 @@ in {
       "obsidian"
       "orbstack"
       "petrichor"
+      "raspberry-pi-imager"
       "spokenly"
       "transmission"
       "visual-studio-code"
