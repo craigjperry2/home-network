@@ -28,6 +28,18 @@
     # Pick only one of the below networking options.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
+    interfaces.enp0s31f6.wakeOnLan.enable = true;
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
   };
 
   # Set your time zone.
@@ -123,6 +135,18 @@
   # Enable the OpenSSH daemon.
   services = {
     openssh.enable = true;
+    autosuspend = {
+      enable = true;
+      settings = {
+        idle_time = 300;
+      };
+      checks = {
+        ssh = {
+          class = "ExternalCommand";
+          command = "${pkgs.procps}/bin/pgrep -x sshd > /dev/null && ${pkgs.iproute2}/bin/ss -tn state established '( dport = :22 or sport = :22 )' | grep -q tcp";
+        };
+      };
+    };
     zfs = {
       autoScrub.enable = true;
       autoSnapshot = {
@@ -157,6 +181,16 @@
   };
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  systemd.services.sleepproxy-register = {
+    description = "Register with macOS Sleep Proxy";
+    before = ["sleep.target"];
+    wantedBy = ["sleep.target"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.callPackage ../../pkgs/sleepproxyclient.nix {}}/bin/sleepproxyclient --interface enp0s31f6";
+    };
+  };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
