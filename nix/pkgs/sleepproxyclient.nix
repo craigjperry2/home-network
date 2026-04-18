@@ -22,18 +22,12 @@ in
       mkdir -p $out/bin
       cp sleepproxyclient.py $out/bin/sleepproxyclient
 
-      # Patch 1: Increase discovery timeout
-      sed -i 's/timeout=1/timeout=5/g' $out/bin/sleepproxyclient
-
-      # Patch 2: Make preferred-proxies additive instead of just a filter.
-      # This ensures that if we provide IPs, they are used even if mDNS discovery fails.
-      sed -i '/proxies = \[p for p in proxies if p in self.preferred_proxies\]/i \            for p in self.preferred_proxies:\n                if p not in proxies: proxies.append(p)' $out/bin/sleepproxyclient
-
       # Ensure it uses the correct python interpreter
       sed -i "1i#!${python}/bin/python3" $out/bin/sleepproxyclient
       chmod +x $out/bin/sleepproxyclient
 
+      # Wrap and include avahi in PATH so it can find avahi-browse
       wrapProgram $out/bin/sleepproxyclient \
-        --prefix PATH : ${lib.makeBinPath [python]}
+        --prefix PATH : ${lib.makeBinPath [python pkgs.avahi pkgs.coreutils pkgs.gnugrep]}
     '';
   }
