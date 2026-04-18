@@ -189,7 +189,15 @@
     wantedBy = ["sleep.target"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.callPackage ../../pkgs/sleepproxyclient.nix {}}/bin/sleepproxyclient --interface enp0s31f6";
+      # Include specific IPs for proxies that were discovered by Avahi but missed by internal Python discovery.
+      # Also add a small delay to ensure the registration packet is sent before suspend.
+      ExecStart = "${pkgs.writeShellScript "sleepproxy-run" ''
+        ${pkgs.callPackage ../../pkgs/sleepproxyclient.nix {}}/bin/sleepproxyclient \
+          --interface enp0s31f6 \
+          --debug \
+          --preferred-proxies 192.168.7.236 192.168.7.158
+        ${pkgs.coreutils}/bin/sleep 2
+      ''}";
     };
   };
 

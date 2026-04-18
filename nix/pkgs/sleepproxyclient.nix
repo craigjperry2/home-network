@@ -21,9 +21,14 @@ in
     installPhase = ''
       mkdir -p $out/bin
       cp sleepproxyclient.py $out/bin/sleepproxyclient
+
+      # Increase discovery timeout from 1s to 5s to help with cross-subnet reflection
+      sed -i 's/timeout=1/timeout=5/g' $out/bin/sleepproxyclient
+
       # Ensure it uses the correct python interpreter
       sed -i "1i#!${python}/bin/python3" $out/bin/sleepproxyclient
       chmod +x $out/bin/sleepproxyclient
+
       wrapProgram $out/bin/sleepproxyclient \
         --prefix PATH : ${lib.makeBinPath [python]}
     '';
