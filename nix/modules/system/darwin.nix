@@ -167,8 +167,19 @@ in {
 
   nix.settings.experimental-features = "nix-command flakes";
 
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    overlays = [
+      (_final: prev: {
+        fish = prev.fish.overrideAttrs (_old: {
+          # Bust the cache key to force a local rebuild, ensuring valid codesigning
+          # on Apple Silicon. See: https://github.com/NixOS/nixpkgs/issues/507531
+          NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
+        });
+      })
+    ];
+    hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
+  };
 
   nix-homebrew = {
     user = "craig";
