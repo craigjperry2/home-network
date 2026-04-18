@@ -40,6 +40,17 @@
       workstation = true;
       userServices = true;
     };
+    extraServiceFiles.ssh = ''
+      <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+      <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+      <service-group>
+        <name replace-wildcards="yes">%h</name>
+        <service>
+          <type>_ssh._tcp</type>
+          <port>22</port>
+        </service>
+      </service-group>
+    '';
   };
 
   # Set your time zone.
