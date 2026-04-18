@@ -43,6 +43,7 @@ in {
       "firefox@developer-edition"
       "ghostty"
       "google-chrome"
+      "google-gemini"
       "iina"
       "istat-menus@6"
       "little-snitch"
