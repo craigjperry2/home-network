@@ -324,6 +324,8 @@
         ll = "eza --git -l --colour=always --tree --level=2 --sort time --icons --header";
 
         mkdir = "mkdir -p";
+
+        srp = ''ssh s1.home.craigjperry.com "journalctl -u systemd-suspend.service | awk '/Performing sleep/ {sm=\$1; sd=\$2; st=\$3; \"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline ss; close(\"date\")} /System returned/ {\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline es; close(\"date\"); d=es-ss; printf \"Suspended on %s %s at %s, slept for %02d:%02d:%02d, woke on %s %s at %s\\n\", sm, sd, st, d/3600, d%3600/60, d%60, \$1, \$2, \$3}'"'';
       };
 
       initContent = ''
