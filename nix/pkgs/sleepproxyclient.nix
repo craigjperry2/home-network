@@ -3,11 +3,11 @@
   lib,
   ...
 }: let
-  python = pkgs.python3.withPackages (ps: [ps.dnspython]);
+  python = pkgs.python3.withPackages (ps: [ps.dnspython ps.netifaces]);
 in
   pkgs.stdenv.mkDerivation {
     pname = "sleepproxyclient";
-    version = "unstable-2025-07-21";
+    version = "unstable-2023-11-20";
 
     src = pkgs.fetchFromGitHub {
       owner = "awein";
@@ -21,8 +21,10 @@ in
     installPhase = ''
       mkdir -p $out/bin
       cp sleepproxyclient.py $out/bin/sleepproxyclient
+      # Ensure it uses the correct python interpreter
+      sed -i "1i#!${python}/bin/python3" $out/bin/sleepproxyclient
       chmod +x $out/bin/sleepproxyclient
       wrapProgram $out/bin/sleepproxyclient \
-        --set PATH ${lib.makeBinPath [python]}
+        --prefix PATH : ${lib.makeBinPath [python]}
     '';
   }
