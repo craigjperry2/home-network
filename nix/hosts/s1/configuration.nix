@@ -142,8 +142,9 @@
       };
       checks = {
         ssh = {
-          class = "ExternalCommand";
-          command = "${pkgs.procps}/bin/pgrep -x sshd > /dev/null && ${pkgs.iproute2}/bin/ss -tn state established '( dport = :22 or sport = :22 )' | grep -q tcp";
+          class = "Users";
+          # Prevent suspend if any user is logged in via a remote host (SSH)
+          host = "[0-9a-fA-F:].*";
         };
       };
     };
