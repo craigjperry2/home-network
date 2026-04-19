@@ -2,6 +2,8 @@
 
 This repo is the golden source for automation of my home network configuration.
 
+Repo-local Codex hooks are configured under `.codex/` and mirror the Gemini Nix validation flow.
+
 ## Instructions
 
 ### MacOS

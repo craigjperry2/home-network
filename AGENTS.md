@@ -11,6 +11,10 @@
 * `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
+* `.codex/` — repo-local Codex project config and hooks
+  * `config.toml` — enables the repo-local Codex hooks file
+  * `hooks.json` — runs the Nix validation hook on `Stop`
+  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
@@ -42,6 +46,8 @@ nix develop -c deadnix
 
 Always run `nix run nixpkgs#alejandra -- .` and `nix flake check` after making changes to nix files.
 `nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
+
+Codex is configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
 
 ## Git Repo
 
