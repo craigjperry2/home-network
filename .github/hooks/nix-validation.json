@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "./scripts/nix-lint.sh",
+        "cwd": ".github/hooks",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}
