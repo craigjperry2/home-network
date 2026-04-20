@@ -15,9 +15,9 @@
   * `config.toml` — enables the repo-local Codex hooks file
   * `hooks.json` — runs the Nix validation hook on `Stop`
   * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
-* `.github/hooks/` — repo-local GitHub Copilot hooks
-  * `nix-validation.json` — runs the Nix validation hook on `agentStop`
-  * `scripts/nix-lint.sh` — reuses the Codex Nix validation script for Copilot hooks
+* `.github/hooks/` — repo-local GitHub Copilot CLI hooks
+  * `nix-validation.json` — runs Nix validation on `preToolUse` to block actions until validation passes
+  * `scripts/nix-lint.sh` — validates Nix formatting, flake evaluation, and linting
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 

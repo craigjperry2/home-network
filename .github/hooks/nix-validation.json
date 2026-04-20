@@ -1,12 +1,13 @@
 {
   "version": 1,
   "hooks": {
-    "agentStop": [
+    "preToolUse": [
       {
+        "comment": "preToolUse is required for enforcement; postToolUse output is ignored by Copilot CLI",
         "type": "command",
         "bash": "./scripts/nix-lint.sh",
         "cwd": ".github/hooks",
-        "timeoutSec": 60
+        "timeoutSec": 120
       }
     ]
   }
