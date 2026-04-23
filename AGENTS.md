@@ -1,6 +1,6 @@
 # AGENTS.md
 
-## Repository Layout
+## Repository Layout
 
 * `nix/` — Nix flake configuring hosts via NixOS and nix-darwin with Home Manager
   * `flake.nix` — flake entrypoint; defines nixosConfigurations (s1),
@@ -12,11 +12,10 @@
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
 * `.claude/` — repo-local Claude Code config and hooks
-  * `settings.json` — runs the Nix validation hook on `Stop`
   * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; exit 2 blocks stop and forces a fix turn
 * `.codex/` — repo-local Codex project config and hooks
-  * `config.toml` — enables the repo-local Codex hooks file
-  * `hooks.json` — runs the Nix validation hook on `Stop`
+  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
+* `.gemini/` — repo-local Gemini CLI config and hooks
   * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
   * `nix-validation.json` — runs Nix validation on `preToolUse` to block actions until validation passes
@@ -24,7 +23,7 @@
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
-## Nix Configuration
+## Nix Configuration
 
 All nix work is done from within the `nix/` directory:
 
@@ -55,14 +54,14 @@ Always run `nix run nixpkgs#alejandra -- .` and `nix flake check` after making c
 
 Claude, Codex, Gemini and Copilot are configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
 
-## Git Repo
+## Git Repo
 
 * Commits use a "conventional commits" style
 * This repo has a long history but none of the history is relevant to an
   agent at this point. The repo underwent a large shift in structure at tag
   v0.5.0 and anything before then should be ignored.
 
-## Keeping AGENTS.md Up To Date
+## Keeping AGENTS.md Up To Date
 
 Propose edits to this file to keep it updated. For example when i repeatedly
 correct an agent or share significant info about how to work in this repo
