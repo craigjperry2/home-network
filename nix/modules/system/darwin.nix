@@ -54,6 +54,7 @@ in {
       "spokenly"
       "transmission"
       "visual-studio-code"
+      "zed"
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
