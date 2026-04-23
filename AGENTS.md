@@ -11,6 +11,9 @@
 * `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
+* `.claude/` — repo-local Claude Code config and hooks
+  * `settings.json` — runs the Nix validation hook on `Stop`
+  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; exit 2 blocks stop and forces a fix turn
 * `.codex/` — repo-local Codex project config and hooks
   * `config.toml` — enables the repo-local Codex hooks file
   * `hooks.json` — runs the Nix validation hook on `Stop`
@@ -50,7 +53,7 @@ nix develop -c deadnix
 Always run `nix run nixpkgs#alejandra -- .` and `nix flake check` after making changes to nix files.
 `nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
 
-Codex and Copilot are configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
+Claude, Codex, Gemini and Copilot are configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
 
 ## Git Repo
 
