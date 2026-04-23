@@ -177,6 +177,8 @@ in {
           # on Apple Silicon. See: https://github.com/NixOS/nixpkgs/issues/507531
           NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
         });
+
+        zellij = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.zellij;
       })
     ];
     hostPlatform = "aarch64-darwin";
