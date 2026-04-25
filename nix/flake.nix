@@ -55,6 +55,8 @@
     nix-homebrew,
     homebrew-core,
     homebrew-cask,
+    # arthur-ficial-tap and brew-src are consumed by modules/system/darwin.nix
+    # via `inputs` specialArg — not referenced directly here.
     ...
   }: let
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
