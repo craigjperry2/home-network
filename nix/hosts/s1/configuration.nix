@@ -163,8 +163,8 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  virtualisation.containers.enable = true;
   virtualisation = {
+    containers.enable = true;
     podman = {
       enable = true;
       dockerCompat = true;
