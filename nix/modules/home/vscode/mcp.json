@@ -1,0 +1,21 @@
+{
+  "servers": {
+    "microsoftdocs/mcp": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "gallery": "https://api.mcp.github.com",
+      "version": "1.0.0"
+    },
+    "io.github.ChromeDevTools/chrome-devtools-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--registry",
+        "https://registry.npmjs.org",
+        "chrome-devtools-mcp@0.16.0"
+      ],
+      "gallery": "https://api.mcp.github.com",
+      "version": "0.16.0"
+    }
+  }
+}

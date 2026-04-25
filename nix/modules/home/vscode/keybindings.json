@@ -1,0 +1,14 @@
+[
+  {
+    "key": "ctrl+cmd+v",
+    "command": "toggleVim"
+  },
+  {
+    "key": "ctrl+shift+c",
+    "command": "editor.action.clipboardCopyAction"
+  },
+  {
+    "key": "ctrl+shift+v",
+    "command": "editor.action.clipboardPasteAction"
+  }
+]
