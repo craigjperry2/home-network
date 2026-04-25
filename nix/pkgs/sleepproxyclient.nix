@@ -22,13 +22,15 @@ in
       mkdir -p $out/bin
       cp sleepproxyclient.py $out/bin/sleepproxyclient
 
-      substituteInPlace $out/bin/sleepproxyclient \
-        --replace-fail "timeout=1" "timeout=5" \
-        --replace-fail "proxies = [p for p in proxies if p in self.preferred_proxies]" \
-                       "for p in self.preferred_proxies:
-                if p not in proxies: proxies.append(p)
-            proxies = [p for p in proxies if p in self.preferred_proxies]" \
-        --replace-fail "--no-db-lookup " ""
+      # Patch 1: Increase discovery timeout
+      sed -i 's/timeout=1/timeout=5/g' $out/bin/sleepproxyclient
+
+      # Patch 2: Make preferred-proxies additive instead of just a filter.
+      # This ensures that if we provide IPs, they are used even if mDNS discovery fails.
+      sed -i '/proxies = \[p for p in proxies if p in self.preferred_proxies\]/i \            for p in self.preferred_proxies:\n                if p not in proxies: proxies.append(p)' $out/bin/sleepproxyclient
+
+      # Patch 3: Remove unsupported --no-db-lookup flag from avahi-browse command
+      sed -i 's/--no-db-lookup //g' $out/bin/sleepproxyclient
 
       # Ensure it uses the correct python interpreter
       sed -i "1i#!${python}/bin/python3" $out/bin/sleepproxyclient
