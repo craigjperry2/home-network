@@ -80,38 +80,44 @@
     });
 
     nixosConfigurations = {
-      s1 = nixpkgs.lib.nixosSystem {
+      s1 = let
         system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = import nixpkgs-unstable {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
+      in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
           };
+          modules = [
+            ./modules/system/linux.nix
+            ./hosts/s1/configuration.nix
+            home-manager.nixosModules.home-manager
+            (hmConfig ./hosts/s1/home.nix)
+          ];
         };
-        modules = [
-          ./modules/system/linux.nix
-          ./hosts/s1/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s1/home.nix)
-        ];
-      };
-      s2 = nixpkgs.lib.nixosSystem {
+      s2 = let
         system = "aarch64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = import nixpkgs-unstable {
-            system = "aarch64-linux";
-            config.allowUnfree = true;
+      in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
           };
+          modules = [
+            ./modules/system/linux.nix
+            ./hosts/s2/configuration.nix
+            home-manager.nixosModules.home-manager
+            (hmConfig ./hosts/s2/home.nix)
+          ];
         };
-        modules = [
-          ./modules/system/linux.nix
-          ./hosts/s2/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s2/home.nix)
-        ];
-      };
     };
 
     darwinConfigurations = {
