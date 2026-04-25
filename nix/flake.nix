@@ -79,44 +79,26 @@
     });
 
     nixosConfigurations = {
-      s1 = let
+      s1 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-      in
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs;
-            unstable = import nixpkgs-unstable {
-              inherit system;
-              config.allowUnfree = true;
-            };
-          };
-          modules = [
-            ./modules/system/linux.nix
-            ./hosts/s1/configuration.nix
-            home-manager.nixosModules.home-manager
-            (hmConfig ./hosts/s1/home.nix)
-          ];
-        };
-      s2 = let
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./modules/system/linux.nix
+          ./hosts/s1/configuration.nix
+          home-manager.nixosModules.home-manager
+          (hmConfig ./hosts/s1/home.nix)
+        ];
+      };
+      s2 = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
-      in
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs;
-            unstable = import nixpkgs-unstable {
-              inherit system;
-              config.allowUnfree = true;
-            };
-          };
-          modules = [
-            ./modules/system/linux.nix
-            ./hosts/s2/configuration.nix
-            home-manager.nixosModules.home-manager
-            (hmConfig ./hosts/s2/home.nix)
-          ];
-        };
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./modules/system/linux.nix
+          ./hosts/s2/configuration.nix
+          home-manager.nixosModules.home-manager
+          (hmConfig ./hosts/s2/home.nix)
+        ];
+      };
     };
 
     darwinConfigurations = {
