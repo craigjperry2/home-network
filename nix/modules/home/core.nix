@@ -195,6 +195,7 @@
          set showcmd
          set scrolloff=5
          set expandtab
+         set background=light
 
          set inccommand=split
 
