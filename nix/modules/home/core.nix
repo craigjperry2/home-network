@@ -33,7 +33,6 @@
     xan
     yazi
     yt-dlp
-    zellij
     zulu
     python3Packages.python-kasa
   ];
@@ -286,6 +285,14 @@
          vnoremap <A-j> :m '>+1<CR>gv=gv
          vnoremap <A-k> :m '<-2<CR>gv=gv
       '';
+    };
+
+    zellij = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        default_mode = "locked";
+      };
     };
 
     # Shell configuration
