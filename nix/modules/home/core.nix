@@ -289,8 +289,7 @@
 
     zellij = {
       enable = true;
-      enableZshIntegration = true;
-      attachExistingSession = true;
+      enableZshIntegration = false;
       settings = {
         default_mode = "locked";
         attach_to_session = true;
@@ -409,6 +408,12 @@
         }
 
         eval "$(starship init zsh)"
+
+        # Auto-start zellij for SSH connections
+        if [[ -n "$SSH_CONNECTION" ]]; then
+            export ZELLIJ_AUTO_ATTACH=true
+            eval "$(zellij setup --generate-auto-start zsh)"
+        fi
       '';
     };
 
