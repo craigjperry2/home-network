@@ -177,8 +177,6 @@
     wheelNeedsPassword = false;
   };
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   systemd.services.sleepproxy-register = {
     description = "Register with macOS Sleep Proxy";
     before = ["sleep.target"];
