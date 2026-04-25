@@ -127,7 +127,6 @@
           ./hosts/d2/configuration.nix
           home-manager.darwinModules.home-manager
           (hmConfig ./hosts/d2/home.nix)
-          {users.users.craig.home = "/Users/craig";}
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
@@ -138,7 +137,6 @@
           ./hosts/r2/configuration.nix
           home-manager.darwinModules.home-manager
           (hmConfig ./hosts/r2/home.nix)
-          {users.users.craig.home = "/Users/craig";}
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };

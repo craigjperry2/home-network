@@ -11,6 +11,8 @@
   leftArrow = builtins.fromJSON ''"\uF702"'';
   rightArrow = builtins.fromJSON ''"\uF703"'';
 in {
+  users.users.craig.home = "/Users/craig";
+
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
