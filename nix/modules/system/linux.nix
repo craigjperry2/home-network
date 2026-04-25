@@ -7,7 +7,7 @@
   nixpkgs.overlays = [
     (
       final: prev: {
-        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.system}) zellij gemini-cli;
+        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}) zellij gemini-cli;
       }
     )
   ];

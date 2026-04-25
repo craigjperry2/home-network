@@ -178,7 +178,7 @@ in {
           NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
         });
 
-        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.system}) zellij;
+        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}) zellij;
       })
     ];
     hostPlatform = "aarch64-darwin";
