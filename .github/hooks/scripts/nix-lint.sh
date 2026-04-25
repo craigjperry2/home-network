@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # Copilot hooks receive JSON on stdin with toolName, toolArgs, etc.

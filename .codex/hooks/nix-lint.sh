@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 NIX_CHANGES=$(git diff --name-only HEAD | grep -E '\.nix$|flake\.lock$' || true)
