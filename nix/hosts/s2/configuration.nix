@@ -49,11 +49,6 @@
     homeMode = "700";
     useDefaultShell = true;
     shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9pHorrpMijyrP4U8LMZ7oC/jFAr1me9GCNMCGjZG6eGLkLnNb58vQivTblr9JUgBHTbNHJ6TTdcNMjQICCLiQDWrtupa2HOokDEHyserwyCShGwFGEGwdprBs5r4MpRIRyoNqWlfx3IJswV8TmKReQhjShBR91OXfuikIw28A8E7Bh1qLAiDGAfAps1skmQ5aIbxBuDH/uGD0l0wQOhNVXrsQHvZSawTtthjpJ5gpURbjdZ4ZwLmLBHa4sm77/E5QGe9QFIGPoN4JZeUF5Onf1Yu4oebC2W96RRHxhfDYVmneKD7g+6IuILnIB7vVojy/1u0voaQVXVA5h7ozE/AJd+vAe8CBw0bwrmCTJtckqFyEs0+u+jN0cmu51lH+P+jjPc3REZDQKZNqZMsb1y/Zn2LJlv2dspvhi5CPVyXNr2kXXCfw2XISWT+at4vjtRHcPpQSJisq/MP81EO8JzuyXYKYcCMoH7HUkCSom0zmo1WylBPCQtXIHu75Eo8Rj+Bhocs0QHlaWyKuicjqnbWEiOHV2khQACVs9a5xTTSPpOLHNsOoCLzuFUvD9iq4moDAlI8paJaIqR6+HayeTDf6frsGWPnOwDXnG1E6Va54uRb2Rstp3aDp+ifMLSrAfF9Mh6EQky/m69b+gZucs3TtmrRfI6MVK2M4ZLkn4L28nw=="
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBR6v9xL2WGh2Q/kKa4JPjJfNQZmzW0DYrhyzNNndQcu"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINH0Rsc+pShq1HnPIp5OnHT8+GW4s45tA7jJW44NQXg7"
-    ];
   };
 
   security.sudo.wheelNeedsPassword = false;
