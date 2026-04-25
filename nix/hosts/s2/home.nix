@@ -12,19 +12,5 @@
     username = "craig";
     homeDirectory = "/home/craig";
     stateVersion = "25.11";
-    packages = [];
-  };
-
-  xdg = {
-    enable = true;
-    userDirs = {
-      enable = true;
-      createDirectories = true;
-    };
-  };
-
-  programs.zsh.shellAliases = {
-    sns = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#s2 )";
-    uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
   };
 }

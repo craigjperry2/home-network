@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./vscode.nix
   ];
@@ -335,6 +339,12 @@
         mkdir = "mkdir -p";
 
         srp = ''ssh s1.home.craigjperry.com "journalctl -u systemd-suspend.service | awk '/Performing sleep/ {sm=\$1; sd=\$2; st=\$3; \"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline ss; close(\"date\")} /System returned/ {\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline es; close(\"date\"); d=es-ss; printf \"Suspended on %s %s at %s, slept for %02d:%02d:%02d, woke on %s %s at %s\\n\", sm, sd, st, d/3600, d%3600/60, d%60, \$1, \$2, \$3}'"'';
+
+        sns =
+          if pkgs.stdenv.isLinux
+          then "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#$(hostname -s) )"
+          else "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo darwin-rebuild switch --flake .#$(hostname -s) )";
+        uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
       };
 
       initContent = ''
@@ -475,5 +485,14 @@
 
     # Let Home Manager install and manage itself
     home-manager.enable = true;
+  };
+
+  # XDG user directories (Linux only)
+  xdg = lib.mkIf pkgs.stdenv.isLinux {
+    enable = true;
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
   };
 }
