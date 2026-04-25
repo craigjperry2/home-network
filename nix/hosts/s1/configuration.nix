@@ -11,6 +11,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../modules/system/linux.nix
   ];
 
   boot = {
@@ -118,19 +119,8 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #   wget
-    curl
-    ghostty.terminfo
-    htop
-    neovim
-    p7zip
     smartmontools
-    sysstat
-    unzip
-    zellij
     zfs
-    zip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

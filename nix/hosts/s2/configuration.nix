@@ -16,6 +16,7 @@
     ./incus.nix
     # Include the OrbStack-specific configuration.
     ./orbstack.nix
+    ../../modules/system/linux.nix
   ];
 
   # Enable the X11 windowing system.
@@ -103,19 +104,6 @@
   programs.zsh.enable = true;
 
   environment.shells = with pkgs; [zsh];
-
-  # You can use https://search.nixos.org/ to find more packages (and options).
-  environment.systemPackages = with pkgs; [
-    curl
-    ghostty.terminfo
-    htop
-    neovim
-    p7zip
-    sysstat
-    unzip
-    zellij
-    zip
-  ];
 
   # services = {
   #   openssh.enable = true;
