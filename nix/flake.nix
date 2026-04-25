@@ -79,6 +79,7 @@
           };
         };
         modules = [
+          ./modules/system/linux.nix
           ./hosts/s1/configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -102,6 +103,7 @@
           };
         };
         modules = [
+          ./modules/system/linux.nix
           ./hosts/s2/configuration.nix
           home-manager.nixosModules.home-manager
           {
