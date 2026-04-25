@@ -53,35 +53,14 @@
         "type": "github"
       }
     },
-    "home-manager-darwin": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs-darwin"
-        ]
-      },
-      "locked": {
-        "lastModified": 1775425411,
-        "narHash": "sha256-KY6HsebJHEe5nHOWP7ur09mb0drGxYSzE3rQxy62rJo=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "0d02ec1d0a05f88ef9e74b516842900c41f0f2fe",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "release-25.11",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1777143580,
-        "narHash": "sha256-IBUfHgnDk3OuM39beKSfvzj5ELQ3S/M7mcD2i2vUAS8=",
+        "lastModified": 1777146801,
+        "narHash": "sha256-iKD3+Q9/w5hT5EHvKccOk1mDYFqTCxXRO3dYaKAgTWc=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "ee9f16807954bdd472679cc689bcb6a28a1984c5",
+        "rev": "8de228b260b1429b962b1c2851ac7a92f4dc2215",
         "type": "github"
       },
       "original": {
@@ -200,7 +179,6 @@
         "arthur-ficial-tap": "arthur-ficial-tap",
         "brew-src": "brew-src",
         "home-manager": "home-manager",
-        "home-manager-darwin": "home-manager-darwin",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
         "nix-darwin": "nix-darwin",
