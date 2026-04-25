@@ -59,6 +59,17 @@
   }: let
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
     eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs {inherit system;}));
+
+    # Shared Home Manager module config for all hosts
+    hmConfig = homeFile: {
+      home-manager = {
+        backupFileExtension = "bak";
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        users.craig = import homeFile;
+        extraSpecialArgs = {inherit inputs;};
+      };
+    };
   in {
     formatter = eachSystem (pkgs: pkgs.alejandra);
 
@@ -82,15 +93,7 @@
           ./modules/system/linux.nix
           ./hosts/s1/configuration.nix
           home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              backupFileExtension = "bak";
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.craig = import ./hosts/s1/home.nix;
-              extraSpecialArgs = {inherit inputs;};
-            };
-          }
+          (hmConfig ./hosts/s1/home.nix)
         ];
       };
       s2 = nixpkgs.lib.nixosSystem {
@@ -106,15 +109,7 @@
           ./modules/system/linux.nix
           ./hosts/s2/configuration.nix
           home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              backupFileExtension = "bak";
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.craig = import ./hosts/s2/home.nix;
-              extraSpecialArgs = {inherit inputs;};
-            };
-          }
+          (hmConfig ./hosts/s2/home.nix)
         ];
       };
     };
@@ -125,16 +120,8 @@
         modules = [
           ./hosts/d2/configuration.nix
           home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              backupFileExtension = "bak";
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.craig = import ./hosts/d2/home.nix;
-              extraSpecialArgs = {inherit inputs;};
-            };
-            users.users.craig.home = "/Users/craig";
-          }
+          (hmConfig ./hosts/d2/home.nix)
+          {users.users.craig.home = "/Users/craig";}
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
@@ -144,16 +131,8 @@
         modules = [
           ./hosts/r2/configuration.nix
           home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              backupFileExtension = "bak";
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.craig = import ./hosts/r2/home.nix;
-              extraSpecialArgs = {inherit inputs;};
-            };
-            users.users.craig.home = "/Users/craig";
-          }
+          (hmConfig ./hosts/r2/home.nix)
+          {users.users.craig.home = "/Users/craig";}
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
