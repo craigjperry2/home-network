@@ -1,12 +1,11 @@
 {
-  config,
   pkgs,
   inputs,
   ...
 }: {
   nixpkgs.overlays = [
     (
-      final: prev: {
+      _: prev: {
         inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}) zellij gemini-cli;
       }
     )

@@ -46,17 +46,14 @@
   };
 
   outputs = inputs @ {
-    self,
     nixpkgs,
     nixpkgs-unstable,
-    nixpkgs-darwin,
     home-manager,
     nix-darwin,
     nix-homebrew,
-    homebrew-core,
-    homebrew-cask,
-    # arthur-ficial-tap and brew-src are consumed by modules/system/darwin.nix
-    # via `inputs` specialArg — not referenced directly here.
+    # self, nixpkgs-darwin, arthur-ficial-tap, brew-src, homebrew-core, and
+    # homebrew-cask are consumed by modules via `inputs` specialArg — not
+    # referenced directly here.
     ...
   }: let
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
