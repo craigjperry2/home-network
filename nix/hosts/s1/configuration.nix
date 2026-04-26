@@ -125,6 +125,7 @@
   # Enable the OpenSSH daemon.
   services = {
     openssh.enable = true;
+    tailscale.enable = true;
     autosuspend = {
       enable = true;
       settings = {

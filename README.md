@@ -80,6 +80,14 @@ Because the pilot uses separate local paths, rollback is straightforward: stop
 using the `onedrive-rclone` folder and continue with the native OneDrive app
 until the `rclone` workflow has been proven.
 
+### Linux (Tailscale)
+
+Tailscale is enabled on linux hosts (e.g. `s1`) but secrets are not managed declaratively in nix. Therefore, to connect a newly provisioned headless host to the tailnet, you must run the following command and authenticate via the provided URL:
+
+```bash
+sudo tailscale up
+```
+
 ## History
 
 It's changed over the years, Ansible was a staple tool for the longest time. It's
