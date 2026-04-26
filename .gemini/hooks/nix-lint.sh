@@ -1,24 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
-# Detect if nix files were changed in the workspace
-# We check the git diff for modified nix files
-NIX_CHANGES=$(git diff --name-only HEAD | grep -E '\.nix$|flake\.lock$' || true)
+# Detect if nix files were changed in the workspace (including staged and untracked)
+NIX_CHANGES=$(git status --porcelain | awk '{print $2}' | grep -E '\.nix$|flake\.lock$' || true)
 
 if [ -n "$NIX_CHANGES" ]; then
   # Navigate to the nix directory
   PROJECT_ROOT="${GEMINI_PROJECT_DIR:-$(pwd)}"
-  cd "$PROJECT_ROOT/nix" || { exit 1; }
+  cd "$PROJECT_ROOT/nix" || { echo '{"decision": "block", "reason": "Could not find nix directory"}'; exit 0; }
 
   # 1. Format
   if ! nix run nixpkgs#alejandra -- . >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix formatting (alejandra) failed. Please fix formatting."}'
+    echo '{"decision": "block", "reason": "Nix formatting (alejandra) failed. Run: cd nix && nix run nixpkgs#alejandra -- ."}'
     exit 0
   fi
 
   # 2. Evaluate
-  if ! nix flake check >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix flake check failed. The configuration does not evaluate correctly."}'
+  if ! nix flake check --extra-experimental-features "nix-command flakes" >/dev/null 2>&1; then
+    echo '{"decision": "block", "reason": "Nix flake check failed. The configuration does not evaluate correctly. Check nix/flake.nix"}'
     exit 0
   fi
 
@@ -35,6 +34,5 @@ if [ -n "$NIX_CHANGES" ]; then
   fi
 fi
 
-# Always allow if everything passes or no changes
 echo '{"decision": "allow"}'
 exit 0
