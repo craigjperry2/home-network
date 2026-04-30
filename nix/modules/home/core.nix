@@ -339,6 +339,7 @@
         mkdir = "mkdir -p";
 
         srp = ''ssh s1.home.craigjperry.com "journalctl -u systemd-suspend.service | awk '/Performing sleep/ {sm=\$1; sd=\$2; st=\$3; \"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline ss; close(\"date\")} /System returned/ {\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline es; close(\"date\"); d=es-ss; printf \"Suspended on %s %s at %s, slept for %02d:%02d:%02d, woke on %s %s at %s\\n\", sm, sd, st, d/3600, d%3600/60, d%60, \$1, \$2, \$3}'"'';
+        why-awake = ''ssh s1.home.craigjperry.com "last_wake=\$(sudo journalctl -u systemd-suspend.service --since '1 week ago' --no-pager | awk '/System returned from sleep/ {last=\$1\\\" \\\"\$2\\\" \\\"\$3} END {print last}'); if [ -n \\\"\$last_wake\\\" ]; then wake_ts=\$(date -d \\\"\$last_wake\\\" +%s); now_ts=\$(date +%s); diff=\$((now_ts - wake_ts)); printf 'Awake for %d minutes\\n' \$((diff / 60)); else uptime; fi; sudo journalctl -u autosuspend.service -n 1 --no-pager | awk '{print \\\"Last check at: \\\" \$1 \\\" \\\" \$2 \\\" \\\" \$3}'; echo 'Active checks:'; sudo journalctl -u autosuspend.service -n 50 --no-pager | awk -F' - ' '/Check .* matched/ {print \$NF}' | sort -u" '';
 
         sns =
           if pkgs.stdenv.isLinux
