@@ -1,12 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../modules/system/linux.nix
   ];
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "plexmediaserver"
+    ];
 
   boot = {
     loader = {
@@ -35,17 +44,35 @@
       workstation = true;
       userServices = true;
     };
-    extraServiceFiles.ssh = ''
-      <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
-      <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-      <service-group>
-        <name replace-wildcards="yes">%h</name>
-        <service>
-          <type>_ssh._tcp</type>
-          <port>22</port>
-        </service>
-      </service-group>
-    '';
+    extraServiceFiles = {
+      ssh = ''
+        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">%h</name>
+          <service>
+            <type>_ssh._tcp</type>
+            <port>22</port>
+          </service>
+        </service-group>
+      '';
+      plex = ''
+        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+        <service-group>
+          <name replace-wildcards="yes">Plex Media Server on %h</name>
+          <service>
+            <type>_plexmediasv._tcp</type>
+            <port>32400</port>
+          </service>
+          <service>
+            <type>_http._tcp</type>
+            <port>32400</port>
+            <txt-record>path=/web</txt-record>
+          </service>
+        </service-group>
+      '';
+    };
   };
 
   # Set your time zone.
@@ -137,23 +164,47 @@
           # Prevent suspend if any user is logged in via a remote host (SSH)
           host = "[0-9a-fA-F:].*";
         };
+        plex = {
+          class = "ActiveConnection";
+          ports = "32400";
+        };
       };
     };
     zfs = {
       autoScrub.enable = true;
-      autoSnapshot = {
-        enable = true;
-        frequent = 4;
+    };
+    sanoid = {
+      enable = true;
+      datasets."tank" = {
+        recursive = true;
+        useTemplate = ["production"];
+      };
+      templates.production = {
         hourly = 24;
         daily = 7;
-        weekly = 4;
         monthly = 12;
+        autoprune = true;
+        autosnap = true;
       };
+    };
+    plex = {
+      enable = true;
+      dataDir = "/srv/vms/plex";
+      openFirewall = true;
+    };
+    immich = {
+      enable = true;
+      host = "0.0.0.0";
+      mediaLocation = "/srv/vms/immich/media";
+    };
+    postgresql = {
+      enable = true;
+      dataDir = "/srv/vms/immich/postgres";
     };
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [2283];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
