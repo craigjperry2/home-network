@@ -56,22 +56,6 @@
           </service>
         </service-group>
       '';
-      plex = ''
-        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
-        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-        <service-group>
-          <name replace-wildcards="yes">Plex Media Server on %h</name>
-          <service>
-            <type>_plexmediasv._tcp</type>
-            <port>32400</port>
-          </service>
-          <service>
-            <type>_http._tcp</type>
-            <port>32400</port>
-            <txt-record>path=/web</txt-record>
-          </service>
-        </service-group>
-      '';
     };
   };
 
