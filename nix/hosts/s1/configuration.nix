@@ -165,8 +165,21 @@
           host = "[0-9a-fA-F:].*";
         };
         plex = {
-          class = "ActiveConnection";
-          ports = "32400";
+          class = "ExternalCommand";
+          command = toString (pkgs.writeShellScript "check-plex-remote" ''
+            export PATH="${pkgs.iproute2}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.gnused}/bin:${pkgs.gnugrep}/bin:$PATH"
+            peer_ips=$(ss -tn state established sport = :32400 | tail -n +2 | awk '{print $5}' | sed -E 's/:[0-9]+$//' | tr -d '[]' | sed 's/^::ffff://')
+            if [ -z "$peer_ips" ]; then
+              exit 1
+            fi
+            local_ips=$(ip -br addr | awk '{print $3}' | cut -d/ -f1)
+            for p in $peer_ips; do
+              if ! echo "$local_ips" | grep -q "^$p$"; then
+                exit 0
+              fi
+            done
+            exit 1
+          '');
         };
       };
     };
