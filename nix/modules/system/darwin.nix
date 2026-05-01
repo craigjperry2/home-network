@@ -56,6 +56,7 @@ in {
       "spokenly"
       "transmission"
       "visual-studio-code"
+      "whatcable"
       "zed"
     ];
     masApps = {
@@ -194,6 +195,7 @@ in {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
       "arthur-ficial/homebrew-tap" = inputs.arthur-ficial-tap;
+      "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
     mutableTaps = false;
     autoMigrate = true;

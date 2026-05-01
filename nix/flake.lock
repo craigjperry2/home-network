@@ -185,7 +185,24 @@
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
         "nixpkgs-darwin": "nixpkgs-darwin",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "whatcable-tap": "whatcable-tap"
+      }
+    },
+    "whatcable-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777661672,
+        "narHash": "sha256-h3myYZGYpjrGU8gjDsLewM8VffF4UEPxHAT4eYKNRmY=",
+        "owner": "darrylmorley",
+        "repo": "homebrew-whatcable",
+        "rev": "4d6f927e46d871f304198321445088c4d390ab0a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "darrylmorley",
+        "repo": "homebrew-whatcable",
+        "type": "github"
       }
     }
   },
