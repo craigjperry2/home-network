@@ -151,17 +151,10 @@
         plex = {
           class = "ExternalCommand";
           command = toString (pkgs.writeShellScript "check-plex-remote" ''
-            export PATH="${pkgs.iproute2}/bin:${pkgs.coreutils}/bin:${pkgs.gawk}/bin:${pkgs.gnused}/bin:${pkgs.gnugrep}/bin:$PATH"
-            peer_ips=$(ss -tn state established sport = :32400 | tail -n +2 | awk '{print $5}' | sed -E 's/:[0-9]+$//' | tr -d '[]' | sed 's/^::ffff://')
-            if [ -z "$peer_ips" ]; then
-              exit 1
+            export PATH="${pkgs.systemd}/bin:${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:$PATH"
+            if journalctl -u plex --since "5 minutes ago" | grep -i "state=playing" ; then
+              exit 0
             fi
-            local_ips=$(ip -br addr | awk '{print $3}' | cut -d/ -f1)
-            for p in $peer_ips; do
-              if ! echo "$local_ips" | grep -q "^$p$"; then
-                exit 0
-              fi
-            done
             exit 1
           '');
         };
