@@ -74,6 +74,14 @@
         extraSpecialArgs = {inherit inputs;};
       };
     };
+
+    unstablePkgs = system:
+      import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+    allowUnfree = {nixpkgs.config.allowUnfree = true;};
   in {
     formatter = eachSystem (pkgs: pkgs.alejandra);
 
@@ -86,8 +94,12 @@
     nixosConfigurations = {
       s1 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "x86_64-linux";
+        };
         modules = [
+          allowUnfree
           ./modules/system/linux.nix
           ./hosts/s1/configuration.nix
           home-manager.nixosModules.home-manager
@@ -96,8 +108,12 @@
       };
       s2 = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "aarch64-linux";
+        };
         modules = [
+          allowUnfree
           ./modules/system/linux.nix
           ./hosts/s2/configuration.nix
           home-manager.nixosModules.home-manager
@@ -108,8 +124,12 @@
 
     darwinConfigurations = {
       d2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "aarch64-darwin";
+        };
         modules = [
+          allowUnfree
           ./hosts/d2/configuration.nix
           home-manager.darwinModules.home-manager
           (hmConfig ./hosts/d2/home.nix)
@@ -118,8 +138,12 @@
       };
 
       r2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "aarch64-darwin";
+        };
         modules = [
+          allowUnfree
           ./hosts/r2/configuration.nix
           home-manager.darwinModules.home-manager
           (hmConfig ./hosts/r2/home.nix)

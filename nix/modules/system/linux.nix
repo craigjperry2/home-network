@@ -1,17 +1,20 @@
 {
   pkgs,
-  inputs,
+  unstable,
   ...
 }: {
   nixpkgs.overlays = [
     (
-      _: prev: {
-        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}) zellij gemini-cli;
+      _: _prev: {
+        inherit (unstable) claude-code codex copilot-cli gemini-cli zellij;
       }
     )
   ];
 
   environment.systemPackages = with pkgs; [
+    claude-code
+    codex
+    copilot-cli
     curl
     gemini-cli
     ghostty.terminfo

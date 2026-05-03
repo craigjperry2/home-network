@@ -12,11 +12,6 @@
     ../../modules/system/linux.nix
   ];
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "plexmediaserver"
-    ];
-
   boot = {
     loader = {
       systemd-boot.enable = true;

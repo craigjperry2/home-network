@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  inputs,
+  unstable,
   ...
 }: let
   esc = builtins.fromJSON ''"\u001b"'';
@@ -181,11 +181,10 @@ in {
           NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
         });
 
-        inherit (inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}) zellij;
+        inherit (unstable) zellij;
       })
     ];
     hostPlatform = "aarch64-darwin";
-    config.allowUnfree = true;
   };
 
   nix-homebrew = {
