@@ -96,6 +96,10 @@
         user.name = "Craig Perry";
         user.email = "craigp84@gmail.com";
         color.ui = "auto";
+        credential.helper =
+          if pkgs.stdenv.isDarwin
+          then "osxkeychain"
+          else "${pkgs.gitFull}/bin/git-credential-libsecret";
         core.pager = "delta";
         delta = {
           navigate = true;
