@@ -14,7 +14,11 @@
     then "Library/Application Support/Code/User"
     else ".config/Code/User";
 
-  settingsJson = builtins.readFile ./vscode/settings.json;
+  settingsJson = let
+    base = builtins.fromJSON (builtins.readFile ./vscode/settings.json);
+    settings = base // {"python.defaultInterpreterPath" = "${pkgs.python3}/bin/python3";};
+  in
+    builtins.toJSON settings;
   keybindingsJson = builtins.readFile ./vscode/keybindings.json;
   mcpJson = builtins.readFile ./vscode/mcp.json;
   extensionsList = builtins.readFile ./vscode/extensions.txt;
