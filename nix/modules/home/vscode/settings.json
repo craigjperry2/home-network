@@ -84,7 +84,7 @@
   "python.analysis.inlayHints.functionReturnTypes": true,
   "python.analysis.languageServerMode": "full",
   "python.analysis.typeCheckingMode": "strict",
-  "python.defaultInterpreterPath": "python",
+  "python.defaultInterpreterPath": "/etc/profiles/per-user/craig/bin/python",
   "python.languageServer": "Pylance",
   "pgsql.connections": [
     {
