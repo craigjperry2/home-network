@@ -6,7 +6,7 @@
   nixpkgs.overlays = [
     (
       _: _prev: {
-        inherit (unstable) claude-code codex copilot-cli gemini-cli zellij;
+        inherit (unstable) claude-code codex github-copilot-cli gemini-cli zellij;
       }
     )
   ];
@@ -14,7 +14,7 @@
   environment.systemPackages = with pkgs; [
     claude-code
     codex
-    copilot-cli
+    github-copilot-cli
     curl
     gemini-cli
     ghostty.terminfo
