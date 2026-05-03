@@ -73,6 +73,7 @@
   "git.blame.editorDecoration.enabled": true,
   "git.blame.editorDecoration.template": "${authorName} (${authorDateAgo}) ${subject}",
   "git.terminalGitEditor": true,
+  "github.copilot.chat.localIndex.enabled": false,
   "github.copilot.nextEditSuggestions.enabled": true,
   "lldb.suppressUpdateNotifications": true,
   "notebook.codeActionsOnSave": {
