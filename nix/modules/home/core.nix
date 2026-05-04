@@ -8,6 +8,7 @@
   ];
 
   home.packages = with pkgs; [
+    ast-grep
     bat
     bun
     delta
