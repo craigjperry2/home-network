@@ -1,8 +1,18 @@
 {
   pkgs,
   unstable,
+  inputs,
   ...
 }: {
+  imports = [
+    inputs.vscode-server.nixosModules.default
+  ];
+
+  services.vscode-server.enable = true;
+
+  # Enable the auto-fix service for all users by default
+  systemd.user.services.auto-fix-vscode-server.wantedBy = ["default.target"];
+
   nixpkgs.overlays = [
     (
       _: _prev: {
@@ -23,6 +33,7 @@
     p7zip
     sysstat
     unzip
+    wget
     zellij
     zip
   ];
