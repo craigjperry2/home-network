@@ -4,7 +4,6 @@ charliermarsh.ruff
 dbaeumer.vscode-eslint
 esbenp.prettier-vscode
 fill-labs.dependi
-github.copilot-chat
 github.vscode-github-actions
 github.vscode-pull-request-github
 golang.go
