@@ -173,14 +173,7 @@ in {
 
   nix.settings.experimental-features = "nix-command flakes";
 
-  nixpkgs = {
-    overlays = [
-      (_final: prev: {
-        inherit (unstable) zellij;
-      })
-    ];
-    hostPlatform = "aarch64-darwin";
-  };
+  nixpkgs.hostPlatform = "aarch64-darwin";
 
   nix-homebrew = {
     user = "craig";

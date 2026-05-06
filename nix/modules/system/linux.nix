@@ -6,7 +6,7 @@
   nixpkgs.overlays = [
     (
       _: _prev: {
-        inherit (unstable) claude-code codex github-copilot-cli gemini-cli zellij;
+        inherit (unstable) claude-code codex github-copilot-cli gemini-cli;
       }
     )
   ];
