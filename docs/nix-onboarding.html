@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nix Configuration Review & Report</title>
+<style>
+  :root {
+    --bg: #f9fafb;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --high: #ef4444;
+    --warn: #f59e0b;
+    --info: #3b82f6;
+    --sugg: #10b981;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: var(--text-main); max-width: 1200px; margin: 0 auto; padding: 2rem; background: var(--bg); }
+  h1 { border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+  h2, h3 { color: #111; margin-top: 2rem; }
+  .card { background: var(--card-bg); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  
+  .severity-high { border-left: 5px solid var(--high); }
+  .severity-warning { border-left: 5px solid var(--warn); }
+  .severity-info { border-left: 5px solid var(--info); }
+  .severity-suggestion { border-left: 5px solid var(--sugg); }
+  
+  .badge { padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge.high { background: var(--high); }
+  .badge.warning { background: var(--warn); }
+  .badge.info { background: var(--info); }
+  .badge.suggestion { background: var(--sugg); }
+  
+  .finding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .finding-title { font-weight: 600; font-size: 1.1rem; margin: 0; }
+  .finding-meta { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85rem; color: var(--text-muted); }
+  
+  pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; }
+  pre { background: var(--bg); padding: 1rem; border-radius: 6px; overflow-x: auto; border: 1px solid var(--border); }
+  code { background: var(--bg); padding: 0.2em 0.4em; border-radius: 3px; }
+  
+  .diff-container { background: #fff; border: 1px solid var(--border); border-radius: 6px; margin: 1rem 0; overflow: hidden; }
+  .diff-header { background: #f3f4f6; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-family: ui-monospace, monospace; font-size: 0.85rem; color: #374151; font-weight: bold; }
+  .diff-body { display: flex; flex-direction: column; overflow-x: auto; }
+  .diff-line { display: flex; width: 100%; }
+  .diff-line:hover { background: #f9fafb; }
+  .line-num { color: #9ca3af; padding: 0 0.5rem; border-right: 1px solid var(--border); text-align: right; min-width: 2.5rem; user-select: none; background: #f9fafb; }
+  .line-content { padding: 0 0.75rem; white-space: pre; flex-grow: 1; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .line-add { background: #ecfdf5; }
+  .line-del { background: #fef2f2; }
+  .line-add .line-content { color: #065f46; }
+  .line-del .line-content { color: #991b1b; }
+  
+  .diff-layout { display: flex; gap: 1rem; }
+  .diff-code { flex: 1; overflow-x: auto; }
+  .annotation-box { width: 300px; flex-shrink: 0; background: #fffbeb; border: 1px solid #fcd34d; border-left: 4px solid var(--warn); border-radius: 4px; padding: 1rem; margin: 1rem 1rem 1rem 0; font-size: 0.9rem; align-self: flex-start; }
+  .annotation-box.info-box { background: #eff6ff; border-color: #bfdbfe; border-left-color: var(--info); }
+  .annotation-title { font-weight: bold; margin-bottom: 0.5rem; display: block; }
+</style>
+</head>
+<body>
+
+<h1>Nix Configuration Review</h1>
+<p>This report provides an architectural overview, code quality findings, and an annotated review of recent changes within the <code>nix/</code> directory.</p>
+
+<h2>Architecture Overview</h2>
+<div class="card severity-info">
+  <p>The repository follows a clean, modern <strong>Nix Flake</strong>-based infrastructure-as-code architecture. It strictly separates concerns, resulting in a DRY (Don't Repeat Yourself) setup.</p>
+  <ul>
+    <li><strong><code>flake.nix</code></strong>: The single source of truth for dependencies (Inputs) and system definitions (Outputs). It defines four systems across Linux (NixOS) and macOS (nix-darwin).</li>
+    <li><strong><code>hosts/</code></strong>: Contains machine-specific configurations (<code>s1</code>, <code>s2</code>, <code>d2</code>, <code>r2</code>). It correctly isolates host-specific hardware or virtualization quirks.</li>
+    <li><strong><code>modules/</code></strong>: Implements shared logic.
+      <ul>
+        <li><code>home/</code>: Uses Home Manager to provide identical user environments (zsh, neovim, vscode) across macOS and Linux.</li>
+        <li><code>system/</code>: Shared OS-level settings for Linux and macOS.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<h2>Code Quality Findings</h2>
+
+<div class="card severity-warning">
+  <div class="finding-header">
+    <h3 class="finding-title">Use of <code>nix-ld</code> Enables Unpure Execution</h3>
+    <span class="badge warning">Warning</span>
+  </div>
+  <div class="finding-meta">File: <code>nix/modules/system/linux.nix</code></div>
+  <p>The configuration enables <code>programs.nix-ld.enable = true</code>. While often a practical necessity for tools like VSCode Remote Server (which downloads precompiled Node.js binaries), <code>nix-ld</code> punches a hole in Nix's purity model by providing standard Linux loader paths. Be aware that this could mask missing dependencies in local development environments.</p>
+</div>
+
+<div class="card severity-warning">
+  <div class="finding-header">
+    <h3 class="finding-title">Passwordless Sudo for Wheel Group</h3>
+    <span class="badge warning">Warning</span>
+  </div>
+  <div class="finding-meta">Files: <code>hosts/s1/configuration.nix</code>, <code>hosts/s2/configuration.nix</code></div>
+  <p><code>security.sudo.wheelNeedsPassword = false;</code> is configured on the Linux hosts. While this is highly convenient for a home network environment, it means that any process running as the <code>craig</code> user can escalate to root privileges without interaction. Consider evaluating if this convenience outweighs the security risk for your threat model.</p>
+</div>
+
+<div class="card severity-suggestion">
+  <div class="finding-header">
+    <h3 class="finding-title">Prefer <code>substituteInPlace</code> Over <code>sed</code></h3>
+    <span class="badge suggestion">Suggestion</span>
+  </div>
+  <div class="finding-meta">File: <code>nix/pkgs/sleepproxyclient.nix</code></div>
+  <p>In the custom package derivation, <code>sed -i</code> is used extensively during the <code>installPhase</code> to patch the python scripts. In Nixpkgs, it is generally more idiomatic and robust to use the built-in <code>substituteInPlace</code> function instead of <code>sed</code>, as it handles paths and syntax errors more cleanly.</p>
+  <pre><code># Instead of:
+sed -i 's/timeout=1/timeout=5/g' $out/bin/sleepproxyclient
+
+# Consider:
+substituteInPlace $out/bin/sleepproxyclient \
+  --replace-warn 'timeout=1' 'timeout=5'</code></pre>
+</div>
+
+<div class="card severity-info">
+  <div class="finding-header">
+    <h3 class="finding-title">State Version Mismatch Between Host and Home Manager</h3>
+    <span class="badge info">Info</span>
+  </div>
+  <div class="finding-meta">Files: <code>hosts/s1/configuration.nix</code>, <code>hosts/s1/home.nix</code></div>
+  <p>The system <code>system.stateVersion</code> is set to <code>"25.05"</code> while the Home Manager <code>home.stateVersion</code> is <code>"25.11"</code>. This is <strong>perfectly safe and normal</strong>, but worth noting. It accurately reflects that the OS was installed under 25.05 semantics, while the user environment was initialized under 25.11 semantics.</p>
+</div>
+
+
+<h2>Recent Changes Review</h2>
+
+<div class="diff-container">
+  <div class="diff-header">commit 4071bb7 - feat(vscode): nuclear option for enabling vscode remote + extensions with binaries</div>
+  <div class="diff-layout">
+    <div class="diff-code">
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">--- a/nix/modules/system/linux.nix</div></div>
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">+++ b/nix/modules/system/linux.nix</div></div>
+      <div class="diff-line"><div class="line-num">11</div><div class="line-content">     )</div></div>
+      <div class="diff-line"><div class="line-num">12</div><div class="line-content">   ];</div></div>
+      <div class="diff-line"><div class="line-num">13</div><div class="line-content"> </div></div>
+      <div class="diff-line line-add"><div class="line-num">+</div><div class="line-content">  programs.nix-ld.enable = true;</div></div>
+      <div class="diff-line line-add"><div class="line-num">+</div><div class="line-content"> </div></div>
+      <div class="diff-line"><div class="line-num">14</div><div class="line-content">   environment.systemPackages = with pkgs; [</div></div>
+      <div class="diff-line"><div class="line-num">15</div><div class="line-content">     claude-code</div></div>
+    </div>
+    <div class="annotation-box">
+      <span class="annotation-title">Trade-off Required</span>
+      The author correctly identifies this as the "nuclear option". VSCode Remote SSH downloads pre-compiled NodeJS binaries dynamically, which immediately fail to run on NixOS due to missing dynamic linkers (e.g. <code>/lib64/ld-linux-x86-64.so.2</code>). <code>nix-ld</code> stubs these in. It's the most pragmatic solution for remote VSCode without resorting to heavy FHS environments.
+    </div>
+  </div>
+</div>
+
+<div class="diff-container">
+  <div class="diff-header">commit a170e4c - fix(zellij): unwind zellij dep failure now that upstream is fixed</div>
+  <div class="diff-layout">
+    <div class="diff-code">
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">--- a/nix/modules/system/darwin.nix</div></div>
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">+++ b/nix/modules/system/darwin.nix</div></div>
+      <div class="diff-line"><div class="line-num">173</div><div class="line-content"> </div></div>
+      <div class="diff-line"><div class="line-num">174</div><div class="line-content">   nix.settings.experimental-features = "nix-command flakes";</div></div>
+      <div class="diff-line"><div class="line-num">175</div><div class="line-content"> </div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">  nixpkgs = {</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">    overlays = [</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">      (_final: prev: {</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">        inherit (unstable) zellij;</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">      })</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">    ];</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">    hostPlatform = "aarch64-darwin";</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content">  };</div></div>
+      <div class="diff-line line-add"><div class="line-num">+</div><div class="line-content">  nixpkgs.hostPlatform = "aarch64-darwin";</div></div>
+    </div>
+    <div class="annotation-box info-box">
+      <span class="annotation-title">Technical Debt Reduced</span>
+      Removing temporary overrides and overlays once the <code>nixpkgs</code> upstream receives the fix is a great hygiene practice. It keeps the local flake lean and reduces evaluation overhead.
+    </div>
+  </div>
+</div>
+
+<div class="diff-container">
+  <div class="diff-header">commit 2fa8ddb - feat(vscode): copilot chat bundled into vscode natively since 1.116.0</div>
+  <div class="diff-layout">
+    <div class="diff-code">
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">--- a/nix/modules/home/vscode/extensions.txt</div></div>
+      <div class="diff-line"><div class="line-num"></div><div class="line-content">+++ b/nix/modules/home/vscode/extensions.txt</div></div>
+      <div class="diff-line"><div class="line-num">4</div><div class="line-content"> dbaeumer.vscode-eslint</div></div>
+      <div class="diff-line"><div class="line-num">5</div><div class="line-content"> esbenp.prettier-vscode</div></div>
+      <div class="diff-line"><div class="line-num">6</div><div class="line-content"> fill-labs.dependi</div></div>
+      <div class="diff-line line-del"><div class="line-num">-</div><div class="line-content"> github.copilot-chat</div></div>
+      <div class="diff-line"><div class="line-num">7</div><div class="line-content"> github.vscode-github-actions</div></div>
+      <div class="diff-line"><div class="line-num">8</div><div class="line-content"> github.vscode-pull-request-github</div></div>
+    </div>
+    <div class="annotation-box info-box">
+      <span class="annotation-title">Extension Pruning</span>
+      Excellent catch. Removing extensions that are now built-in prevents extension host crashes and cleans up the initial install process handled by your custom Home Manager activation script.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
