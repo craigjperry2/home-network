@@ -26,7 +26,7 @@ if ! nix develop -c statix check >/dev/null 2>&1; then
   exit 2
 fi
 
-if ! nix develop -c deadnix >/dev/null 2>&1; then
-  echo "Nix lint (deadnix) failed. Run: cd nix && nix develop -c deadnix"
+if ! nix develop -c deadnix --fail >/dev/null 2>&1; then
+  echo "Nix lint (deadnix) failed. Run: cd nix && nix develop -c deadnix --fail"
   exit 2
 fi

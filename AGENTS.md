@@ -14,7 +14,9 @@
 * `.claude/` — repo-local Claude Code config and hooks
   * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; exit 2 blocks stop and forces a fix turn
 * `.codex/` — repo-local Codex project config and hooks
-  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
+  * `config.toml` — enables project-local Codex lifecycle hooks
+  * `hooks.json` — runs the Nix validation hook on Codex `Stop`
+  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; blocks stop and forces a fix turn when validation fails or formatting changed files
 * `.gemini/` — repo-local Gemini CLI config and hooks
   * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
@@ -46,11 +48,23 @@ nix flake check
 **Lint** for anti-patterns (statix) and unused code (deadnix):
 ```bash
 nix develop -c statix check
-nix develop -c deadnix
+nix develop -c deadnix --fail
 ```
 
 Always run `nix run nixpkgs#alejandra -- .` and `nix flake check` after making changes to nix files.
 `nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
+Before committing Nix changes, also run the full lint sequence:
+
+```bash
+nix develop -c statix check
+nix develop -c deadnix --fail
+```
+
+Codex has a project-local Stop hook that runs the same format, flake check and
+lint sequence whenever `.nix` files or `flake.lock` are changed, including
+untracked files. Treat this hook as a backstop: if it blocks, continue the turn,
+fix the reported issue, and do not commit until the hook or explicit validation
+passes.
 
 Claude, Codex, Gemini and Copilot are configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
 

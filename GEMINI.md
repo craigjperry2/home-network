@@ -15,6 +15,7 @@ Every turn that modifies `.nix` or `flake.lock` files MUST be followed by:
 2. `nix run nixpkgs#alejandra -- .` (Formatting)
 3. `nix flake check` (Evaluation)
 4. `nix develop -c statix check` (Linting)
+5. `nix develop -c deadnix --fail` (Unused code)
 
 ### 2. Commit Style
 Adhere strictly to **Conventional Commits**.

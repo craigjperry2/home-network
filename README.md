@@ -2,7 +2,7 @@
 
 This repo is the golden source for automation of my home network configuration.
 
-Repo-local Copilot and Codex hooks are configured under `.github/hooks/` and `.codex/` and mirror the Gemini Nix validation flow.
+Repo-local Copilot and Codex hooks are configured under `.github/hooks/` and `.codex/` and mirror the Gemini Nix validation flow. Codex runs its Nix validation as a `Stop` hook, so agents should continue fixing issues when the hook blocks and should only commit after formatting, `nix flake check`, `statix`, and `deadnix --fail` pass.
 
 ## Instructions
 

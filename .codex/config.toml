@@ -1,1 +1,6 @@
-hooks = "./hooks.json"
+# Project-local Codex config.
+#
+# Lifecycle hooks are discovered from .codex/hooks.json next to this file.
+# Keep hook definitions there to avoid merging inline and JSON hook sources.
+[features]
+hooks = true

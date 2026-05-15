@@ -28,7 +28,7 @@ if [ -n "$NIX_CHANGES" ]; then
   fi
 
   # 4. Lint (Deadnix)
-  if ! nix develop -c deadnix >/dev/null 2>&1; then
+  if ! nix develop -c deadnix --fail >/dev/null 2>&1; then
     echo '{"decision": "block", "reason": "Nix lint (deadnix) failed. Please remove unused code."}'
     exit 0
   fi

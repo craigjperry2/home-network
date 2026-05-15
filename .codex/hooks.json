@@ -2,12 +2,12 @@
   "hooks": {
     "Stop": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ./.codex/hooks/nix-lint.sh",
-            "timeout": 60000
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/nix-lint.sh\"",
+            "timeout": 600,
+            "statusMessage": "Validating Nix changes"
           }
         ]
       }

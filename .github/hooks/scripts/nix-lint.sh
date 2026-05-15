@@ -65,9 +65,9 @@ if ! nix develop -c statix check >/dev/null 2>&1; then
 fi
 
 # 4. Deadnix lint
-if ! nix develop -c deadnix >/dev/null 2>&1; then
+if ! nix develop -c deadnix --fail >/dev/null 2>&1; then
   touch "$SENTINEL"
-  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix lint (deadnix) failed. Run: cd nix && nix develop -c deadnix — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
+  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix lint (deadnix) failed. Run: cd nix && nix develop -c deadnix --fail — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
   exit 0
 fi
 
