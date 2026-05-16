@@ -17,6 +17,10 @@ in {
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
+    unstable.nixd
+    unstable.alejandra
+    unstable.statix
+    unstable.deadnix
   ];
 
   homebrew = {

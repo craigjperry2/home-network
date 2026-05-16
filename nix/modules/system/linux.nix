@@ -6,7 +6,7 @@
   nixpkgs.overlays = [
     (
       _: _prev: {
-        inherit (unstable) claude-code codex github-copilot-cli gemini-cli;
+        inherit (unstable) claude-code codex github-copilot-cli gemini-cli nixd alejandra statix deadnix;
       }
     )
   ];
@@ -27,6 +27,10 @@
     unzip
     zellij
     zip
+    nixd
+    alejandra
+    statix
+    deadnix
   ];
 
   users.users.craig.openssh.authorizedKeys.keys = [
