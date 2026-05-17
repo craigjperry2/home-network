@@ -78,7 +78,11 @@
     unstablePkgs = system:
       import nixpkgs-unstable {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          cudaSupport = true;
+          cudaCapabilities = ["6.1"];
+        };
       };
 
     allowUnfree = {nixpkgs.config.allowUnfree = true;};

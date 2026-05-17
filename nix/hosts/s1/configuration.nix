@@ -1,7 +1,11 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{pkgs, ...}: {
+{
+  pkgs,
+  unstable,
+  ...
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -148,7 +152,7 @@
     llama-cpp = {
       enable = true;
       model = "/srv/ai/gemma-4-e4b-8bit.gguf";
-      package = pkgs.llama-cpp.override {cudaSupport = true;};
+      package = unstable.llama-cpp.override {cudaSupport = true;};
       port = 11434;
       host = "0.0.0.0";
       extraFlags = [
@@ -156,6 +160,11 @@
         "99" # Offload all layers to GPU
       ];
     };
+  };
+
+  systemd.services.llama-cpp.serviceConfig = {
+    SupplementaryGroups = ["video" "render"];
+    ReadOnlyPaths = ["/srv/ai"];
   };
 
   # Open ports in the firewall.
