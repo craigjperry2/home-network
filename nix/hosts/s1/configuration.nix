@@ -26,74 +26,9 @@
     interfaces.enp0s31f6.wakeOnLan.enable = true;
   };
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-      userServices = true;
-    };
-    extraServiceFiles = {
-      ssh = ''
-        <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
-        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-        <service-group>
-          <name replace-wildcards="yes">%h</name>
-          <service>
-            <type>_ssh._tcp</type>
-            <port>22</port>
-          </service>
-        </service-group>
-      '';
-    };
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/London";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     tree
-  #   ];
-  # };
   users.users.craig = {
     isNormalUser = true;
     extraGroups = ["wheel" "networkmanager"];
@@ -101,31 +36,52 @@
     shell = pkgs.zsh;
   };
 
-  # programs.firefox.enable = true;
-
   programs.zsh.enable = true;
 
-  environment.shells = with pkgs; [zsh];
+  environment = {
+    shells = with pkgs; [zsh];
+    systemPackages = with pkgs; [
+      smartmontools
+      zfs
+    ];
+  };
 
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
-  environment.systemPackages = with pkgs; [
-    smartmontools
-    zfs
-  ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
   services = {
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+        userServices = true;
+      };
+      extraServiceFiles = {
+        ssh = ''
+          <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name replace-wildcards="yes">%h</name>
+            <service>
+              <type>_ssh._tcp</type>
+              <port>22</port>
+            </service>
+          </service-group>
+        '';
+        llama-cpp = ''
+          <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name replace-wildcards="yes">%h</name>
+            <service>
+              <type>_llama-cpp._tcp</type>
+              <port>11434</port>
+            </service>
+          </service-group>
+        '';
+      };
+    };
+
     openssh.enable = true;
     tailscale.enable = true;
     autosuspend = {
@@ -148,6 +104,10 @@
             fi
             exit 1
           '');
+        };
+        llama-cpp = {
+          class = "ActiveConnection";
+          ports = "11434";
         };
       };
     };
@@ -182,13 +142,31 @@
       enable = true;
       dataDir = "/srv/vms/immich/postgres";
     };
+
+    xserver.videoDrivers = ["nvidia"];
+
+    llama-cpp = {
+      enable = true;
+      model = "/srv/ai/gemma-4-e4b-8bit.gguf";
+      package = pkgs.llama-cpp.override {cudaSupport = true;};
+      port = 11434;
+      host = "0.0.0.0";
+      extraFlags = [
+        "--n-gpu-layers"
+        "99" # Offload all layers to GPU
+      ];
+    };
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2283];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [2283 11434];
+
+  hardware.graphics.enable = true;
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false; # GTX 1080 Ti does not support open drivers
+    nvidiaSettings = true;
+  };
 
   virtualisation = {
     containers.enable = true;
