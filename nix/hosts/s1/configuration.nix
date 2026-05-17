@@ -157,7 +157,17 @@
       host = "0.0.0.0";
       extraFlags = [
         "--n-gpu-layers"
-        "99" # Offload all layers to GPU
+        "99"
+        "--mmproj"
+        "/srv/ai/mmproj-F16.gguf"
+        "--image-min-tokens"
+        "560"
+        "--image-max-tokens"
+        "560"
+        "--ubatch-size"
+        "1024"
+        "--batch-size"
+        "1024"
       ];
     };
   };
