@@ -83,6 +83,17 @@
             </service>
           </service-group>
         '';
+        comfyui = ''
+          <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name replace-wildcards="yes">%h</name>
+            <service>
+              <type>_comfyui._tcp</type>
+              <port>8188</port>
+            </service>
+          </service-group>
+        '';
       };
     };
 
@@ -112,6 +123,10 @@
         llama-cpp = {
           class = "ActiveConnection";
           ports = "11434";
+        };
+        comfyui = {
+          class = "ActiveConnection";
+          ports = "8188";
         };
       };
     };
@@ -149,6 +164,15 @@
 
     xserver.videoDrivers = ["nvidia"];
 
+    comfyui = {
+      enable = true;
+      gpuSupport = "cuda";
+      listenAddress = "0.0.0.0";
+      port = 8188;
+      dataDir = "/srv/ai/comfyui";
+      extraArgs = ["--lowvram"];
+    };
+
     llama-cpp = {
       enable = true;
       model = "/srv/ai/gemma-4-e4b-8bit.gguf";
@@ -172,13 +196,26 @@
     };
   };
 
-  systemd.services.llama-cpp.serviceConfig = {
-    SupplementaryGroups = ["video" "render"];
-    ReadOnlyPaths = ["/srv/ai"];
+  systemd.services.llama-cpp = {
+    conflicts = ["comfyui.service"];
+    serviceConfig = {
+      SupplementaryGroups = ["video" "render"];
+      ReadOnlyPaths = ["/srv/ai"];
+    };
+  };
+
+  # ComfyUI is not started automatically at boot; llama-cpp is the default GPU service.
+  # Starting comfyui will automatically stop llama-cpp (and vice versa) due to Conflicts=.
+  # Usage:
+  #   sudo systemctl start comfyui   # stops llama-cpp, starts comfyui
+  #   sudo systemctl start llama-cpp # stops comfyui, starts llama-cpp
+  systemd.services.comfyui = {
+    wantedBy = pkgs.lib.mkForce [];
+    conflicts = ["llama-cpp.service"];
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2283 11434];
+  networking.firewall.allowedTCPPorts = [2283 8188 11434];
 
   hardware.graphics.enable = true;
   hardware.nvidia = {
