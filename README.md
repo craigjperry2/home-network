@@ -88,6 +88,44 @@ Tailscale is enabled on linux hosts (e.g. `s1`) but secrets are not managed decl
 sudo tailscale up
 ```
 
+### Linux (`s1`) AI services
+
+`s1` exposes both:
+
+* `llama.cpp` on `http://s1:11434`
+* `ComfyUI` on `http://s1:8188`
+
+ComfyUI runs from a GPU-enabled container and persists its state under
+`/srv/ai/comfyui/`:
+
+* models → `/srv/ai/comfyui/models`
+* input → `/srv/ai/comfyui/input`
+* output → `/srv/ai/comfyui/output`
+* custom nodes → `/srv/ai/comfyui/custom_nodes`
+* user data/workflows → `/srv/ai/comfyui/user`
+
+The GTX 1080 Ti is shared conservatively:
+
+* `llama.cpp` now leaves headroom via `--fit-target`, uses quantized KV cache,
+  and enables CUDA unified memory as a safety valve
+* ComfyUI runs with `--lowvram --reserve-vram 6`
+
+That should allow light concurrent use, especially for SD1.5-class workflows.
+If a heavier ComfyUI workflow or model still collides with `llama.cpp`, switch
+manually:
+
+```bash
+sudo systemctl stop llama-cpp
+sudo systemctl start podman-comfyui
+```
+
+or:
+
+```bash
+sudo systemctl stop podman-comfyui
+sudo systemctl start llama-cpp
+```
+
 ## History
 
 It's changed over the years, Ansible was a staple tool for the longest time. It's

@@ -83,6 +83,18 @@
             </service>
           </service-group>
         '';
+        comfyui = ''
+          <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name replace-wildcards="yes">%h</name>
+            <service>
+              <type>_http._tcp</type>
+              <port>8188</port>
+              <txt-record>path=/</txt-record>
+            </service>
+          </service-group>
+        '';
       };
     };
 
@@ -112,6 +124,10 @@
         llama-cpp = {
           class = "ActiveConnection";
           ports = "11434";
+        };
+        comfyui = {
+          class = "ActiveConnection";
+          ports = "8188";
         };
       };
     };
@@ -158,6 +174,14 @@
       extraFlags = [
         "--n-gpu-layers"
         "99"
+        "--fit-target"
+        "4608"
+        "--ctx-size"
+        "4096"
+        "--cache-type-k"
+        "q4_0"
+        "--cache-type-v"
+        "q4_0"
         "--mmproj"
         "/srv/ai/mmproj-F16.gguf"
         "--image-min-tokens"
@@ -165,20 +189,32 @@
         "--image-max-tokens"
         "560"
         "--ubatch-size"
-        "1024"
+        "512"
         "--batch-size"
-        "1024"
+        "512"
       ];
     };
   };
 
+  systemd.tmpfiles.rules = [
+    "d /srv/ai/comfyui 0755 root root -"
+    "d /srv/ai/comfyui/input 0755 root root -"
+    "d /srv/ai/comfyui/output 0755 root root -"
+    "d /srv/ai/comfyui/models 0755 root root -"
+    "d /srv/ai/comfyui/custom_nodes 0755 root root -"
+    "d /srv/ai/comfyui/user 0755 root root -"
+  ];
+
+  systemd.services.llama-cpp.environment = {
+    GGML_CUDA_ENABLE_UNIFIED_MEMORY = "1";
+  };
   systemd.services.llama-cpp.serviceConfig = {
     SupplementaryGroups = ["video" "render"];
     ReadOnlyPaths = ["/srv/ai"];
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2283 11434];
+  networking.firewall.allowedTCPPorts = [2283 8188 11434];
 
   hardware.graphics.enable = true;
   hardware.nvidia = {
@@ -186,6 +222,7 @@
     open = false; # GTX 1080 Ti does not support open drivers
     nvidiaSettings = true;
   };
+  hardware.nvidia-container-toolkit.enable = true;
 
   virtualisation = {
     containers.enable = true;
@@ -193,6 +230,28 @@
       enable = true;
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers.comfyui = {
+        image = "ghcr.io/ai-dock/comfyui:latest-cuda";
+        ports = ["8188:8188"];
+        environment = {
+          CLI_ARGS = "--listen 0.0.0.0 --port 8188 --lowvram --reserve-vram 6";
+          NVIDIA_VISIBLE_DEVICES = "all";
+        };
+        volumes = [
+          "/srv/ai/comfyui/input:/workspace/ComfyUI/input"
+          "/srv/ai/comfyui/output:/workspace/ComfyUI/output"
+          "/srv/ai/comfyui/models:/workspace/ComfyUI/models"
+          "/srv/ai/comfyui/custom_nodes:/workspace/ComfyUI/custom_nodes"
+          "/srv/ai/comfyui/user:/workspace/ComfyUI/user"
+        ];
+        extraOptions = [
+          "--device=nvidia.com/gpu=all"
+          "--security-opt=label=disable"
+        ];
+      };
     };
   };
 
