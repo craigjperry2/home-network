@@ -86,7 +86,7 @@ in {
       "Vimlike" = 1584519802;
     };
   };
-  # Not available in 25.11: https://github.com/nix-darwin/nix-darwin/pull/1222
+  # Not yet enabled - see https://github.com/nix-darwin/nix-darwin/pull/1222
   # vscode = [
   #   "charliermarsh.ruff"
   #   "dbaeumer.vscode-eslint"

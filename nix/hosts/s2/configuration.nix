@@ -59,6 +59,8 @@
     dhcpcd.enable = false;
     useDHCP = false;
     useHostResolvConf = false;
+    # OrbStack manages /etc/resolv.conf via environment.etc in orbstack.nix
+    resolvconf.enable = false;
   };
 
   systemd.network = {

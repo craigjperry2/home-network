@@ -142,8 +142,10 @@
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
+      withRuby = false;
+      withPython3 = false;
       plugins = with pkgs.vimPlugins; [
-        fzfWrapper
+        fzf-wrapper
         fzf-vim
         {
           plugin = lualine-nvim;
@@ -154,6 +156,7 @@
         }
         {
           plugin = nnn-vim;
+          type = "viml";
           config = ''
             let g:nnn#layout = {'window': {'width':0.9, 'height':0.6, 'highlight':'Debug'}}
             let g:nnn#action = {'<c-x>': 'split', '<c-v>': 'vsplit'}
@@ -163,6 +166,7 @@
         plenary-nvim
         {
           plugin = vim-colors-solarized;
+          type = "viml";
           config = ''
             colorscheme solarized
           '';
@@ -522,6 +526,7 @@
     userDirs = {
       enable = true;
       createDirectories = true;
+      setSessionVariables = true;
     };
   };
 }
