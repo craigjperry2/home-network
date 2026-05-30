@@ -4,6 +4,7 @@
 {
   pkgs,
   unstable,
+  config,
   ...
 }: let
   llamaCppPort = 11434;
@@ -246,6 +247,7 @@ in {
     open = false; # GTX 1080 Ti does not support open drivers
     nvidiaSettings = true;
     powerManagement.enable = true; # Save/restore GPU state across suspend/resume
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   };
 
   virtualisation = {
