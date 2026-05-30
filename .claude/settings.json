@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd $(git rev-parse --show-toplevel) && .claude/hooks/nix-lint.sh"
+            "command": "cd $(git rev-parse --show-toplevel) && bash .hooks/nix-lint.sh --adapter claude"
           }
         ]
       }

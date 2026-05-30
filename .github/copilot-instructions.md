@@ -4,12 +4,13 @@
 
 After modifying `.nix` files or `flake.lock`, end your turn with a trivial tool
 call (e.g., `view` a file) to trigger the `preToolUse` validation hook. The
-hook adapter runs `prek` for changed Nix files, using `.pre-commit-config.yaml`
-as the canonical validation config.
+shared hook runner runs `prek` for changed Nix files, using
+`.pre-commit-config.yaml` as the canonical validation config.
 
 ## Nix Hook Recovery Protocol
 
-The Copilot `preToolUse` hook uses a **sentinel-based recovery mode** to avoid deadlocks:
+The Copilot adapter in `.hooks/nix-lint.sh` uses a **sentinel-based recovery
+mode** to avoid deadlocks:
 
 1. **First failure**: The hook denies the tool call and reports the error. A recovery
    sentinel file is created automatically.

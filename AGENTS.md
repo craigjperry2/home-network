@@ -3,26 +3,23 @@
 ## Repository Layout
 
 * `nix/` — Nix flake configuring hosts via NixOS and nix-darwin with Home Manager
-  * `flake.nix` — flake entrypoint; defines nixosConfigurations (s1),
-     darwinConfigurations (d2, r2)
-  * `hosts/<name>/` — per-host (s1, d2, r2) `configuration.nix` and `home.nix`
+  * `flake.nix` — flake entrypoint; defines nixosConfigurations (s1, s2),
+    darwinConfigurations (d2, r2)
+  * `hosts/<name>/` — per-host (s1, s2, d2, r2) `configuration.nix` and `home.nix`
   * `modules/home/core.nix` — shared Home Manager config (packages, programs, shell)
   * `modules/system/darwin.nix` — shared macOS system config
 * `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
 * `.pre-commit-config.yaml` — canonical Prek git/agent hook config for Nix validation
-* `.claude/` — repo-local Claude Code config and hooks
-  * `hooks/nix-lint.sh` — Claude adapter that runs Prek for changed Nix files
+* `.hooks/nix-lint.sh` — shared hook runner that invokes Prek for changed Nix files
+* `.claude/` — repo-local Claude Code hook config
 * `.codex/` — repo-local Codex project config and hooks
   * `config.toml` — enables project-local Codex lifecycle hooks
-  * `hooks.json` — runs the Nix validation hook on Codex `Stop`
-  * `hooks/nix-lint.sh` — Codex adapter that runs Prek for changed Nix files
-* `.gemini/` — repo-local Gemini CLI config and hooks
-  * `hooks/nix-lint.sh` — Gemini adapter that runs Prek for changed Nix files
+  * `hooks.json` — runs the shared Nix validation hook on Codex `Stop`
+* `.gemini/` — repo-local Gemini CLI hook config
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
-  * `nix-validation.json` — runs Nix validation on `preToolUse` to block actions until validation passes
-  * `scripts/nix-lint.sh` — Copilot adapter that runs Prek for changed Nix files
+  * `nix-validation.json` — runs the shared Nix validation hook on `preToolUse`
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 

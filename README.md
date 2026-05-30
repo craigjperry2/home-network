@@ -2,7 +2,8 @@
 
 This repo is the golden source for automation of my home network configuration.
 
-Repo-local Copilot, Codex, Claude and Gemini hooks call Prek using the canonical
+Repo-local Copilot, Codex, Claude and Gemini hooks call the shared
+`.hooks/nix-lint.sh` runner, which invokes Prek using the canonical
 `.pre-commit-config.yaml` config. The Nix validation flow formats with
 Alejandra, evaluates with `nix flake check`, then runs `statix` and
 `deadnix --fail`. Agents should continue fixing issues when a hook blocks and

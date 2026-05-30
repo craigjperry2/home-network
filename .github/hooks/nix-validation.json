@@ -5,7 +5,7 @@
       {
         "comment": "preToolUse is required for enforcement; postToolUse output is ignored by Copilot CLI",
         "type": "command",
-        "bash": "./scripts/nix-lint.sh",
+        "bash": "bash \"$(git rev-parse --show-toplevel)/.hooks/nix-lint.sh\" --adapter copilot",
         "cwd": ".github/hooks",
         "timeoutSec": 120
       }

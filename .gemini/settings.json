@@ -7,7 +7,7 @@
           {
             "name": "nix-validation-hook",
             "type": "command",
-            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/nix-lint.sh",
+            "command": "bash \"$GEMINI_PROJECT_DIR/.hooks/nix-lint.sh\" --adapter gemini",
             "timeout": 60000,
             "description": "Ensures Nix files are formatted, valid, and linted after any turn where they were modified."
           }
