@@ -21,6 +21,7 @@ in {
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = ["zfs"];
+    zfs.forceImportRoot = false;
     zfs.extraPools = ["tank"];
   };
 

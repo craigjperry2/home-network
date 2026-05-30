@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: {
   imports = [
@@ -315,6 +316,7 @@
       enableCompletion = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
+      dotDir = config.home.homeDirectory;
 
       shellAliases = {
         cat = "bat --pager=never";
