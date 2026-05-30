@@ -10,12 +10,26 @@ You are operating in a Nix-heavy infrastructure-as-code repository. Precision an
 ## Critical Workflows
 
 ### 1. Nix Modifications
-Every turn that modifies `.nix` or `flake.lock` files MUST be followed by:
-1. `cd nix`
-2. `nix run nixpkgs#alejandra -- .` (Formatting)
-3. `nix flake check` (Evaluation)
-4. `nix develop -c statix check` (Linting)
-5. `nix develop -c deadnix --fail` (Unused code)
+Every turn that modifies `.nix` or `flake.lock` files MUST validate the change.
+Enter the Nix dev shell once:
+
+```bash
+cd nix
+nix develop
+```
+
+Then run:
+
+```bash
+nix run nixpkgs#alejandra -- .
+nix flake check
+statix check
+deadnix --fail
+```
+
+`.pre-commit-config.yaml` is the canonical Prek hook configuration. Gemini's
+hook adapter runs Prek for changed Nix files and translates failures into Gemini
+hook decisions.
 
 ### 2. Commit Style
 Adhere strictly to **Conventional Commits**.

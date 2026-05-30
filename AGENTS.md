@@ -11,62 +11,54 @@
 * `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
+* `.pre-commit-config.yaml` — canonical Prek git/agent hook config for Nix validation
 * `.claude/` — repo-local Claude Code config and hooks
-  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; exit 2 blocks stop and forces a fix turn
+  * `hooks/nix-lint.sh` — Claude adapter that runs Prek for changed Nix files
 * `.codex/` — repo-local Codex project config and hooks
   * `config.toml` — enables project-local Codex lifecycle hooks
   * `hooks.json` — runs the Nix validation hook on Codex `Stop`
-  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes; blocks stop and forces a fix turn when validation fails or formatting changed files
+  * `hooks/nix-lint.sh` — Codex adapter that runs Prek for changed Nix files
 * `.gemini/` — repo-local Gemini CLI config and hooks
-  * `hooks/nix-lint.sh` — formats, evaluates and lints Nix changes
+  * `hooks/nix-lint.sh` — Gemini adapter that runs Prek for changed Nix files
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
   * `nix-validation.json` — runs Nix validation on `preToolUse` to block actions until validation passes
-  * `scripts/nix-lint.sh` — validates Nix formatting, flake evaluation, and linting
+  * `scripts/nix-lint.sh` — Copilot adapter that runs Prek for changed Nix files
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
 ## Nix Configuration
 
-All nix work is done from within the `nix/` directory:
+All Nix work is done from within the `nix/` directory. Enter the dev shell first:
 
 ```bash
 cd nix
+nix develop
 ```
 
-**Format** (alejandra):
+Then run the validation sequence after changing `.nix` files or `flake.lock`:
+
 ```bash
 nix run nixpkgs#alejandra -- .
+nix flake check
+statix check
+deadnix --fail
 ```
+
+`nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
 
 > Note: `nix fmt` hangs waiting for stdin — use the `nix run` form above instead.
 
-**Validate** the flake (evaluates all host configurations):
-```bash
-nix flake check
-```
-
-**Lint** for anti-patterns (statix) and unused code (deadnix):
-```bash
-nix develop -c statix check
-nix develop -c deadnix --fail
-```
-
-Always run `nix run nixpkgs#alejandra -- .` and `nix flake check` after making changes to nix files.
-`nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
-Before committing Nix changes, also run the full lint sequence:
+For one-shot validation without entering the shell interactively:
 
 ```bash
-nix develop -c statix check
-nix develop -c deadnix --fail
+cd nix
+nix develop -c bash -lc 'nix run nixpkgs#alejandra -- . && nix flake check && statix check && deadnix --fail'
 ```
 
-Codex has a project-local Stop hook that runs the same format, flake check and
-lint sequence whenever `.nix` files or `flake.lock` are changed, including
-untracked files. Treat this hook as a backstop: if it blocks, continue the turn,
-fix the reported issue, and do not commit until the hook or explicit validation
-passes.
-
-Claude, Codex, Gemini and Copilot are configured in this repo to run the same Nix validation sequence automatically after turns that modify `.nix` files or `flake.lock`.
+`.pre-commit-config.yaml` is the canonical Prek hook configuration. The git
+pre-commit hook and the Claude, Codex, Gemini and Copilot adapters all run Prek
+for changed Nix files. Treat hook failures as a backstop: continue the turn, fix
+the reported issue, and do not commit until Prek or explicit validation passes.
 
 ## Git Repo
 

@@ -25,63 +25,29 @@ if [ ! -d "$PROJECT_ROOT/nix" ]; then
   block "Codex Nix validation could not find $PROJECT_ROOT/nix."
 fi
 
-NIX_CHANGES=$(
+changed_files=()
+while IFS= read -r file; do
+  changed_files+=("$file")
+done < <(
   cd "$PROJECT_ROOT"
   {
     git diff --name-only HEAD 2>/dev/null
     git ls-files --others --exclude-standard 2>/dev/null
-  } | grep -E '(^|/)([^/]+\.nix|flake\.lock)$' || true
+  } | grep -E '(^|/)([^/]+\.nix|flake\.lock)$' | awk '!seen[$0]++' || true
 )
 
-if [ -z "$NIX_CHANGES" ]; then
+if [ ${#changed_files[@]} -eq 0 ]; then
   printf '{}\n'
   exit 0
 fi
 
-STATUS_BEFORE=$(cd "$PROJECT_ROOT" && git status --porcelain -- nix '*.nix' 'flake.lock')
+if ! output=$(cd "$PROJECT_ROOT" && nix develop ./nix -c prek run --files "${changed_files[@]}" 2>&1); then
+  block "Prek Nix validation failed.
 
-run_check() {
-  local label=$1
-  local fix=$2
-  shift 2
-
-  local output
-  if ! output=$("$@" 2>&1); then
-    block "$label failed.
-
-Run: $fix
+Run from the repo root: nix develop ./nix -c prek run --files ${changed_files[*]}
 
 Output:
 $output"
-  fi
-}
-
-cd "$PROJECT_ROOT/nix" || block "Codex Nix validation could not cd into $PROJECT_ROOT/nix."
-
-run_check \
-  "Nix formatting (alejandra)" \
-  "cd nix && nix run nixpkgs#alejandra -- ." \
-  nix run nixpkgs#alejandra -- .
-
-STATUS_AFTER_FORMAT=$(cd "$PROJECT_ROOT" && git status --porcelain -- nix '*.nix' 'flake.lock')
-
-run_check \
-  "Nix flake check" \
-  "cd nix && nix flake check" \
-  nix flake check
-
-run_check \
-  "Nix lint (statix)" \
-  "cd nix && nix develop -c statix check" \
-  nix develop -c statix check
-
-run_check \
-  "Nix lint (deadnix)" \
-  "cd nix && nix develop -c deadnix --fail" \
-  nix develop -c deadnix --fail
-
-if [ "$STATUS_BEFORE" != "$STATUS_AFTER_FORMAT" ]; then
-  block "Alejandra formatted Nix files during the Stop hook. Review the formatter changes, then finish the turn with the validation status."
 fi
 
 printf '{}\n'

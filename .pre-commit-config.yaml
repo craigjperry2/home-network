@@ -1,0 +1,34 @@
+default_install_hook_types:
+  - pre-commit
+fail_fast: true
+
+repos:
+  - repo: local
+    hooks:
+      - id: nix-format
+        name: Format Nix files
+        language: system
+        entry: bash -c 'cd nix && nix run nixpkgs#alejandra -- .'
+        files: '(^|/)([^/]+\.nix|flake\.lock)$'
+        pass_filenames: false
+
+      - id: nix-flake-check
+        name: Check Nix flake
+        language: system
+        entry: bash -c 'cd nix && nix flake check'
+        files: '(^|/)([^/]+\.nix|flake\.lock)$'
+        pass_filenames: false
+
+      - id: nix-statix
+        name: Lint Nix with statix
+        language: system
+        entry: bash -c 'cd nix && nix develop -c statix check'
+        files: '(^|/)([^/]+\.nix|flake\.lock)$'
+        pass_filenames: false
+
+      - id: nix-deadnix
+        name: Check unused Nix code
+        language: system
+        entry: bash -c 'cd nix && nix develop -c deadnix --fail'
+        files: '(^|/)([^/]+\.nix|flake\.lock)$'
+        pass_filenames: false

@@ -1,38 +1,51 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-# Detect if nix files were changed in the workspace (including staged and untracked)
-NIX_CHANGES=$(git status --porcelain | awk '{print $2}' | grep -E '\.nix$|flake\.lock$' || true)
+json_escape() {
+  local value=${1-}
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\n'/\\n}
+  value=${value//$'\r'/}
+  value=${value//$'\t'/\\t}
+  printf '%s' "$value"
+}
 
-if [ -n "$NIX_CHANGES" ]; then
-  # Navigate to the nix directory
-  PROJECT_ROOT="${GEMINI_PROJECT_DIR:-$(pwd)}"
-  cd "$PROJECT_ROOT/nix" || { echo '{"decision": "block", "reason": "Could not find nix directory"}'; exit 0; }
+block() {
+  local reason=$1
+  printf '{"decision":"block","reason":"%s"}\n' "$(json_escape "$reason")"
+  exit 0
+}
 
-  # 1. Format
-  if ! nix run nixpkgs#alejandra -- . >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix formatting (alejandra) failed. Run: cd nix && nix run nixpkgs#alejandra -- ."}'
-    exit 0
-  fi
+PROJECT_ROOT=${GEMINI_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}
 
-  # 2. Evaluate
-  if ! nix flake check --extra-experimental-features "nix-command flakes" >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix flake check failed. The configuration does not evaluate correctly. Check nix/flake.nix"}'
-    exit 0
-  fi
-
-  # 3. Lint (Statix)
-  if ! nix develop -c statix check >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix lint (statix) failed. Please address the linting warnings/errors."}'
-    exit 0
-  fi
-
-  # 4. Lint (Deadnix)
-  if ! nix develop -c deadnix --fail >/dev/null 2>&1; then
-    echo '{"decision": "block", "reason": "Nix lint (deadnix) failed. Please remove unused code."}'
-    exit 0
-  fi
+if [ ! -d "$PROJECT_ROOT/nix" ]; then
+  block "Gemini Nix validation could not find $PROJECT_ROOT/nix."
 fi
 
-echo '{"decision": "allow"}'
-exit 0
+changed_files=()
+while IFS= read -r file; do
+  changed_files+=("$file")
+done < <(
+  cd "$PROJECT_ROOT"
+  {
+    git diff --name-only HEAD 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | grep -E '(^|/)([^/]+\.nix|flake\.lock)$' | awk '!seen[$0]++' || true
+)
+
+if [ ${#changed_files[@]} -eq 0 ]; then
+  echo '{"decision":"allow"}'
+  exit 0
+fi
+
+if ! output=$(cd "$PROJECT_ROOT" && nix develop ./nix -c prek run --files "${changed_files[@]}" 2>&1); then
+  block "Prek Nix validation failed.
+
+Run from the repo root: nix develop ./nix -c prek run --files ${changed_files[*]}
+
+Output:
+$output"
+fi
+
+echo '{"decision":"allow"}'

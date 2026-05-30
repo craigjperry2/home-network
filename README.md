@@ -2,7 +2,11 @@
 
 This repo is the golden source for automation of my home network configuration.
 
-Repo-local Copilot and Codex hooks are configured under `.github/hooks/` and `.codex/` and mirror the Gemini Nix validation flow. Codex runs its Nix validation as a `Stop` hook, so agents should continue fixing issues when the hook blocks and should only commit after formatting, `nix flake check`, `statix`, and `deadnix --fail` pass.
+Repo-local Copilot, Codex, Claude and Gemini hooks call Prek using the canonical
+`.pre-commit-config.yaml` config. The Nix validation flow formats with
+Alejandra, evaluates with `nix flake check`, then runs `statix` and
+`deadnix --fail`. Agents should continue fixing issues when a hook blocks and
+should only commit after Prek or explicit validation passes.
 
 ## Instructions
 

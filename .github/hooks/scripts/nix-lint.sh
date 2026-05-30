@@ -3,73 +3,72 @@ set -euo pipefail
 
 # Copilot hooks receive JSON on stdin with toolName, toolArgs, etc.
 INPUT=$(cat || true)
+readonly INPUT
 
-# Check for uncommitted nix file changes
-NIX_CHANGES=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.nix$|flake\.lock$' || true)
+json_escape() {
+  local value=${1-}
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\n'/\\n}
+  value=${value//$'\r'/}
+  value=${value//$'\t'/\\t}
+  printf '%s' "$value"
+}
+
+deny() {
+  local reason=$1
+  printf '{"permissionDecision":"deny","permissionDecisionReason":"%s"}\n' "$(json_escape "$reason")"
+  exit 0
+}
 
 PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 
-# Sentinel file for recovery mode (keyed per-repo to avoid cross-repo interference)
-REPO_HASH=$(echo "$PROJECT_ROOT" | shasum -a 256 | cut -c1-12)
+changed_files=()
+while IFS= read -r file; do
+  changed_files+=("$file")
+done < <(
+  cd "$PROJECT_ROOT"
+  {
+    git diff --name-only HEAD 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | grep -E '(^|/)([^/]+\.nix|flake\.lock)$' | awk '!seen[$0]++' || true
+)
+
+REPO_HASH=$(printf '%s' "$PROJECT_ROOT" | shasum -a 256 | cut -c1-12)
 SENTINEL="/tmp/.copilot-nix-recovery-${REPO_HASH}"
 
-# No nix changes = allow all tools (and clean up any stale sentinel)
-if [ -z "$NIX_CHANGES" ]; then
+if [ ${#changed_files[@]} -eq 0 ]; then
   rm -f "$SENTINEL"
   exit 0
 fi
 
-# Recovery mode: if sentinel exists, allow tools so the agent can fix the issue
+run_prek() {
+  cd "$PROJECT_ROOT"
+  nix develop ./nix -c prek run --files "${changed_files[@]}"
+}
+
 if [ -f "$SENTINEL" ]; then
-  # TTL: if sentinel is older than 10 minutes, expire it and re-enforce
-  SENTINEL_AGE=$(( $(date +%s) - $(stat -f %m "$SENTINEL" 2>/dev/null || echo 0) ))
+  SENTINEL_AGE=$(($(date +%s) - $(stat -f %m "$SENTINEL" 2>/dev/null || echo 0)))
   if [ "$SENTINEL_AGE" -gt 600 ]; then
     rm -f "$SENTINEL"
-    # Fall through to normal validation below
   else
-    # Re-run validation to check if the agent has fixed the issue
-    cd "$PROJECT_ROOT/nix" || exit 1
-    if nix run nixpkgs#alejandra -- --check . >/dev/null 2>&1 && \
-       nix flake check >/dev/null 2>&1; then
-      # Fixed! Remove sentinel and return to normal enforcement
+    if run_prek >/dev/null 2>&1; then
       rm -f "$SENTINEL"
     fi
-    # Allow the tool regardless (agent is in recovery mode)
     exit 0
   fi
 fi
 
-cd "$PROJECT_ROOT/nix" || exit 1
-
-# --- Normal validation ---
-
-# 1. Format check
-if ! nix run nixpkgs#alejandra -- --check . >/dev/null 2>&1; then
+if ! output=$(run_prek 2>&1); then
   touch "$SENTINEL"
-  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix formatting (alejandra) failed. Run: cd nix && nix run nixpkgs#alejandra -- . — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
-  exit 0
+  deny "Prek Nix validation failed.
+
+Run from the repo root: nix develop ./nix -c prek run --files ${changed_files[*]}
+
+Output:
+$output
+
+Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."
 fi
 
-# 2. Flake evaluation
-if ! nix flake check >/dev/null 2>&1; then
-  touch "$SENTINEL"
-  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix flake check failed. The configuration does not evaluate correctly. Run: cd nix && nix flake check — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
-  exit 0
-fi
-
-# 3. Statix lint
-if ! nix develop -c statix check >/dev/null 2>&1; then
-  touch "$SENTINEL"
-  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix lint (statix) failed. Run: cd nix && nix develop -c statix check — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
-  exit 0
-fi
-
-# 4. Deadnix lint
-if ! nix develop -c deadnix --fail >/dev/null 2>&1; then
-  touch "$SENTINEL"
-  echo '{"permissionDecision":"deny","permissionDecisionReason":"Nix lint (deadnix) failed. Run: cd nix && nix develop -c deadnix --fail — Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."}'
-  exit 0
-fi
-
-# All checks passed - allow the tool
 exit 0

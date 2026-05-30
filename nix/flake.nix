@@ -91,7 +91,16 @@
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [pkgs.statix pkgs.deadnix];
+        packages = [pkgs.prek pkgs.statix pkgs.deadnix];
+
+        shellHook = ''
+          if git rev-parse --show-toplevel >/dev/null 2>&1; then
+            repo_root=$(git rev-parse --show-toplevel)
+            if [ -f "$repo_root/.pre-commit-config.yaml" ]; then
+              (cd "$repo_root" && prek install --hook-type pre-commit >/dev/null)
+            fi
+          fi
+        '';
       };
     });
 
