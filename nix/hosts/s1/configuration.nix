@@ -5,7 +5,10 @@
   pkgs,
   unstable,
   ...
-}: {
+}: let
+  llamaCppPort = 11434;
+  llamaCppBackendPort = 11435;
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -79,7 +82,7 @@
             <name replace-wildcards="yes">%h</name>
             <service>
               <type>_llama-cpp._tcp</type>
-              <port>11434</port>
+              <port>${toString llamaCppPort}</port>
             </service>
           </service-group>
         '';
@@ -111,7 +114,7 @@
         };
         llama-cpp = {
           class = "ActiveConnection";
-          ports = "11434";
+          ports = toString llamaCppPort;
         };
       };
     };
@@ -153,8 +156,8 @@
       enable = true;
       model = "/srv/ai/gemma-4-e4b-8bit.gguf";
       package = unstable.llama-cpp.override {cudaSupport = true;};
-      port = 11434;
-      host = "0.0.0.0";
+      port = llamaCppBackendPort;
+      host = "127.0.0.1";
       extraFlags = [
         "--n-gpu-layers"
         "99"
@@ -172,13 +175,68 @@
     };
   };
 
-  systemd.services.llama-cpp.serviceConfig = {
-    SupplementaryGroups = ["video" "render"];
-    ReadOnlyPaths = ["/srv/ai"];
+  systemd = {
+    services = {
+      llama-cpp = {
+        wantedBy = pkgs.lib.mkForce [];
+        before = ["sleep.target"];
+        conflicts = ["sleep.target"];
+        serviceConfig = {
+          SupplementaryGroups = ["video" "render"];
+          ReadOnlyPaths = ["/srv/ai"];
+        };
+      };
+
+      llama-cpp-proxy = {
+        description = "Socket proxy for LLaMA C++";
+        requires = [
+          "llama-cpp.service"
+          "llama-cpp.socket"
+        ];
+        after = [
+          "llama-cpp.service"
+          "llama-cpp.socket"
+        ];
+        before = ["sleep.target"];
+        conflicts = ["sleep.target"];
+        serviceConfig = {
+          Type = "notify";
+          ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:${toString llamaCppBackendPort}";
+          Restart = "on-failure";
+        };
+      };
+
+      sleepproxy-register = {
+        description = "Register with macOS Sleep Proxy";
+        before = ["sleep.target"];
+        wantedBy = ["sleep.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          # Include specific IPs for proxies that were discovered by Avahi but missed by internal Python discovery.
+          # Also add a small delay to ensure the registration packet is sent before suspend.
+          ExecStart = "${pkgs.writeShellScript "sleepproxy-run" ''
+            ${pkgs.callPackage ../../pkgs/sleepproxyclient.nix {}}/bin/sleepproxyclient \
+              --interface enp0s31f6 \
+              --debug \
+              --preferred-proxies 192.168.7.236 192.168.7.158
+            ${pkgs.coreutils}/bin/sleep 2
+          ''}";
+        };
+      };
+    };
+
+    sockets.llama-cpp = {
+      description = "Socket for LLaMA C++ proxy";
+      wantedBy = ["sockets.target"];
+      socketConfig = {
+        ListenStream = toString llamaCppPort;
+        Service = "llama-cpp-proxy.service";
+      };
+    };
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2283 11434];
+  networking.firewall.allowedTCPPorts = [2283 llamaCppPort];
 
   hardware.graphics.enable = true;
   hardware.nvidia = {
@@ -199,24 +257,6 @@
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
-  };
-
-  systemd.services.sleepproxy-register = {
-    description = "Register with macOS Sleep Proxy";
-    before = ["sleep.target"];
-    wantedBy = ["sleep.target"];
-    serviceConfig = {
-      Type = "oneshot";
-      # Include specific IPs for proxies that were discovered by Avahi but missed by internal Python discovery.
-      # Also add a small delay to ensure the registration packet is sent before suspend.
-      ExecStart = "${pkgs.writeShellScript "sleepproxy-run" ''
-        ${pkgs.callPackage ../../pkgs/sleepproxyclient.nix {}}/bin/sleepproxyclient \
-          --interface enp0s31f6 \
-          --debug \
-          --preferred-proxies 192.168.7.236 192.168.7.158
-        ${pkgs.coreutils}/bin/sleep 2
-      ''}";
-    };
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
