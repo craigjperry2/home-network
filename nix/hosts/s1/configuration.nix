@@ -179,6 +179,7 @@ in {
     services = {
       llama-cpp = {
         wantedBy = pkgs.lib.mkForce [];
+        after = ["nvidia-resume.service"];
         before = ["sleep.target"];
         conflicts = ["sleep.target"];
         serviceConfig = {
@@ -243,6 +244,7 @@ in {
     modesetting.enable = true;
     open = false; # GTX 1080 Ti does not support open drivers
     nvidiaSettings = true;
+    powerManagement.enable = true; # Save/restore GPU state across suspend/resume
   };
 
   virtualisation = {
