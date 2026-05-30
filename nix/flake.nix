@@ -39,6 +39,10 @@
       flake = false;
     };
 
+    comfyui-nix = {
+      url = "github:utensils/comfyui-nix";
+    };
+
     arthur-ficial-tap = {
       url = "github:arthur-ficial/homebrew-tap";
       flake = false;
@@ -117,6 +121,7 @@
           ./hosts/s1/configuration.nix
           home-manager.nixosModules.home-manager
           (hmConfig ./hosts/s1/home.nix)
+          inputs.comfyui-nix.nixosModules.default
         ];
       };
       s2 = nixpkgs.lib.nixosSystem {
