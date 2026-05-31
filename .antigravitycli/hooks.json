@@ -1,0 +1,11 @@
+{
+  "nix-validation-hook": {
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "bash .hooks/nix-lint.sh --adapter antigravity",
+        "timeout": 60
+      }
+    ]
+  }
+}

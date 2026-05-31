@@ -15,7 +15,7 @@ elif [[ "${1-}" == --adapter=* ]]; then
 fi
 
 case "$ADAPTER" in
-  claude | plain | codex | gemini | copilot) ;;
+  claude | plain | codex | gemini | copilot | antigravity) ;;
   *)
     printf 'Unknown Nix lint hook adapter: %s\n' "$ADAPTER" >&2
     exit 2
@@ -41,7 +41,7 @@ allow() {
     codex)
       printf '{}\n'
       ;;
-    gemini)
+    gemini | antigravity)
       printf '{"decision":"allow"}\n'
       ;;
   esac
@@ -51,7 +51,7 @@ allow() {
 deny() {
   local reason=$1
   case "$ADAPTER" in
-    codex | gemini)
+    codex | gemini | antigravity)
       printf '{"decision":"block","reason":"%s"}\n' "$(json_escape "$reason")"
       exit 0
       ;;
@@ -81,6 +81,8 @@ file_mtime() {
 if [ -z "${PROJECT_ROOT-}" ]; then
   if [ "$ADAPTER" = "gemini" ] && [ -n "${GEMINI_PROJECT_DIR-}" ]; then
     PROJECT_ROOT=$GEMINI_PROJECT_DIR
+  elif [ "$ADAPTER" = "antigravity" ] && [ -n "${ANTIGRAVITY_PROJECT_DIR-}" ]; then
+    PROJECT_ROOT=$ANTIGRAVITY_PROJECT_DIR
   else
     PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
   fi
