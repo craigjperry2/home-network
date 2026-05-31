@@ -152,8 +152,6 @@ in {
       dataDir = "/srv/vms/immich/postgres";
     };
 
-    xserver.videoDrivers = ["nvidia"];
-
     llama-cpp = {
       enable = true;
       model = "/srv/ai/gemma-4-e4b-8bit.gguf";
