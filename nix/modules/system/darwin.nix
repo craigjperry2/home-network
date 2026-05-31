@@ -40,6 +40,8 @@ in {
     ];
     casks = [
       "antigravity"
+      "antigravity-cli"
+      "antigravity-ide"
       "audacity"
       "chatgpt"
       "claude"
