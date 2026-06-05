@@ -73,6 +73,7 @@ in {
       "Affinity Photo 2" = 1616822987;
       "Affinity Publisher 2" = 1606941598;
       "Darkroom" = 953286746;
+      "Flighty" = 1358823008;
       "Gyroflow" = 6447994244;
       "Home Assistant" = 1099568401;
       "Microsoft Excel" = 462058435;
