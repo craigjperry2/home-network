@@ -156,7 +156,7 @@ in {
 
     llama-cpp = {
       enable = true;
-      model = "/srv/ai/active.gguf";
+      model = "/srv/ai/gemma-4-e4b-8bit.gguf";
       package = unstable.llama-cpp.override {cudaSupport = true;};
       port = llamaCppBackendPort;
       host = "127.0.0.1";
@@ -164,7 +164,7 @@ in {
         "--n-gpu-layers"
         "99"
         "--mmproj"
-        "/srv/ai/mmproj-F16.gguf"
+        "/srv/ai/gemma-4-e4b-8bit-mmproj-F16.gguf"
         "--image-min-tokens"
         "560"
         "--image-max-tokens"
