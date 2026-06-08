@@ -8,7 +8,59 @@
   ...
 }: let
   llamaCppPort = 11434;
-  llamaCppBackendPort = 11435;
+
+  mkLlamaService = name: model: extraArgs: {
+    description = "LLaMA C++ server (${name})";
+    wantedBy = [];
+    before = ["sleep.target"];
+    conflicts =
+      ["sleep.target"]
+      ++ (
+        if name == "gemma"
+        then ["llama-cpp-qwen.service"]
+        else ["llama-cpp-gemma.service"]
+      );
+    serviceConfig = {
+      Type = "idle";
+      DynamicUser = true;
+      SupplementaryGroups = ["video" "render"];
+      ReadOnlyPaths = ["/srv/ai"];
+      StateDirectory = "llama-cpp-${name}";
+      CacheDirectory = "llama-cpp-${name}";
+      WorkingDirectory = "/var/lib/llama-cpp-${name}";
+      Environment = ["LLAMA_CACHE=/var/cache/llama-cpp-${name}"];
+      ExecStart = "${(unstable.llama-cpp.override {cudaSupport = true;})}/bin/llama-server --host 127.0.0.1 --port ${toString llamaCppPort} -m ${model} ${extraArgs}";
+      Restart = "on-failure";
+      RestartSec = 300;
+
+      PrivateDevices = false;
+      CapabilityBoundingSet = "";
+      RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
+      NoNewPrivileges = true;
+      PrivateMounts = true;
+      PrivateTmp = true;
+      PrivateUsers = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHome = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectSystem = "strict";
+      MemoryDenyWriteExecute = true;
+      LockPersonality = true;
+      RemoveIPC = true;
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      SystemCallArchitectures = "native";
+      SystemCallFilter = ["@system-service" "~@privileged"];
+      SystemCallErrorNumber = "EPERM";
+      ProtectProc = "invisible";
+      ProtectHostname = true;
+      ProcSubset = "pid";
+    };
+  };
 in {
   imports = [
     # Include the results of the hardware scan.
@@ -77,17 +129,6 @@ in {
             </service>
           </service-group>
         '';
-        llama-cpp = ''
-          <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
-          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-          <service-group>
-            <name replace-wildcards="yes">%h</name>
-            <service>
-              <type>_llama-cpp._tcp</type>
-              <port>${toString llamaCppPort}</port>
-            </service>
-          </service-group>
-        '';
       };
     };
 
@@ -113,10 +154,6 @@ in {
             fi
             exit 1
           '');
-        };
-        llama-cpp = {
-          class = "ActiveConnection";
-          ports = toString llamaCppPort;
         };
       };
     };
@@ -153,60 +190,12 @@ in {
     };
 
     xserver.videoDrivers = ["nvidia"];
-
-    llama-cpp = {
-      enable = true;
-      model = "/srv/ai/gemma-4-e4b-8bit.gguf";
-      package = unstable.llama-cpp.override {cudaSupport = true;};
-      port = llamaCppBackendPort;
-      host = "127.0.0.1";
-      extraFlags = [
-        "--n-gpu-layers"
-        "99"
-        "--mmproj"
-        "/srv/ai/gemma-4-e4b-8bit-mmproj-F16.gguf"
-        "--image-min-tokens"
-        "560"
-        "--image-max-tokens"
-        "560"
-        "--ubatch-size"
-        "1024"
-        "--batch-size"
-        "1024"
-      ];
-    };
   };
 
   systemd = {
     services = {
-      llama-cpp = {
-        wantedBy = pkgs.lib.mkForce [];
-        before = ["sleep.target"];
-        conflicts = ["sleep.target"];
-        serviceConfig = {
-          SupplementaryGroups = ["video" "render"];
-          ReadOnlyPaths = ["/srv/ai"];
-        };
-      };
-
-      llama-cpp-proxy = {
-        description = "Socket proxy for LLaMA C++";
-        requires = [
-          "llama-cpp.service"
-          "llama-cpp.socket"
-        ];
-        after = [
-          "llama-cpp.service"
-          "llama-cpp.socket"
-        ];
-        before = ["sleep.target"];
-        conflicts = ["sleep.target"];
-        serviceConfig = {
-          Type = "notify";
-          ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:${toString llamaCppBackendPort}";
-          Restart = "on-failure";
-        };
-      };
+      llama-cpp-gemma = mkLlamaService "gemma" "/srv/ai/gemma-4-e4b-8bit.gguf" "--n-gpu-layers 99 --mmproj /srv/ai/gemma-4-e4b-8bit-mmproj-F16.gguf --image-min-tokens 560 --image-max-tokens 560 --ubatch-size 1024 --batch-size 1024";
+      llama-cpp-qwen = mkLlamaService "qwen" "/srv/ai/Qwen3.5-9B-Q8_0.gguf" "--n-gpu-layers 99 --ctx-size 65536 --no-context-shift --temp 0.6 --top-k 20 --top-p 0.95 --min-p 0";
 
       sleepproxy-register = {
         description = "Register with macOS Sleep Proxy";
@@ -224,15 +213,6 @@ in {
             ${pkgs.coreutils}/bin/sleep 2
           ''}";
         };
-      };
-    };
-
-    sockets.llama-cpp = {
-      description = "Socket for LLaMA C++ proxy";
-      wantedBy = ["sockets.target"];
-      socketConfig = {
-        ListenStream = toString llamaCppPort;
-        Service = "llama-cpp-proxy.service";
       };
     };
   };
