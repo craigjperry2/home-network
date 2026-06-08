@@ -152,9 +152,11 @@ in {
       dataDir = "/srv/vms/immich/postgres";
     };
 
+    xserver.videoDrivers = ["nvidia"];
+
     llama-cpp = {
       enable = true;
-      model = "/srv/ai/gemma-4-e4b-8bit.gguf";
+      model = "/srv/ai/active.gguf";
       package = unstable.llama-cpp.override {cudaSupport = true;};
       port = llamaCppBackendPort;
       host = "127.0.0.1";
