@@ -9,17 +9,15 @@
 }: let
   llamaCppPort = 11434;
 
+  llamaModels = ["gemma" "qwen" "qwen-embed"];
+
   mkLlamaService = name: model: extraArgs: {
     description = "LLaMA C++ server (${name})";
     wantedBy = [];
     before = ["sleep.target"];
     conflicts =
       ["sleep.target"]
-      ++ (
-        if name == "gemma"
-        then ["llama-cpp-qwen.service"]
-        else ["llama-cpp-gemma.service"]
-      );
+      ++ (map (n: "llama-cpp-${n}.service") (builtins.filter (n: n != name) llamaModels));
     serviceConfig = {
       Type = "idle";
       DynamicUser = true;
@@ -196,6 +194,7 @@ in {
     services = {
       llama-cpp-gemma = mkLlamaService "gemma" "/srv/ai/gemma-4-e4b-8bit.gguf" "--n-gpu-layers 99 --mmproj /srv/ai/gemma-4-e4b-8bit-mmproj-F16.gguf --image-min-tokens 560 --image-max-tokens 560 --ubatch-size 1024 --batch-size 1024";
       llama-cpp-qwen = (mkLlamaService "qwen" "/srv/ai/Qwen3.5-9B-Q8_0.gguf" "--n-gpu-layers 99 --ctx-size 65536 --no-context-shift --temp 0.6 --top-k 20 --top-p 0.95 --min-p 0") // {wantedBy = ["multi-user.target"];};
+      llama-cpp-qwen-embed = mkLlamaService "qwen-embed" "/srv/ai/Qwen3-Embedding-4B-Q8_0.gguf" "--embeddings --n-gpu-layers 99";
 
       sleepproxy-register = {
         description = "Register with macOS Sleep Proxy";
