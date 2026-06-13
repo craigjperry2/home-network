@@ -17,7 +17,7 @@ fi
 case "$ADAPTER" in
   claude | plain | codex | gemini | copilot | antigravity) ;;
   *)
-    printf 'Unknown Nix lint hook adapter: %s\n' "$ADAPTER" >&2
+    printf 'Unknown Prek lint hook adapter: %s\n' "$ADAPTER" >&2
     exit 2
     ;;
 esac
@@ -88,10 +88,6 @@ if [ -z "${PROJECT_ROOT-}" ]; then
   fi
 fi
 
-if [ ! -d "$PROJECT_ROOT/nix" ]; then
-  deny "Nix validation could not find $PROJECT_ROOT/nix."
-fi
-
 changed_files=()
 while IFS= read -r file; do
   changed_files+=("$file")
@@ -100,7 +96,7 @@ done < <(
   {
     git diff --name-only HEAD 2>/dev/null
     git ls-files --others --exclude-standard 2>/dev/null
-  } | grep -E '(^|/)([^/]+\.nix|flake\.lock)$' | awk '!seen[$0]++' || true
+  } | grep -E '((^|/)([^/]+\.nix|flake\.lock)$|^scripts/.*\.py$)' | awk '!seen[$0]++' || true
 )
 
 run_prek() {
@@ -114,13 +110,14 @@ run_prek() {
 
 failure_reason() {
   local output=$1
-  printf 'Prek Nix validation failed.\n\nRun from the repo root: nix develop ./nix -c prek run --files %s\n\nOutput:\n%s' "${changed_files[*]}" "$output"
+  printf 'Prek validation failed.\n\nRun from the repo root: nix develop ./nix -c prek run --files %s\n\nOutput:\n%s' "${changed_files[*]}" "$output"
 }
 
 run_standard_adapter() {
-  local output
+  local output reason
   if ! output=$(run_prek 2>&1); then
-    deny "$(failure_reason "$output")"
+    reason=$(failure_reason "$output")
+    deny "$reason"
   fi
 
   if { [ "$ADAPTER" = "claude" ] || [ "$ADAPTER" = "plain" ]; } && [ -n "$output" ]; then
@@ -133,7 +130,7 @@ run_standard_adapter() {
 run_copilot_adapter() {
   local repo_hash sentinel age output
   repo_hash=$(printf '%s' "$PROJECT_ROOT" | hash_repo | cut -c1-12)
-  sentinel="/tmp/.copilot-nix-recovery-${repo_hash}"
+  sentinel="/tmp/.copilot-prek-recovery-${repo_hash}"
 
   if [ -f "$sentinel" ]; then
     age=$(($(date +%s) - $(file_mtime "$sentinel")))
@@ -149,7 +146,9 @@ run_copilot_adapter() {
 
   if ! output=$(run_prek 2>&1); then
     touch "$sentinel"
-    deny "$(failure_reason "$output")
+    local reason
+    reason=$(failure_reason "$output")
+    deny "$reason
 
 Recovery mode enabled: subsequent tool calls will be allowed so you can fix this."
   fi

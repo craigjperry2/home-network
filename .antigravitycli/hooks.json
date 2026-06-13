@@ -1,9 +1,9 @@
 {
-  "nix-validation-hook": {
+  "prek-validation-hook": {
     "PostInvocation": [
       {
         "type": "command",
-        "command": "bash .hooks/nix-lint.sh --adapter antigravity",
+        "command": "bash .hooks/prek-lint.sh --adapter antigravity",
         "timeout": 60
       }
     ]

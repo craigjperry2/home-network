@@ -32,3 +32,24 @@ repos:
         entry: bash -c 'cd nix && nix develop -c deadnix --fail'
         files: '(^|/)([^/]+\.nix|flake\.lock)$'
         pass_filenames: false
+
+      - id: python-format
+        name: Format Python scripts
+        language: system
+        entry: bash -c 'cd scripts && nix develop -c ruff format .'
+        files: '^scripts/.*\.py$'
+        pass_filenames: false
+
+      - id: python-ruff
+        name: Lint Python scripts
+        language: system
+        entry: bash -c 'cd scripts && nix develop -c ruff check .'
+        files: '^scripts/.*\.py$'
+        pass_filenames: false
+
+      - id: python-mypy
+        name: Type check Python scripts
+        language: system
+        entry: bash -c 'for f in "$@"; do nix develop ./scripts -c uv run --with-requirements "$f" python -m mypy "$f"; done' --
+        files: '^scripts/.*\.py$'
+        pass_filenames: true

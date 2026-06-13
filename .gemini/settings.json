@@ -5,11 +5,11 @@
         "matcher": "*",
         "hooks": [
           {
-            "name": "nix-validation-hook",
+            "name": "prek-validation-hook",
             "type": "command",
-            "command": "bash \"$GEMINI_PROJECT_DIR/.hooks/nix-lint.sh\" --adapter gemini",
+            "command": "bash \"$GEMINI_PROJECT_DIR/.hooks/prek-lint.sh\" --adapter gemini",
             "timeout": 60000,
-            "description": "Ensures Nix files are formatted, valid, and linted after any turn where they were modified."
+            "description": "Ensures Nix and Python files are formatted, valid, and linted after any turn where they were modified."
           }
         ]
       }

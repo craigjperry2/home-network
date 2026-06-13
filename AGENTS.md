@@ -11,17 +11,18 @@
 * `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
    non-flake `nix-build` workflow)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
-* `.pre-commit-config.yaml` — canonical Prek git/agent hook config for Nix validation
-* `.hooks/nix-lint.sh` — shared hook runner that invokes Prek for changed Nix files
+* `.pre-commit-config.yaml` — canonical Prek git/agent hook config for Nix and Python validation
+* `.hooks/prek-lint.sh` — shared hook runner that invokes Prek for changed Nix and Python files
 * `.claude/` — repo-local Claude Code hook config
 * `.codex/` — repo-local Codex project config and hooks
   * `config.toml` — enables project-local Codex lifecycle hooks
-  * `hooks.json` — runs the shared Nix validation hook on Codex `Stop`
+  * `hooks.json` — runs the shared Prek validation hook on Codex `Stop`
 * `.gemini/` — repo-local Gemini CLI hook config
 * `.antigravitycli/` — repo-local Antigravity CLI workspace config and hooks
-  * `hooks.json` — runs the shared Nix validation hook on Antigravity `PostInvocation`
+  * `hooks.json` — runs the shared Prek validation hook on Antigravity `PostInvocation`
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
-  * `nix-validation.json` — runs the shared Nix validation hook on `preToolUse`
+  * `nix-validation.json` — runs the shared Prek validation hook on `preToolUse`
+  * `python-validation.json` — redundant (now covered by shared hook)
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
@@ -56,7 +57,7 @@ nix develop -c bash -lc 'nix run nixpkgs#alejandra -- . && nix flake check && st
 
 `.pre-commit-config.yaml` is the canonical Prek hook configuration. The git
 pre-commit hook and the Claude, Codex, Gemini, Antigravity, and Copilot adapters all run Prek
-for changed Nix files. Treat hook failures as a backstop: continue the turn, fix
+for changed Nix and Python files. Treat hook failures as a backstop: continue the turn, fix
 the reported issue, and do not commit until Prek or explicit validation passes.
 
 ## Git Repo

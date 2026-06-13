@@ -5,9 +5,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$(git rev-parse --show-toplevel)/.hooks/nix-lint.sh\" --adapter codex",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.hooks/prek-lint.sh\" --adapter codex",
             "timeout": 600,
-            "statusMessage": "Validating Nix changes"
+            "statusMessage": "Validating changes"
           }
         ]
       }
