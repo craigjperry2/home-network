@@ -21,8 +21,7 @@
 * `.antigravitycli/` — repo-local Antigravity CLI workspace config and hooks
   * `hooks.json` — runs the shared Prek validation hook on Antigravity `PostInvocation`
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
-  * `nix-validation.json` — runs the shared Prek validation hook on `preToolUse`
-  * `python-validation.json` — redundant (now covered by shared hook)
+  * `prek-validation.json` — runs the shared Prek validation hook on `preToolUse` for changed Nix and Python files
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
