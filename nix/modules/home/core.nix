@@ -349,7 +349,7 @@
 
         mkdir = "mkdir -p";
 
-        srp = ''ssh s1.home.craigjperry.com "journalctl -u systemd-suspend.service | awk '/Performing sleep/ {sm=\$1; sd=\$2; st=\$3; \"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline ss; close(\"date\")} /System returned/ {\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\" | getline es; close(\"date\"); d=es-ss; printf \"Suspended on %s %s at %s, slept for %02d:%02d:%02d, woke on %s %s at %s\\n\", sm, sd, st, d/3600, d%3600/60, d%60, \$1, \$2, \$3}'"'';
+        srp = ''ssh s1.home.craigjperry.com "journalctl -u systemd-suspend.service | awk '/Performing sleep/ {sm=\$1; sd=\$2; st=\$3; cmd=\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\"; cmd | getline ss; close(cmd)} /System returned/ {cmd=\"date -d \\\"\"\$1\" \"\$2\" \"\$3\"\\\" +%s\"; cmd | getline es; close(cmd); d=es-ss; printf \"Suspended on %s %s at %s, slept for %02d:%02d:%02d, woke on %s %s at %s\\n\", sm, sd, st, d/3600, d%3600/60, d%60, \$1, \$2, \$3}'"'';
 
         sns =
           if pkgs.stdenv.isLinux
