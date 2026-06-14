@@ -315,6 +315,14 @@
     zsh = {
       enable = true;
       enableCompletion = true;
+      completionInit = ''
+        autoload -Uz compinit
+        if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+          compinit -C
+        else
+          compinit
+        fi
+      '';
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
       dotDir = config.home.homeDirectory;
@@ -460,8 +468,6 @@
         sudo journalctl -u autosuspend.service -n 50 --no-pager | awk '/Check .* matched/ { ts=$1" "$2" "$3; check=gensub(/.*Check (.*) matched.*/, "\\1", "g", $0); if (!(check in start)) start[check]=ts; } END { for (c in start) { print "  - " c " (active since " start[c] ")"; } }'
         REMOTE
         }
-
-        eval "$(starship init zsh)"
 
         # Auto-start zellij for SSH connections
         if [[ -n "$SSH_CONNECTION" ]]; then
