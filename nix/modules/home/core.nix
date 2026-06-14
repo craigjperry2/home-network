@@ -318,6 +318,14 @@
       syntaxHighlighting.enable = true;
       dotDir = config.home.homeDirectory;
 
+      plugins = [
+        {
+          name = "fzf-tab";
+          src = pkgs.zsh-fzf-tab;
+          file = "share/fzf-tab/fzf-tab.plugin.zsh";
+        }
+      ];
+
       shellAliases = {
         cat = "bat --pager=never";
 
