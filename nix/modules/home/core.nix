@@ -21,6 +21,7 @@
     flac
     gh
     gum
+    hyperfine
     iperf3
     jq
     kubectl
