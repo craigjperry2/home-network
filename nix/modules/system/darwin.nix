@@ -39,6 +39,7 @@ in {
       "imessage-exporter"
     ];
     casks = [
+      "agentsview"
       "antigravity"
       "antigravity-cli"
       "antigravity-ide"
