@@ -91,7 +91,6 @@ in {
   users.users.craig = {
     isNormalUser = true;
     extraGroups = ["wheel" "networkmanager"];
-    initialPassword = "changeme01";
     shell = pkgs.zsh;
   };
 
