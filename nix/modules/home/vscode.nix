@@ -20,7 +20,6 @@
   in
     builtins.toJSON settings;
   keybindingsJson = builtins.readFile ./vscode/keybindings.json;
-  mcpJson = builtins.readFile ./vscode/mcp.json;
   extensionsList = builtins.readFile ./vscode/extensions.txt;
 in {
   options.homeNetwork.vscode.cliPath = lib.mkOption {
@@ -40,7 +39,6 @@ in {
     home.file = {
       "${vscodeUserDir}/settings.json".text = settingsJson;
       "${vscodeUserDir}/keybindings.json".text = keybindingsJson;
-      "${vscodeUserDir}/mcp.json".text = mcpJson;
     };
 
     home.activation.installMissingVscodeExtensions = lib.hm.dag.entryAfter ["writeBoundary"] ''
