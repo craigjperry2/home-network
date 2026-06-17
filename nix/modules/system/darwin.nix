@@ -193,6 +193,11 @@ in {
       "arthur-ficial/homebrew-tap" = inputs.arthur-ficial-tap;
       "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
+    trust = {
+      formulae = [
+        "arthur-ficial/homebrew-tap/apfel"
+      ];
+    };
     mutableTaps = false;
     autoMigrate = true;
   };
