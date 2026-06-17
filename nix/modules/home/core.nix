@@ -309,6 +309,13 @@
         default_mode = "locked";
         attach_to_session = true;
       };
+      extraConfig = ''
+        keybinds {
+          locked {
+            bind "Alt g" { Write 7; }
+          }
+        }
+      '';
     };
 
     # Shell configuration
