@@ -28,7 +28,7 @@
     lazygit
     libwebp
     nmap
-    nodejs
+    nodejs-slim
     pnpm
     procs
     python3
