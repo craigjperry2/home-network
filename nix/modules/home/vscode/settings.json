@@ -115,7 +115,6 @@
   "redhat.telemetry.enabled": false,
   "security.workspace.trust.untrustedFiles": "open",
   "terminal.integrated.copyOnSelection": true,
-  "terminal.integrated.defaultLocation": "editor",
   "terminal.integrated.fontFamily": "JetBrainsMono NF",
   "terminal.integrated.fontSize": 13,
   "vim.handleKeys": {
