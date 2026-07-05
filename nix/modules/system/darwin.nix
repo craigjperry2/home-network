@@ -66,7 +66,6 @@ in {
       "transmission"
       "visual-studio-code"
       "whatcable"
-      "zed"
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
@@ -82,7 +81,6 @@ in {
       "Microsoft PowerPoint" = 462062816;
       "Microsoft To Do" = 1274495053;
       "Microsoft Word" = 462054704;
-      "OneDrive" = 823766827;
       "SponsorBlock" = 1573461917;
       "Tailscale" = 1475387142;
       "Telegram" = 747648890;
