@@ -195,6 +195,9 @@ in {
       formulae = [
         "arthur-ficial/homebrew-tap/apfel"
       ];
+      casks = [
+        "darrylmorley/homebrew-whatcable/whatcable"
+      ];
     };
     mutableTaps = false;
     autoMigrate = true;
