@@ -379,7 +379,7 @@
           if pkgs.stdenv.isLinux
           then "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#$(hostname -s) )"
           else "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo darwin-rebuild switch --flake .#$(hostname -s) )";
-        uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix flake update ); sns";
+        uu = "( cd ~/Code/github.com/craigjperry2/home-network/nix ; nix develop -c ./scripts/bump-deps-pr.sh ); sns";
       };
 
       initContent = ''
