@@ -344,6 +344,7 @@
 
       shellAliases = {
         cat = "bat --pager=never";
+        codex-compound = "CODEX_HOME=~/.codex-compound codex";
 
         cdc = "cd ~/Code";
         cdh = "cd ~/Code/github.com/craigjperry2/home-network/";
