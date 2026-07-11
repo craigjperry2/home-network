@@ -11,6 +11,7 @@
   };
 
   home.packages = [
+    (pkgs.callPackage ../../pkgs/agent-browser.nix {})
     (pkgs.callPackage ../../pkgs/dirac-cli.nix {})
   ];
 
