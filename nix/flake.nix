@@ -91,7 +91,7 @@
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [pkgs.prek pkgs.statix pkgs.deadnix];
+        packages = [pkgs.git pkgs.gh pkgs.prek pkgs.statix pkgs.deadnix];
 
         shellHook = ''
           if git rev-parse --show-toplevel >/dev/null 2>&1; then
