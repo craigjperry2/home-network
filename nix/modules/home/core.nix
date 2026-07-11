@@ -383,6 +383,18 @@
       };
 
       initContent = ''
+        vi() {
+          if [[ -n "$VSCODE_INJECTION" || "$TERM_PROGRAM" == "vscode" ]]; then
+            command code -r "$@"
+          else
+            command nvim "$@"
+          fi
+        }
+
+        vim() {
+          vi "$@"
+        }
+
         # vi mode keybindings
         bindkey -v
 
