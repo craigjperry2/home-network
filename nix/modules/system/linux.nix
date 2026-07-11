@@ -6,7 +6,7 @@
   nixpkgs.overlays = [
     (
       _: _prev: {
-        inherit (unstable) claude-code codex github-copilot-cli gemini-cli nixd alejandra statix deadnix;
+        inherit (unstable) claude-code codex github-copilot-cli nixd alejandra statix deadnix;
       }
     )
   ];
@@ -18,7 +18,6 @@
     codex
     github-copilot-cli
     curl
-    gemini-cli
     ghostty.terminfo
     htop
     neovim

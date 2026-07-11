@@ -35,7 +35,6 @@ in {
 
     brews = [
       "arthur-ficial/homebrew-tap/apfel"
-      "gemini-cli"
       "imessage-exporter"
     ];
     casks = [
