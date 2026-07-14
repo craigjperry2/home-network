@@ -165,6 +165,70 @@
           '';
         }
         nvim-web-devicons
+        {
+          plugin = nvim-treesitter.withAllGrammars;
+          type = "lua";
+          config = ''
+            require("nvim-treesitter").setup({})
+
+            vim.api.nvim_create_autocmd("FileType", {
+              callback = function(args)
+                pcall(vim.treesitter.start, args.buf)
+              end,
+            })
+          '';
+        }
+        {
+          plugin = nvim-treesitter-textobjects;
+          type = "lua";
+          config = ''
+            require("nvim-treesitter-textobjects").setup({
+              select = {
+                lookahead = true,
+                selection_modes = {
+                  ["@parameter.outer"] = "v",
+                  ["@function.outer"] = "V",
+                  ["@class.outer"] = "V",
+                },
+              },
+            })
+
+            local select = require("nvim-treesitter-textobjects.select")
+
+            local function map_textobject(key, query, description)
+              vim.keymap.set({"x", "o"}, key, function()
+                select.select_textobject(query, "textobjects")
+              end, {desc = description})
+            end
+
+            map_textobject("ia", "@parameter.inner", "Inside parameter")
+            map_textobject("aa", "@parameter.outer", "Around parameter")
+            map_textobject("if", "@function.inner", "Inside function")
+            map_textobject("af", "@function.outer", "Around function")
+            map_textobject("ic", "@class.inner", "Inside class")
+            map_textobject("ac", "@class.outer", "Around class")
+            map_textobject("ib", "@block.inner", "Inside block")
+            map_textobject("ab", "@block.outer", "Around block")
+            map_textobject("ii", "@conditional.inner", "Inside conditional")
+            map_textobject("ai", "@conditional.outer", "Around conditional")
+            map_textobject("il", "@loop.inner", "Inside loop")
+            map_textobject("al", "@loop.outer", "Around loop")
+            map_textobject("i/", "@comment.inner", "Inside comment")
+            map_textobject("a/", "@comment.outer", "Around comment")
+            map_textobject("iq", "@call.inner", "Inside call")
+            map_textobject("aq", "@call.outer", "Around call")
+            map_textobject("iA", "@assignment.inner", "Inside assignment")
+            map_textobject("aA", "@assignment.outer", "Around assignment")
+            map_textobject("iH", "@assignment.lhs", "Assignment left-hand side")
+            map_textobject("iL", "@assignment.rhs", "Assignment right-hand side")
+            map_textobject("ir", "@return.inner", "Inside return")
+            map_textobject("ar", "@return.outer", "Around return")
+            map_textobject("ix", "@regex.inner", "Inside regular expression")
+            map_textobject("ax", "@regex.outer", "Around regular expression")
+            map_textobject("in", "@number.inner", "Inside number")
+            map_textobject("aS", "@statement.outer", "Around statement")
+          '';
+        }
         plenary-nvim
         {
           plugin = vim-colors-solarized;
