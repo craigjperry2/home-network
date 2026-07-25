@@ -17,7 +17,6 @@
 * `.codex/` — repo-local Codex project config and hooks
   * `config.toml` — enables project-local Codex lifecycle hooks
   * `hooks.json` — runs the shared Prek validation hook on Codex `Stop`
-* `.gemini/` — repo-local Gemini CLI hook config
 * `.antigravitycli/` — repo-local Antigravity CLI workspace config and hooks
   * `hooks.json` — runs the shared Prek validation hook on Antigravity `PostInvocation`
 * `.github/hooks/` — repo-local GitHub Copilot CLI hooks
@@ -55,7 +54,7 @@ nix develop -c bash -lc 'nix run nixpkgs#alejandra -- . && nix flake check && st
 ```
 
 `.pre-commit-config.yaml` is the canonical Prek hook configuration. The git
-pre-commit hook and the Claude, Codex, Gemini, Antigravity, and Copilot adapters all run Prek
+pre-commit hook and the Claude, Codex, Antigravity, and Copilot adapters all run Prek
 for changed Nix and Python files. Treat hook failures as a backstop: continue the turn, fix
 the reported issue, and do not commit until Prek or explicit validation passes.
 

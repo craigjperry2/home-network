@@ -158,4 +158,34 @@ exercise_case() {
 exercise_case "$nix_file" "$nix_clean" "$nix_fail"
 exercise_case "$python_file" "$python_clean" "$python_fail"
 
+run_antigravity_hook() {
+  PATH="$stub_bin:$PATH" \
+  PREK_STUB_LOG="$stub_log" \
+  PROJECT_ROOT="$repo" \
+  bash "$repo/.hooks/prek-lint.sh" --adapter antigravity </dev/null
+}
+
+exercise_antigravity_case() {
+  local path=$1
+  local clean_contents=$2
+  local failing_contents=$3
+
+  : >"$stub_log"
+  printf '%s' "$failing_contents" >"$repo/$path"
+
+  local output
+  output=$(run_antigravity_hook)
+  assert_contains "$output" '"decision":"block"'
+  assert_contains "$output" "$path"
+
+  printf '%s' "$clean_contents" >"$repo/$path"
+  output=$(run_antigravity_hook)
+  assert_contains "$output" '"decision":"allow"'
+
+  git -C "$repo" checkout -- "$path"
+}
+
+exercise_antigravity_case "$nix_file" "$nix_clean" "$nix_fail"
+exercise_antigravity_case "$python_file" "$python_clean" "$python_fail"
+
 printf 'ok\n'
