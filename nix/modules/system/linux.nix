@@ -1,6 +1,7 @@
 {
   pkgs,
   unstable,
+  inputs,
   ...
 }: {
   nixpkgs.overlays = [
@@ -14,6 +15,7 @@
   programs.nix-ld.enable = true;
 
   environment.systemPackages = with pkgs; [
+    inputs.antigravity-nix.packages.${stdenv.hostPlatform.system}.google-antigravity-cli
     claude-code
     codex
     github-copilot-cli
