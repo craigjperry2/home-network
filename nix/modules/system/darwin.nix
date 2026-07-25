@@ -43,7 +43,6 @@ in {
       "antigravity-cli"
       "antigravity-ide"
       "audacity"
-      "chatgpt"
       "claude"
       "claude-code"
       "codex"
