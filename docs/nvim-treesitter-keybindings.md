@@ -2,29 +2,28 @@
 
 These text objects work in visual and operator-pending mode. Prefix one with an
 operator such as `d`, `c`, or `y`; for example, `dif` deletes inside a function
-and `daa` deletes around a parameter. Support varies by language parser.
+and `dap` deletes around a parameter. They use the same suffixes as the VS Code
+Text Objects extension.
 
 | Inside | Around | Object |
 | --- | --- | --- |
-| `ia` | `aa` | Parameter |
 | `if` | `af` | Function |
-| `ic` | `ac` | Class |
-| `ib` | `ab` | Block |
-| `ii` | `ai` | Conditional |
 | `il` | `al` | Loop |
-| `i/` | `a/` | Comment |
-| `iq` | `aq` | Function call |
-| `iA` | `aA` | Assignment |
-| `ir` | `ar` | Return |
-| `ix` | `ax` | Regular expression |
+| `io` | `ao` | Object |
+| `ia` | `aa` | Array |
+| `im` | `am` | Function call |
+| `ik` | `ak` | Class |
+| `ic` | `ac` | Comment |
+| `ip` | `ap` | Parameter |
+| `ii` | `ai` | Conditional |
+| `is` | `as` | String |
+| `it` | `at` | Type |
+| `in` | `an` | Tree-sitter node |
+| `iv` | `av` | Variable |
+| `ir` | `ar` | Assignment right-hand side |
+| `ih` | `ah` | Assignment left-hand side |
 
-Additional one-sided objects:
-
-- `iH`: assignment left-hand side
-- `iL`: assignment right-hand side
-- `in`: number
-- `aS`: statement
-
-Mappings select the next matching object when the cursor is not already inside
-one. The complete language support matrix is in the
-[nvim-treesitter-textobjects documentation](https://github.com/nvim-treesitter/nvim-treesitter-textobjects/blob/main/BUILTIN_TEXTOBJECTS.md).
+Support varies by language parser. Functions, loops, calls, classes, comments,
+parameters, conditionals, and assignments use `nvim-treesitter-textobjects`
+queries and can look ahead to the next match. The remaining objects select the
+matching Tree-sitter node containing the cursor.

@@ -21,6 +21,7 @@ ms-vscode.remote-explorer
 openai.chatgpt
 oven.bun-vscode
 redhat.vscode-yaml
+RodrigoScola.vscode-textobjects
 sonarsource.sonarlint-vscode
 sourcegraph.sourcegraph
 svelte.svelte-vscode
