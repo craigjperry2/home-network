@@ -67,9 +67,6 @@ in {
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
-      "Affinity Designer 2" = 1616831348;
-      "Affinity Photo 2" = 1616822987;
-      "Affinity Publisher 2" = 1606941598;
       "Darkroom" = 953286746;
       "Flighty" = 1358823008;
       "Gyroflow" = 6447994244;
