@@ -178,8 +178,10 @@ in {
     };
     immich = {
       enable = true;
+      package = unstable.immich;
       host = "0.0.0.0";
       mediaLocation = "/srv/vms/immich/media";
+      machine-learning.enable = false;
     };
     postgresql = {
       enable = true;
