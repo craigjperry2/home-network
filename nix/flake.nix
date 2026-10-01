@@ -80,26 +80,25 @@
       };
     };
 
-    unstablePkgs = system:
+    unstablePkgs = system: extraConfig:
       import nixpkgs-unstable {
         inherit system;
-        config = {
-          allowUnfree = true;
-          cudaSupport = true;
-          cudaCapabilities = ["6.1"];
-        };
+        config = {allowUnfree = true;} // extraConfig;
       };
 
     allowUnfree = {nixpkgs.config.allowUnfree = true;};
 
     # Every host gets its platform's shared system module plus
     # hosts/<name>/{configuration,home}.nix.
-    mkNixos = host: {system}:
+    mkNixos = host: {
+      system,
+      unstableConfig ? {},
+    }:
       nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
           inherit inputs;
-          unstable = unstablePkgs system;
+          unstable = unstablePkgs system unstableConfig;
         };
         modules = [
           allowUnfree
@@ -114,7 +113,7 @@
       nix-darwin.lib.darwinSystem {
         specialArgs = {
           inherit inputs;
-          unstable = unstablePkgs "aarch64-darwin";
+          unstable = unstablePkgs "aarch64-darwin" {};
         };
         modules = [
           allowUnfree
@@ -161,7 +160,15 @@
     });
 
     nixosConfigurations = builtins.mapAttrs mkNixos {
-      s1 = {system = "x86_64-linux";};
+      s1 = {
+        system = "x86_64-linux";
+        # GTX 1080 Ti. Only s1 has a GPU, so only its unstable set opts into
+        # CUDA builds (which are not in the public binary cache).
+        unstableConfig = {
+          cudaSupport = true;
+          cudaCapabilities = ["6.1"];
+        };
+      };
       s2 = {system = "aarch64-linux";};
     };
 
