@@ -22,8 +22,18 @@ case "$ADAPTER" in
     ;;
 esac
 
-if [ "$ADAPTER" = "copilot" ]; then
-  cat >/dev/null || true
+# Stop-hook payloads arrive as JSON on stdin. Claude and Codex set
+# stop_hook_active when the agent is already continuing because of this hook.
+hook_input=
+case "$ADAPTER" in
+  claude | codex | copilot)
+    hook_input=$(cat || true)
+    ;;
+esac
+
+stop_hook_active=false
+if [[ "$hook_input" =~ \"stop_hook_active\"[[:space:]]*:[[:space:]]*true ]]; then
+  stop_hook_active=true
 fi
 
 json_escape() {
@@ -51,7 +61,7 @@ allow() {
 deny() {
   local reason=$1
   case "$ADAPTER" in
-    codex | antigravity)
+    claude | codex | antigravity)
       printf '{"decision":"block","reason":"%s"}\n' "$(json_escape "$reason")"
       exit 0
       ;;
@@ -59,8 +69,8 @@ deny() {
       printf '{"permissionDecision":"deny","permissionDecisionReason":"%s"}\n' "$(json_escape "$reason")"
       exit 0
       ;;
-    claude | plain)
-      printf '%s\n' "$reason"
+    plain)
+      printf '%s\n' "$reason" >&2
       exit 2
       ;;
   esac
@@ -86,6 +96,8 @@ if [ -z "${PROJECT_ROOT-}" ]; then
   fi
 fi
 
+STATE_DIR=$(git -C "$PROJECT_ROOT" rev-parse --absolute-git-dir 2>/dev/null || printf '%s' "$PROJECT_ROOT/.git")/prek-hook
+
 changed_files=()
 while IFS= read -r file; do
   changed_files+=("$file")
@@ -106,19 +118,47 @@ run_prek() {
   nix develop ./nix -c prek run --files "${changed_files[@]}"
 }
 
+# Content hash of the files under validation, used to tell whether the agent
+# changed anything since the hook last blocked it.
+state_hash() {
+  (
+    cd "$PROJECT_ROOT"
+    for file in "${changed_files[@]}"; do
+      printf '%s\0' "$file"
+      if [ -f "$file" ]; then
+        cat -- "$file"
+      fi
+    done
+  ) | hash_repo | cut -d' ' -f1
+}
+
 failure_reason() {
   local output=$1
   printf 'Prek validation failed.\n\nRun from the repo root: nix develop ./nix -c prek run --files %s\n\nOutput:\n%s' "${changed_files[*]}" "$output"
 }
 
 run_standard_adapter() {
-  local output reason
+  local output reason hash blocked_file
+  blocked_file="$STATE_DIR/blocked-hash"
   if ! output=$(run_prek 2>&1); then
     reason=$(failure_reason "$output")
+    hash=$(state_hash)
+
+    # Loop guard: if the agent was already sent back by this hook and changed
+    # nothing since, stop blocking so it can hand the failure to the user.
+    if [ "$stop_hook_active" = true ] && [ -f "$blocked_file" ] && [ "$(cat "$blocked_file")" = "$hash" ]; then
+      printf '%s\n\nNo changes since the last block; allowing stop.\n' "$reason" >&2
+      allow
+    fi
+
+    mkdir -p "$STATE_DIR"
+    printf '%s\n' "$hash" >"$blocked_file"
     deny "$reason"
   fi
 
-  if { [ "$ADAPTER" = "claude" ] || [ "$ADAPTER" = "plain" ]; } && [ -n "$output" ]; then
+  rm -f "$blocked_file"
+
+  if [ "$ADAPTER" = "plain" ] && [ -n "$output" ]; then
     printf '%s\n' "$output"
   fi
 

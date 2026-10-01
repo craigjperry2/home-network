@@ -188,4 +188,61 @@ exercise_antigravity_case() {
 exercise_antigravity_case "$nix_file" "$nix_clean" "$nix_fail"
 exercise_antigravity_case "$python_file" "$python_clean" "$python_fail"
 
+run_stop_hook() {
+  local adapter=$1
+  local payload=$2
+  PATH="$stub_bin:$PATH" \
+  PREK_STUB_LOG="$stub_log" \
+  PROJECT_ROOT="$repo" \
+  bash "$repo/.hooks/prek-lint.sh" --adapter "$adapter" <<<"$payload"
+}
+
+assert_empty() {
+  if [ -n "$1" ]; then
+    fail "expected no output, got '$1'"
+  fi
+}
+
+exercise_stop_case() {
+  local adapter=$1
+  local path=$2
+  local clean_contents=$3
+  local failing_contents=$4
+  local output errors
+
+  printf '%s' "$failing_contents" >"$repo/$path"
+
+  # First stop: blocked, with the failure details in the JSON reason.
+  output=$(run_stop_hook "$adapter" '{"stop_hook_active": false}')
+  assert_contains "$output" '"decision":"block"'
+  assert_contains "$output" "$path"
+  assert_contains "$output" 'stub prek failure'
+
+  # Continuing after a block but with edits that still fail: blocked again.
+  printf '%s\n' "$failing_contents" >"$repo/$path"
+  output=$(run_stop_hook "$adapter" '{"stop_hook_active": true}')
+  assert_contains "$output" '"decision":"block"'
+
+  # Continuing after a block with no further edits: allowed, reason on stderr.
+  errors=$(run_stop_hook "$adapter" '{"stop_hook_active": true}' 2>&1 >/dev/null)
+  assert_contains "$errors" 'No changes since the last block'
+  output=$(run_stop_hook "$adapter" '{"stop_hook_active": true}' 2>/dev/null)
+  if [[ "$output" == *'"decision":"block"'* ]]; then
+    fail "expected $adapter hook to allow when nothing changed since the last block"
+  fi
+
+  printf '%s' "$clean_contents" >"$repo/$path"
+  output=$(run_stop_hook "$adapter" '{"stop_hook_active": true}')
+  if [[ "$output" == *'"decision":"block"'* ]]; then
+    fail "expected $adapter hook to allow once checks pass"
+  fi
+
+  git -C "$repo" checkout -- "$path"
+}
+
+exercise_stop_case claude "$nix_file" "$nix_clean" "$nix_fail"
+exercise_stop_case claude "$python_file" "$python_clean" "$python_fail"
+exercise_stop_case codex "$nix_file" "$nix_clean" "$nix_fail"
+assert_empty "$(run_stop_hook claude '{}')"
+
 printf 'ok\n'
