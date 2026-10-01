@@ -98,15 +98,17 @@ fi
 
 STATE_DIR=$(git -C "$PROJECT_ROOT" rev-parse --absolute-git-dir 2>/dev/null || printf '%s' "$PROJECT_ROOT/.git")/prek-hook
 
+# Every uncommitted (non-deleted) file is handed to Prek; the `files:` patterns
+# in .pre-commit-config.yaml decide which hooks apply.
 changed_files=()
 while IFS= read -r file; do
   changed_files+=("$file")
 done < <(
   cd "$PROJECT_ROOT"
   {
-    git diff --name-only HEAD 2>/dev/null
+    git diff --name-only --diff-filter=d HEAD 2>/dev/null
     git ls-files --others --exclude-standard 2>/dev/null
-  } | grep -E '((^|/)([^/]+\.nix|flake\.lock)$|^scripts/.*\.py$)' | awk '!seen[$0]++' || true
+  } | awk '!seen[$0]++'
 )
 
 # Content hash of everything the result depends on: HEAD, the Prek config and

@@ -24,39 +24,21 @@
 * `AGENTS.md` — this file
 * `README.md` — human-readable version of this file with additional notes
 
-## Nix Configuration
+## Validation
 
-All Nix work is done from within the `nix/` directory. Enter the dev shell first:
-
-```bash
-cd nix
-nix develop
-```
-
-Then run the validation sequence after changing `.nix` files or `flake.lock`:
+`.pre-commit-config.yaml` is the single source of truth for validation: Nix
+formatting (Alejandra), `nix flake check`, `statix`, `deadnix`, and Ruff/MyPy
+for `scripts/`. Run it from the repo root after changing anything:
 
 ```bash
-nix run nixpkgs#alejandra -- .
-nix flake check
-statix check
-deadnix --fail
+nix develop ./nix -c prek run --all-files
 ```
 
-`nix flake check` is the primary test — it confirms the full configuration evaluates without errors.
-
-> Note: `nix fmt` hangs waiting for stdin — use the `nix run` form above instead.
-
-For one-shot validation without entering the shell interactively:
-
-```bash
-cd nix
-nix develop -c bash -lc 'nix run nixpkgs#alejandra -- . && nix flake check && statix check && deadnix --fail'
-```
-
-`.pre-commit-config.yaml` is the canonical Prek hook configuration. The git
-pre-commit hook and the Claude, Codex, Antigravity, and Copilot adapters all run Prek
-for changed Nix and Python files. Treat hook failures as a backstop: continue the turn, fix
-the reported issue, and do not commit until Prek or explicit validation passes.
+`nix flake check` is the primary test — it confirms every host configuration
+evaluates. The git pre-commit hook and the Claude, Codex, Antigravity and
+Copilot hooks all run the same Prek config via `.hooks/prek-lint.sh`. Treat
+hook failures as a backstop: continue the turn, fix the reported issue, and do
+not commit until Prek passes.
 
 ## Git Repo
 
