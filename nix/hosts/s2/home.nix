@@ -1,11 +1,3 @@
-{...}: {
-  imports = [
-    ../../modules/home/core.nix
-  ];
-
-  home = {
-    username = "craig";
-    homeDirectory = "/home/craig";
-    stateVersion = "25.11";
-  };
+_: {
+  home.stateVersion = "25.11";
 }

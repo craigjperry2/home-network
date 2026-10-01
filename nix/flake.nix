@@ -68,13 +68,14 @@
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
     eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs {inherit system;}));
 
-    # Shared Home Manager module config for all hosts
-    hmConfig = homeFile: {
+    # Shared Home Manager module config for all hosts: the platform's shared
+    # home module plus the host's own home.nix.
+    hmConfig = platformHome: homeFile: {
       home-manager = {
         backupFileExtension = "bak";
         useGlobalPkgs = true;
         useUserPackages = true;
-        users.craig = import homeFile;
+        users.craig.imports = [platformHome homeFile];
         extraSpecialArgs = {inherit inputs;};
       };
     };
@@ -105,7 +106,7 @@
           ./modules/system/linux.nix
           ./hosts/${host}/configuration.nix
           home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/${host}/home.nix)
+          (hmConfig ./modules/home/linux.nix ./hosts/${host}/home.nix)
         ];
       };
 
@@ -120,7 +121,7 @@
           ./modules/system/darwin.nix
           ./hosts/${host}/configuration.nix
           home-manager.darwinModules.home-manager
-          (hmConfig ./hosts/${host}/home.nix)
+          (hmConfig ./modules/home/darwin.nix ./hosts/${host}/home.nix)
           nix-homebrew.darwinModules.nix-homebrew
         ];
       };
