@@ -211,7 +211,6 @@
 
         mkdir = "mkdir -p";
 
-
         sns =
           if pkgs.stdenv.isLinux
           then "( cd ~/Code/github.com/craigjperry2/home-network/nix ; sudo nixos-rebuild switch --flake .#$(hostname -s) )"
