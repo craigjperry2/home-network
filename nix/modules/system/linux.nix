@@ -36,6 +36,14 @@
 
   users.users.craig.openssh.authorizedKeys.keys = import ../../lib/ssh-keys.nix;
 
+  # Key-only SSH. NixOS allows password logins by default, and wheel has
+  # passwordless sudo on these hosts.
+  services.openssh.settings = {
+    PasswordAuthentication = false;
+    KbdInteractiveAuthentication = false;
+    PermitRootLogin = "no";
+  };
+
   nix = {
     gc = {
       automatic = true;
