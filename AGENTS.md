@@ -3,26 +3,32 @@
 ## Repository Layout
 
 * `nix/` — Nix flake configuring hosts via NixOS and nix-darwin with Home Manager
-  * `flake.nix` — flake entrypoint; defines nixosConfigurations (s1, s2),
-    darwinConfigurations (d2, r2)
-  * `hosts/<name>/` — per-host (s1, s2, d2, r2) `configuration.nix` and `home.nix`
-  * `modules/home/core.nix` — shared Home Manager config (packages, programs, shell)
-  * `modules/system/darwin.nix` — shared macOS system config
-* `nix-install/` — custom NixOS installer ISO for building s1 host (legacy
-   non-flake `nix-build` workflow)
+  * `flake.nix` — entrypoint; `mkNixos`/`mkDarwin` build nixosConfigurations
+    (s1, s2, installer) and darwinConfigurations (d2, r2)
+  * `hosts/<name>/` — per-host `configuration.nix` and `home.nix`; hosts only
+    hold what differs from the shared modules
+  * `hosts/installer/` — USB installer ISO (`nix build ./nix#installer-iso`,
+    see `docs/installer.md`)
+  * `modules/system/{linux,darwin}.nix` — shared system config per platform
+  * `modules/home/{linux,darwin}.nix` — shared Home Manager config per
+    platform; both import `core.nix` (packages, programs, shell)
+  * `modules/home/neovim.nix`, `vscode.nix`, `s1-tools.nix`,
+    `darwin-rclone.nix` — Home Manager feature modules; large config files
+    live alongside in `neovim/` and `vscode/`
+  * `lib/ssh-keys.nix` — SSH public keys for Linux hosts and the installer
+  * `pkgs/` — local package definitions
+  * `scripts/bump-deps-pr.sh` — `nix flake update` and open a PR (`uu` alias)
+* `scripts/` — self-contained Python scripts with their own dev shell (see
+  `scripts/AGENTS.md`)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)
-* `.pre-commit-config.yaml` — canonical Prek git/agent hook config for Nix and Python validation
-* `.hooks/prek-lint.sh` — shared hook runner that invokes Prek for changed Nix and Python files
-* `.claude/` — repo-local Claude Code hook config
-* `.codex/` — repo-local Codex project config and hooks
-  * `config.toml` — enables project-local Codex lifecycle hooks
-  * `hooks.json` — runs the shared Prek validation hook on Codex `Stop`
-* `.antigravitycli/` — repo-local Antigravity CLI workspace config and hooks
-  * `hooks.json` — runs the shared Prek validation hook on Antigravity `PostInvocation`
-* `.github/hooks/` — repo-local GitHub Copilot CLI hooks
-  * `prek-validation.json` — runs the shared Prek validation hook on `preToolUse` for changed Nix and Python files
-* `AGENTS.md` — this file
-* `README.md` — human-readable version of this file with additional notes
+* `docs/` — design notes and how-tos
+* `.pre-commit-config.yaml` — the validation config every hook runs
+* `.hooks/prek-lint.sh` — shared agent hook runner; its header documents each
+  agent adapter (`.claude/`, `.codex/`, `.antigravitycli/`, `.github/hooks/`)
+* `.hooks/nix-devshell.sh` — runs a command in the `nix/` dev shell without
+  nesting `nix develop`
+* `tests/test-prek-lint.sh` — tests for the hook runner; run it after changing
+  anything in `.hooks/`
 
 ## Validation
 

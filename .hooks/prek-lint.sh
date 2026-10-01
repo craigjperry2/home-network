@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+# Shared agent/git validation hook: runs Prek (.pre-commit-config.yaml) on the
+# uncommitted files and reports the result in each agent's hook protocol.
+#
+#   --adapter claude       .claude/settings.json, Stop. Blocks with
+#                          {"decision":"block"} JSON so Claude sees the reason.
+#   --adapter codex        .codex/hooks.json, Stop. Same JSON protocol.
+#   --adapter antigravity  .antigravitycli/hooks.json, PostInvocation. Same
+#                          JSON protocol; needs "enableJsonHooks": true in the
+#                          user's Antigravity CLI settings.
+#   --adapter copilot      .github/hooks/prek-validation.json, preToolUse.
+#                          Copilot has no end-of-turn hook, so a failure denies
+#                          one tool call, then a recovery sentinel lets calls
+#                          through for up to 10 minutes while the agent fixes it
+#                          (protocol for the model: .github/copilot-instructions.md).
+#   --adapter plain        Manual runs: reason on stderr, exit 2 on failure.
+#
+# State lives in .git/prek-hook: the hash of the last passing state (to skip
+# re-running Prek) and of the last blocked state (so a Stop hook stops
+# blocking once the agent makes no further changes).
 set -euo pipefail
 
 ADAPTER=plain
