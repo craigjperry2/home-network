@@ -240,6 +240,22 @@ exercise_stop_case() {
   git -C "$repo" checkout -- "$path"
 }
 
+# A passing state is cached: an unchanged re-run does not invoke Prek again.
+printf '%s' "$nix_clean" >"$repo/$nix_file"
+printf '# touched\n' >>"$repo/$nix_file"
+: >"$stub_log"
+run_stop_hook claude '{}' >/dev/null
+assert_file_contains "$stub_log" "$nix_file"
+: >"$stub_log"
+run_stop_hook claude '{}' >/dev/null
+if [ -s "$stub_log" ]; then
+  fail "expected cached pass to skip Prek"
+fi
+printf '# touched again\n' >>"$repo/$nix_file"
+run_stop_hook claude '{}' >/dev/null
+assert_file_contains "$stub_log" "$nix_file"
+git -C "$repo" checkout -- "$nix_file"
+
 exercise_stop_case claude "$nix_file" "$nix_clean" "$nix_fail"
 exercise_stop_case claude "$python_file" "$python_clean" "$python_fail"
 exercise_stop_case codex "$nix_file" "$nix_clean" "$nix_fail"

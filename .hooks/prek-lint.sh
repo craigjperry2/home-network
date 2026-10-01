@@ -109,27 +109,38 @@ done < <(
   } | grep -E '((^|/)([^/]+\.nix|flake\.lock)$|^scripts/.*\.py$)' | awk '!seen[$0]++' || true
 )
 
-run_prek() {
-  if [ ${#changed_files[@]} -eq 0 ]; then
-    return 0
-  fi
-
-  cd "$PROJECT_ROOT"
-  nix develop ./nix -c prek run --files "${changed_files[@]}"
-}
-
-# Content hash of the files under validation, used to tell whether the agent
-# changed anything since the hook last blocked it.
+# Content hash of everything the result depends on: HEAD, the Prek config and
+# the files under validation. Used to skip re-running checks that already
+# passed and to tell whether the agent changed anything since the last block.
 state_hash() {
   (
     cd "$PROJECT_ROOT"
-    for file in "${changed_files[@]}"; do
+    git rev-parse HEAD 2>/dev/null || true
+    for file in .pre-commit-config.yaml "${changed_files[@]}"; do
       printf '%s\0' "$file"
       if [ -f "$file" ]; then
         cat -- "$file"
       fi
     done
   ) | hash_repo | cut -d' ' -f1
+}
+
+run_prek() {
+  if [ ${#changed_files[@]} -eq 0 ]; then
+    return 0
+  fi
+
+  local hash passed_file
+  hash=$(state_hash)
+  passed_file="$STATE_DIR/passed-hash"
+  if [ -f "$passed_file" ] && [ "$(cat "$passed_file")" = "$hash" ]; then
+    return 0
+  fi
+
+  (cd "$PROJECT_ROOT" && nix develop ./nix -c prek run --files "${changed_files[@]}") || return
+
+  mkdir -p "$STATE_DIR"
+  printf '%s\n' "$hash" >"$passed_file"
 }
 
 failure_reason() {
