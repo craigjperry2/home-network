@@ -1,1 +1,4 @@
 .worktrees/
+# Antigravity CLI writes per-machine project links here; only hooks.json is shared.
+.antigravitycli/*
+!.antigravitycli/hooks.json
