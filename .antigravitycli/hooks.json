@@ -4,7 +4,7 @@
       {
         "type": "command",
         "command": "bash \"${ANTIGRAVITY_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}/.hooks/prek-lint.sh\" --adapter antigravity",
-        "timeout": 60
+        "timeout": 600
       }
     ]
   }
