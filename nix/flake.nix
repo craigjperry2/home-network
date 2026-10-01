@@ -159,18 +159,27 @@
       };
     });
 
-    nixosConfigurations = builtins.mapAttrs mkNixos {
-      s1 = {
-        system = "x86_64-linux";
-        # GTX 1080 Ti. Only s1 has a GPU, so only its unstable set opts into
-        # CUDA builds (which are not in the public binary cache).
-        unstableConfig = {
-          cudaSupport = true;
-          cudaCapabilities = ["6.1"];
+    packages.x86_64-linux.installer-iso = self.nixosConfigurations.installer.config.system.build.isoImage;
+
+    nixosConfigurations =
+      builtins.mapAttrs mkNixos {
+        s1 = {
+          system = "x86_64-linux";
+          # GTX 1080 Ti. Only s1 has a GPU, so only its unstable set opts into
+          # CUDA builds (which are not in the public binary cache).
+          unstableConfig = {
+            cudaSupport = true;
+            cudaCapabilities = ["6.1"];
+          };
+        };
+        s2 = {system = "aarch64-linux";};
+      }
+      // {
+        installer = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [./hosts/installer/configuration.nix];
         };
       };
-      s2 = {system = "aarch64-linux";};
-    };
 
     darwinConfigurations = builtins.mapAttrs mkDarwin {
       d2 = {};
