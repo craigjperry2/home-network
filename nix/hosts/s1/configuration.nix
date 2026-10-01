@@ -27,6 +27,7 @@
       CacheDirectory = "llama-cpp-${name}";
       WorkingDirectory = "/var/lib/llama-cpp-${name}";
       Environment = ["LLAMA_CACHE=/var/cache/llama-cpp-${name}"];
+      # Loopback only: the port is deliberately not opened in the firewall.
       ExecStart = "${(unstable.llama-cpp.override {cudaSupport = true;})}/bin/llama-server --host 127.0.0.1 --port ${toString llamaCppPort} -m ${model} ${extraArgs}";
       Restart = "on-failure";
       RestartSec = 300;
@@ -179,6 +180,7 @@ in {
       enable = true;
       package = unstable.immich;
       host = "0.0.0.0";
+      openFirewall = true;
       mediaLocation = "/srv/vms/immich/media";
       machine-learning.enable = false;
     };
@@ -215,9 +217,6 @@ in {
       };
     };
   };
-
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2283 llamaCppPort];
 
   hardware.graphics.enable = true;
   hardware.nvidia = {
