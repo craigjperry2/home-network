@@ -34,7 +34,8 @@ for `scripts/`. Run it from the repo root after changing anything:
 nix develop ./nix -c prek run --all-files
 ```
 
-`nix flake check` is the primary test — it confirms every host configuration
+To format Nix files on their own, run `nix fmt` from `nix/` (pinned by
+`flake.lock`). `nix flake check` is the primary test — it confirms every host configuration
 evaluates. The git pre-commit hook and the Claude, Codex, Antigravity and
 Copilot hooks all run the same Prek config via `.hooks/prek-lint.sh`. Treat
 hook failures as a backstop: continue the turn, fix the reported issue, and do

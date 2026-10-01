@@ -91,11 +91,19 @@
 
     allowUnfree = {nixpkgs.config.allowUnfree = true;};
   in {
-    formatter = eachSystem (pkgs: pkgs.alejandra);
+    # Newer `nix fmt` passes no arguments, which makes bare alejandra wait on
+    # stdin; default to formatting the current directory instead.
+    formatter = eachSystem (pkgs:
+      pkgs.writeShellScriptBin "alejandra-fmt" ''
+        exec ${pkgs.alejandra}/bin/alejandra "''${@:-.}"
+      '');
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [pkgs.git pkgs.gh pkgs.prek pkgs.statix pkgs.deadnix];
+        packages = [pkgs.git pkgs.gh pkgs.prek pkgs.alejandra pkgs.statix pkgs.deadnix];
+
+        # Lets .hooks/nix-devshell.sh skip a nested `nix develop`.
+        HOME_NETWORK_DEVSHELL = "1";
 
         shellHook = ''
           if git rev-parse --show-toplevel >/dev/null 2>&1; then
