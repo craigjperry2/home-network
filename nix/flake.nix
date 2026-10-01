@@ -90,6 +90,40 @@
       };
 
     allowUnfree = {nixpkgs.config.allowUnfree = true;};
+
+    # Every host gets its platform's shared system module plus
+    # hosts/<name>/{configuration,home}.nix.
+    mkNixos = host: {system}:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs system;
+        };
+        modules = [
+          allowUnfree
+          ./modules/system/linux.nix
+          ./hosts/${host}/configuration.nix
+          home-manager.nixosModules.home-manager
+          (hmConfig ./hosts/${host}/home.nix)
+        ];
+      };
+
+    mkDarwin = host: _:
+      nix-darwin.lib.darwinSystem {
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "aarch64-darwin";
+        };
+        modules = [
+          allowUnfree
+          ./modules/system/darwin.nix
+          ./hosts/${host}/configuration.nix
+          home-manager.darwinModules.home-manager
+          (hmConfig ./hosts/${host}/home.nix)
+          nix-homebrew.darwinModules.nix-homebrew
+        ];
+      };
   in {
     # Newer `nix fmt` passes no arguments, which makes bare alejandra wait on
     # stdin; default to formatting the current directory instead.
@@ -125,65 +159,14 @@
       };
     });
 
-    nixosConfigurations = {
-      s1 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "x86_64-linux";
-        };
-        modules = [
-          allowUnfree
-          ./modules/system/linux.nix
-          ./hosts/s1/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s1/home.nix)
-        ];
-      };
-      s2 = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-linux";
-        };
-        modules = [
-          allowUnfree
-          ./modules/system/linux.nix
-          ./hosts/s2/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s2/home.nix)
-        ];
-      };
+    nixosConfigurations = builtins.mapAttrs mkNixos {
+      s1 = {system = "x86_64-linux";};
+      s2 = {system = "aarch64-linux";};
     };
 
-    darwinConfigurations = {
-      d2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-darwin";
-        };
-        modules = [
-          allowUnfree
-          ./hosts/d2/configuration.nix
-          home-manager.darwinModules.home-manager
-          (hmConfig ./hosts/d2/home.nix)
-          nix-homebrew.darwinModules.nix-homebrew
-        ];
-      };
-
-      r2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-darwin";
-        };
-        modules = [
-          allowUnfree
-          ./hosts/r2/configuration.nix
-          home-manager.darwinModules.home-manager
-          (hmConfig ./hosts/r2/home.nix)
-          nix-homebrew.darwinModules.nix-homebrew
-        ];
-      };
+    darwinConfigurations = builtins.mapAttrs mkDarwin {
+      d2 = {};
+      r2 = {};
     };
   };
 }
