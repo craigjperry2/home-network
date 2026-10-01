@@ -55,14 +55,14 @@
   };
 
   outputs = inputs @ {
+    self,
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
     nix-darwin,
     nix-homebrew,
-    # self, nixpkgs-darwin, arthur-ficial-tap, brew-src, homebrew-core, and
-    # homebrew-cask are consumed by modules via `inputs` specialArg — not
-    # referenced directly here.
+    # nixpkgs-darwin, the Homebrew sources and taps are consumed by modules via
+    # the `inputs` specialArg — not referenced directly here.
     ...
   }: let
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
@@ -97,6 +97,15 @@
       pkgs.writeShellScriptBin "alejandra-fmt" ''
         exec ${pkgs.alejandra}/bin/alejandra "''${@:-.}"
       '');
+
+    # `nix flake check` ignores darwinConfigurations entirely. Force each Mac
+    # host to evaluate from every system's checks (without building it), so
+    # Darwin breakage fails the check on Linux and macOS alike.
+    checks = eachSystem (pkgs:
+      nixpkgs.lib.mapAttrs' (name: cfg:
+        nixpkgs.lib.nameValuePair "darwin-${name}-eval"
+        (pkgs.writeText "darwin-${name}-eval" (builtins.unsafeDiscardStringContext cfg.system.drvPath)))
+      self.darwinConfigurations);
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {

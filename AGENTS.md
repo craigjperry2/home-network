@@ -36,7 +36,8 @@ nix develop ./nix -c prek run --all-files
 
 To format Nix files on their own, run `nix fmt` from `nix/` (pinned by
 `flake.lock`). `nix flake check` is the primary test — it confirms every host configuration
-evaluates. The git pre-commit hook and the Claude, Codex, Antigravity and
+evaluates, including the Darwin hosts (via `checks.<system>.darwin-*-eval`,
+since `nix flake check` otherwise skips `darwinConfigurations`). The git pre-commit hook and the Claude, Codex, Antigravity and
 Copilot hooks all run the same Prek config via `.hooks/prek-lint.sh`. Treat
 hook failures as a backstop: continue the turn, fix the reported issue, and do
 not commit until Prek passes.
