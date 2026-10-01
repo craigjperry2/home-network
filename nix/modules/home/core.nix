@@ -91,7 +91,7 @@
       bookmarks = {
         l = "~/Code/local";
         r = "~/Code/github.com";
-        d = "~/Code/github.com";
+        d = "~/Code/github.com/craigjperry2/dotfiles/dotfiles";
       };
     };
 
@@ -131,7 +131,7 @@
           ps = "!git push origin $(git symbolic-ref --short HEAD)";
           pl = "!git pull origin $(git symbolic-ref --short HEAD)";
           s = "status --short --branch";
-          w = "whatchanged";
+          w = "log --raw --no-merges";
           ctop = "!git log | grep Author | sort | uniq -c | sort -rn";
           ltop = "!git ls-files | xargs -n1 git blame --line-porcelain HEAD | grep '^author ' | sort | uniq -c | sort -nr";
           find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | fzf -m | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f";
@@ -197,9 +197,7 @@
         gb = "g b";
         gcm = "g cm";
         gd = "g d";
-        gdt = "g dt";
         gds = "g ds";
-        gdst = "g dst";
         gl = "g show";
         gll = "g l";
         gps = "g ps";
