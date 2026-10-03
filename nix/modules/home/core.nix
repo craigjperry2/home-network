@@ -582,6 +582,9 @@
 
       shellAliases = {
         cat = "bat --pager=never";
+        catl = "bat";
+        catp = "bat -p";
+
         codex-compound = "CODEX_HOME=~/.codex-compound codex";
 
         cdc = "cd ~/Code";
