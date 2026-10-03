@@ -13,7 +13,6 @@
     ./incus.nix
     # Include the OrbStack-specific configuration.
     ./orbstack.nix
-    ../../modules/system/linux.nix
   ];
 
   # Enable the X11 windowing system.

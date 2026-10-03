@@ -8,28 +8,28 @@ repos:
       - id: nix-format
         name: Format Nix files
         language: system
-        entry: bash -c 'cd nix && nix run nixpkgs#alejandra -- .'
+        entry: bash .hooks/nix-devshell.sh alejandra .
         files: '(^|/)([^/]+\.nix|flake\.lock)$'
         pass_filenames: false
 
       - id: nix-flake-check
         name: Check Nix flake
         language: system
-        entry: bash -c 'cd nix && nix flake check'
+        entry: bash .hooks/nix-devshell.sh nix flake check
         files: '(^|/)([^/]+\.nix|flake\.lock)$'
         pass_filenames: false
 
       - id: nix-statix
         name: Lint Nix with statix
         language: system
-        entry: bash -c 'cd nix && nix develop -c statix check'
+        entry: bash .hooks/nix-devshell.sh statix check
         files: '(^|/)([^/]+\.nix|flake\.lock)$'
         pass_filenames: false
 
       - id: nix-deadnix
         name: Check unused Nix code
         language: system
-        entry: bash -c 'cd nix && nix develop -c deadnix --fail'
+        entry: bash .hooks/nix-devshell.sh deadnix --fail
         files: '(^|/)([^/]+\.nix|flake\.lock)$'
         pass_filenames: false
 

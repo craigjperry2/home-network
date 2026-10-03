@@ -173,7 +173,20 @@ in {
     };
   };
 
-  nix.settings.experimental-features = "nix-command flakes";
+  nix = {
+    settings.experimental-features = "nix-command flakes";
+    # Match the Linux hosts' weekly GC (see linux.nix), Sundays at 03:15.
+    gc = {
+      automatic = true;
+      interval = {
+        Weekday = 0;
+        Hour = 3;
+        Minute = 15;
+      };
+      options = "--delete-older-than 28d";
+    };
+    optimise.automatic = true;
+  };
 
   nixpkgs.hostPlatform = "aarch64-darwin";
 

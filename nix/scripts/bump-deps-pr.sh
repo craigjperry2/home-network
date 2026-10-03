@@ -17,7 +17,7 @@ run() {
   "$@"
 }
 
-for cmd in git nix gh statix deadnix; do
+for cmd in git nix gh prek; do
   require_cmd "$cmd"
 done
 
@@ -83,11 +83,8 @@ if [ "$changed_files" != "nix/flake.lock" ]; then
 fi
 
 (
-  cd "$nix_dir"
-  run nix run nixpkgs#alejandra -- .
-  run nix flake check
-  run statix check
-  run deadnix --fail
+  cd "$repo_root"
+  run prek run --all-files
 )
 
 run git -C "$repo_root" add nix/flake.lock
@@ -103,10 +100,7 @@ cat >"$pr_body" <<'EOF'
 - Bump nixpkgs, nix-darwin, home-manager, Homebrew sources, and Homebrew taps.
 
 ## Validation
-- nix run nixpkgs#alejandra -- .
-- nix flake check
-- statix check
-- deadnix --fail
+- prek run --all-files
 EOF
 
 run gh pr create --base "$base_branch" --head "$branch_name" --title "$pr_title" --body-file "$pr_body"

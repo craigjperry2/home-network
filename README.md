@@ -2,13 +2,10 @@
 
 This repo is the golden source for automation of my home network configuration.
 
-Repo-local Copilot, Codex, Claude, and Antigravity hooks call the shared
-`.hooks/prek-lint.sh` runner, which invokes Prek using the canonical
-`.pre-commit-config.yaml` config. The Prek validation flow includes Nix
-formatting (Alejandra), evaluation (`nix flake check`), linting (`statix`,
-`deadnix --fail`), and Python formatting/linting/typing (Ruff, MyPy).
-Agents should continue fixing issues when a hook blocks and
-should only commit after Prek or explicit validation passes.
+Validation runs through [Prek](https://github.com/j178/prek) using
+`.pre-commit-config.yaml`, from the git pre-commit hook and from repo-local
+Claude, Codex, Antigravity and Copilot hooks. See `AGENTS.md` for the layout
+and the validation command.
 
 ## Instructions
 

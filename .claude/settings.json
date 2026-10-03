@@ -5,7 +5,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd $(git rev-parse --show-toplevel) && bash .hooks/prek-lint.sh --adapter claude"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.hooks/prek-lint.sh\" --adapter claude",
+            "timeout": 600
           }
         ]
       }

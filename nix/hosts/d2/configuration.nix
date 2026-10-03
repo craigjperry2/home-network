@@ -1,8 +1,4 @@
-{...}: {
-  imports = [
-    ../../modules/system/darwin.nix
-  ];
-
+_: {
   networking = {
     computerName = "d2";
     hostName = "d2";

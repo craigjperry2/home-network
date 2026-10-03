@@ -55,47 +55,98 @@
   };
 
   outputs = inputs @ {
+    self,
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
     nix-darwin,
     nix-homebrew,
-    # self, nixpkgs-darwin, arthur-ficial-tap, brew-src, homebrew-core, and
-    # homebrew-cask are consumed by modules via `inputs` specialArg — not
-    # referenced directly here.
+    # nixpkgs-darwin, the Homebrew sources and taps are consumed by modules via
+    # the `inputs` specialArg — not referenced directly here.
     ...
   }: let
     systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
     eachSystem = f: nixpkgs.lib.genAttrs systems (system: f (import nixpkgs {inherit system;}));
 
-    # Shared Home Manager module config for all hosts
-    hmConfig = homeFile: {
+    # Shared Home Manager module config for all hosts: the platform's shared
+    # home module plus the host's own home.nix.
+    hmConfig = platformHome: homeFile: {
       home-manager = {
         backupFileExtension = "bak";
         useGlobalPkgs = true;
         useUserPackages = true;
-        users.craig = import homeFile;
+        users.craig.imports = [platformHome homeFile];
         extraSpecialArgs = {inherit inputs;};
       };
     };
 
-    unstablePkgs = system:
+    unstablePkgs = system: extraConfig:
       import nixpkgs-unstable {
         inherit system;
-        config = {
-          allowUnfree = true;
-          cudaSupport = true;
-          cudaCapabilities = ["6.1"];
-        };
+        config = {allowUnfree = true;} // extraConfig;
       };
 
     allowUnfree = {nixpkgs.config.allowUnfree = true;};
+
+    # Every host gets its platform's shared system module plus
+    # hosts/<name>/{configuration,home}.nix.
+    mkNixos = host: {
+      system,
+      unstableConfig ? {},
+    }:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs system unstableConfig;
+        };
+        modules = [
+          allowUnfree
+          ./modules/system/linux.nix
+          ./hosts/${host}/configuration.nix
+          home-manager.nixosModules.home-manager
+          (hmConfig ./modules/home/linux.nix ./hosts/${host}/home.nix)
+        ];
+      };
+
+    mkDarwin = host: _:
+      nix-darwin.lib.darwinSystem {
+        specialArgs = {
+          inherit inputs;
+          unstable = unstablePkgs "aarch64-darwin" {};
+        };
+        modules = [
+          allowUnfree
+          ./modules/system/darwin.nix
+          ./hosts/${host}/configuration.nix
+          home-manager.darwinModules.home-manager
+          (hmConfig ./modules/home/darwin.nix ./hosts/${host}/home.nix)
+          nix-homebrew.darwinModules.nix-homebrew
+        ];
+      };
   in {
-    formatter = eachSystem (pkgs: pkgs.alejandra);
+    # Newer `nix fmt` passes no arguments, which makes bare alejandra wait on
+    # stdin; default to formatting the current directory instead.
+    formatter = eachSystem (pkgs:
+      pkgs.writeShellScriptBin "alejandra-fmt" ''
+        exec ${pkgs.alejandra}/bin/alejandra "''${@:-.}"
+      '');
+
+    # `nix flake check` ignores darwinConfigurations entirely. Force each Mac
+    # host to evaluate from every system's checks (without building it), so
+    # Darwin breakage fails the check on Linux and macOS alike.
+    checks = eachSystem (pkgs:
+      nixpkgs.lib.mapAttrs' (name: cfg:
+        nixpkgs.lib.nameValuePair "darwin-${name}-eval"
+        (pkgs.writeText "darwin-${name}-eval" (builtins.unsafeDiscardStringContext cfg.system.drvPath)))
+      self.darwinConfigurations);
 
     devShells = eachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [pkgs.git pkgs.gh pkgs.prek pkgs.statix pkgs.deadnix];
+        packages = [pkgs.git pkgs.gh pkgs.prek pkgs.alejandra pkgs.statix pkgs.deadnix];
+
+        # Lets .hooks/nix-devshell.sh skip a nested `nix develop`.
+        HOME_NETWORK_DEVSHELL = "1";
 
         shellHook = ''
           if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -108,65 +159,31 @@
       };
     });
 
-    nixosConfigurations = {
-      s1 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "x86_64-linux";
-        };
-        modules = [
-          allowUnfree
-          ./modules/system/linux.nix
-          ./hosts/s1/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s1/home.nix)
-        ];
-      };
-      s2 = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-linux";
-        };
-        modules = [
-          allowUnfree
-          ./modules/system/linux.nix
-          ./hosts/s2/configuration.nix
-          home-manager.nixosModules.home-manager
-          (hmConfig ./hosts/s2/home.nix)
-        ];
-      };
-    };
+    packages.x86_64-linux.installer-iso = self.nixosConfigurations.installer.config.system.build.isoImage;
 
-    darwinConfigurations = {
-      d2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-darwin";
+    nixosConfigurations =
+      builtins.mapAttrs mkNixos {
+        s1 = {
+          system = "x86_64-linux";
+          # GTX 1080 Ti. Only s1 has a GPU, so only its unstable set opts into
+          # CUDA builds (which are not in the public binary cache).
+          unstableConfig = {
+            cudaSupport = true;
+            cudaCapabilities = ["6.1"];
+          };
         };
-        modules = [
-          allowUnfree
-          ./hosts/d2/configuration.nix
-          home-manager.darwinModules.home-manager
-          (hmConfig ./hosts/d2/home.nix)
-          nix-homebrew.darwinModules.nix-homebrew
-        ];
+        s2 = {system = "aarch64-linux";};
+      }
+      // {
+        installer = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [./hosts/installer/configuration.nix];
+        };
       };
 
-      r2 = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          unstable = unstablePkgs "aarch64-darwin";
-        };
-        modules = [
-          allowUnfree
-          ./hosts/r2/configuration.nix
-          home-manager.darwinModules.home-manager
-          (hmConfig ./hosts/r2/home.nix)
-          nix-homebrew.darwinModules.nix-homebrew
-        ];
-      };
+    darwinConfigurations = builtins.mapAttrs mkDarwin {
+      d2 = {};
+      r2 = {};
     };
   };
 }

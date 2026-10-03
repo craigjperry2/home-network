@@ -2,11 +2,10 @@
 
 ## Prek Validation Hook
 
-After modifying `.nix` files, `flake.lock`, or `.py` files in `scripts/`, end
-your turn with a trivial tool call (e.g., `view` a file) to trigger the
-`preToolUse` validation hook. The shared hook runner `.hooks/prek-lint.sh` runs
-`prek` for all changed files, using `.pre-commit-config.yaml` as the canonical
-validation config.
+After modifying files, end your turn with a trivial tool call (e.g., `view` a
+file) to trigger the `preToolUse` validation hook. The shared hook runner
+`.hooks/prek-lint.sh` hands all changed files to `prek`, and
+`.pre-commit-config.yaml` decides which checks apply.
 
 ## Hook Recovery Protocol
 
