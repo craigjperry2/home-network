@@ -20,6 +20,12 @@
           pkgs.ruff
           pkgs.mypy
         ];
+        # mypy and its compiled deps (librt) come from nixpkgs via PYTHONPATH,
+        # so uv must use the matching interpreter, not a uv-managed Python.
+        env = {
+          UV_PYTHON = pkgs.python3.interpreter;
+          UV_PYTHON_DOWNLOADS = "never";
+        };
       };
     });
   };
