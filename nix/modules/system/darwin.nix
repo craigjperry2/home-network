@@ -39,6 +39,7 @@ in {
     ];
     casks = [
       "agentsview"
+      "amp-app"
       "antigravity"
       "antigravity-cli"
       "antigravity-ide"
