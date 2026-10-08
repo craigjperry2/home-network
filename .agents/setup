@@ -48,6 +48,8 @@ if [ -e "$nix_profile/etc/profile.d/nix.sh" ]; then
   . "$nix_profile/etc/profile.d/nix.sh"
   if [[ -z "\${IN_NIX_SHELL:-}" && "\$PWD" == "$repo_root" ]]; then
     eval "\$("$nix_profile/bin/nix" print-dev-env "$repo_root/nix" 2>/dev/null)" 2>/dev/null
+    # Keep Amp's wrappers (its gh supplies GitHub auth) ahead of the dev shell's.
+    if [ -d "$HOME/.amp/bin" ]; then PATH="$HOME/.amp/bin:\$PATH"; fi
   fi
 fi
 EOF

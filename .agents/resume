@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Amp orb resume: after .agents/setup, Amp appends a block to ~/.bash_profile
+# that sources ~/.env, whose absolute PATH drops the nix/ dev shell set up by
+# the earlier home-network hook. Move that hook back to the end so it applies
+# last. Idempotent and runs in milliseconds.
+set -euo pipefail
+
+profile="$HOME/.bash_profile"
+hook="$HOME/.config/home-network/profile.sh"
+comment="# home-network: Nix and nix/ dev shell (from .agents/setup)"
+line="[ -f \"$hook\" ] && . \"$hook\""
+
+grep -Fqx "$line" "$profile" 2>/dev/null || exit 0
+[ "$(grep -v '^[[:space:]]*$' "$profile" | tail -n 1)" = "$line" ] && exit 0
+
+rest="$(grep -Fvx -e "$comment" -e "$line" "$profile" || true)"
+printf '%s\n\n%s\n%s\n' "$rest" "$comment" "$line" >"$profile"
+echo "Moved the home-network hook to the end of $profile"
