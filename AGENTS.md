@@ -32,6 +32,10 @@
 * `.agents/setup` — Amp orb setup: installs single-user Nix, pre-fetches the
   flake inputs and dev shells, and loads the `nix/` dev shell into login
   shells at the repo root (so `prek`, `alejandra`, etc. are on PATH)
+* `.agents/resume` — Amp orb resume: moves that login-shell hook after the
+  block Amp appends to `~/.bash_profile`, whose `~/.env` PATH would drop it.
+  Amp's own tool shell is not a login shell, so agents still run
+  `nix develop ./nix -c …`
 
 ## Validation
 
