@@ -29,6 +29,9 @@
   nesting `nix develop`
 * `tests/test-prek-lint.sh` — tests for the hook runner; run it after changing
   anything in `.hooks/`
+* `.agents/setup` — Amp orb setup: installs single-user Nix, pre-fetches the
+  flake inputs and dev shells, and loads the `nix/` dev shell into login
+  shells at the repo root (so `prek`, `alejandra`, etc. are on PATH)
 
 ## Validation
 
