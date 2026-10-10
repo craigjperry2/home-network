@@ -10,6 +10,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # tsssrstack web app (package + NixOS module), served from s1. Deliberately not following
+    # nixpkgs: s1 runs the Node and npm dependencies that the app's own CI built and tested.
+    # Deploy a new version with `nix flake update tsssrstack` and `sns` on s1.
+    tsssrstack.url = "github:craigjperry2/tsssrstack";
+
     # Darwin packages
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 

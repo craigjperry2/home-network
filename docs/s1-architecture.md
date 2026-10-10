@@ -18,6 +18,7 @@ Persistent state for these services is explicitly moved from `/var/lib` to the `
 | **Plex** | Application Data | `/srv/vms/plex` |
 | **Immich** | Uploads/Internal | `/srv/vms/immich/media` |
 | **Immich** | Database (Postgres) | `/srv/vms/immich/postgres` |
+| **tsssrstack** | Database `tsssrstack`, in the same cluster | `/srv/vms/immich/postgres` |
 | **Shared** | Media Source | `/srv/media/d2-nas-5tb` |
 
 **Media Access:**

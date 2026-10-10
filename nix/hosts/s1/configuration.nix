@@ -5,6 +5,7 @@
   pkgs,
   unstable,
   config,
+  inputs,
   ...
 }: let
   llamaCppPort = 11434;
@@ -64,6 +65,7 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    inputs.tsssrstack.nixosModules.default
   ];
 
   boot = {
@@ -142,6 +144,12 @@ in {
           # Prevent suspend if any user is logged in via a remote host (SSH)
           host = "[0-9a-fA-F:].*";
         };
+        # Stay awake while anyone is connected to tsssrstack. Nothing wakes s1 for an incoming
+        # request, so the site is down whenever s1 is asleep.
+        tsssrstack = {
+          class = "ActiveConnection";
+          ports = toString config.services.tsssrstack.httpsPort;
+        };
         plex = {
           class = "ExternalCommand";
           command = toString (pkgs.writeShellScript "check-plex-remote" ''
@@ -187,6 +195,14 @@ in {
     postgresql = {
       enable = true;
       dataDir = "/srv/vms/immich/postgres";
+    };
+    # Public at https://tsssrstack.home.craigjperry.com/: the router forwards public port 443 to
+    # httpsPort. Its database lives in the cluster above.
+    tsssrstack = {
+      enable = true;
+      domain = "tsssrstack.home.craigjperry.com";
+      httpsPort = 8443;
+      openFirewall = true;
     };
 
     xserver.videoDrivers = ["nvidia"];
@@ -234,6 +250,19 @@ in {
       enable = true;
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
+  # Let's Encrypt via DNS-01, because only port 443 is forwarded (no HTTP-01) and the NixOS ACME
+  # module cannot run TLS-ALPN-01 next to Nginx. The credentials file is created by hand, root-only:
+  #   SPACESHIP_API_KEY=...
+  #   SPACESHIP_API_SECRET=...
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "craig@craigjperry.com";
+    certs."tsssrstack.home.craigjperry.com" = {
+      dnsProvider = "spaceship";
+      environmentFile = "/var/lib/secrets/acme-spaceship.env";
     };
   };
 

@@ -213,6 +213,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1791260994,
+        "narHash": "sha256-Miqqk/ammqnTUxaoCyvtwoPeLbI1ksFyLxi/CazZpWY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "antigravity-nix": "antigravity-nix",
@@ -226,6 +242,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "tsssrstack": "tsssrstack",
         "whatcable-tap": "whatcable-tap"
       }
     },
@@ -241,6 +258,24 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tsssrstack": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1791629628,
+        "narHash": "sha256-EU+gfMje7WXCeuEXtcBK3a/j+HBYq/QwTAN7pHT9Swo=",
+        "owner": "craigjperry2",
+        "repo": "tsssrstack",
+        "rev": "287311336a3d65c66f0c4148cb319145e8b9892a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "craigjperry2",
+        "repo": "tsssrstack",
         "type": "github"
       }
     },
