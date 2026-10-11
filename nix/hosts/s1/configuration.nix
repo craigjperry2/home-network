@@ -150,6 +150,10 @@ in {
           class = "ActiveConnection";
           ports = toString config.services.tsssrstack.httpsPort;
         };
+        no-suspend-file = {
+          class = "ExternalCommand";
+          command = "test -e /no.suspend";
+        };
         plex = {
           class = "ExternalCommand";
           command = toString (pkgs.writeShellScript "check-plex-remote" ''
