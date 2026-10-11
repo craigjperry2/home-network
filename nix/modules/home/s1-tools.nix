@@ -42,5 +42,13 @@
         REMOTE
       '';
     })
+
+    # Run a detailed live health report on s1 from any host.
+    (pkgs.writeShellApplication {
+      name = "host-health";
+      text = ''
+        ssh s1.home.craigjperry.com bash -s < ${../../scripts/host-health.sh}
+      '';
+    })
   ];
 }
