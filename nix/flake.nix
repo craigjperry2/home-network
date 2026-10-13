@@ -170,11 +170,15 @@
       builtins.mapAttrs mkNixos {
         s1 = {
           system = "x86_64-linux";
-          # GTX 1080 Ti. Only s1 has a GPU, so only its unstable set opts into
-          # CUDA builds (which are not in the public binary cache).
+          # GTX 1080 Ti (Pascal, CC 6.1). CUDA 13 dropped support for 6.1, so
+          # pin cudaPackages to cudaPackages_12. Only s1 has a GPU, so only its
+          # unstable set opts into CUDA builds (not in public binary cache).
           unstableConfig = {
             cudaSupport = true;
             cudaCapabilities = ["6.1"];
+            packageOverrides = pkgs: {
+              cudaPackages = pkgs.cudaPackages_12;
+            };
           };
         };
         s2 = {system = "aarch64-linux";};
