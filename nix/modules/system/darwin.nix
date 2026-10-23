@@ -35,7 +35,6 @@ in {
 
     brews = [
       "agent-browser"
-      "arthur-ficial/homebrew-tap/apfel"
       "imessage-exporter"
     ];
     casks = [
@@ -198,13 +197,9 @@ in {
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
-      "arthur-ficial/homebrew-tap" = inputs.arthur-ficial-tap;
       "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
     trust = {
-      formulae = [
-        "arthur-ficial/homebrew-tap/apfel"
-      ];
       casks = [
         "darrylmorley/homebrew-whatcable/whatcable"
       ];

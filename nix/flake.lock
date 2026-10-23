@@ -21,22 +21,6 @@
         "type": "github"
       }
     },
-    "arthur-ficial-tap": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791223037,
-        "narHash": "sha256-ZIYLDZHDeZZKSEaHcHpdYT+9RmMo0jlysSn6WuY5O3A=",
-        "owner": "arthur-ficial",
-        "repo": "homebrew-tap",
-        "rev": "4909759dc818b734addc431a56b57100ae3c701b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arthur-ficial",
-        "repo": "homebrew-tap",
-        "type": "github"
-      }
-    },
     "brew-src": {
       "flake": false,
       "locked": {
@@ -232,7 +216,6 @@
     "root": {
       "inputs": {
         "antigravity-nix": "antigravity-nix",
-        "arthur-ficial-tap": "arthur-ficial-tap",
         "brew-src": "brew-src",
         "home-manager": "home-manager",
         "homebrew-cask": "homebrew-cask",
