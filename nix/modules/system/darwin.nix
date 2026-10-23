@@ -34,6 +34,7 @@ in {
     taps = builtins.attrNames config.nix-homebrew.taps;
 
     brews = [
+      "agent-browser"
       "arthur-ficial/homebrew-tap/apfel"
       "imessage-exporter"
     ];
