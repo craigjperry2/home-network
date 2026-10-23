@@ -40,20 +40,21 @@ in {
     casks = [
       "agentsview"
       "amp-app"
-      "antigravity"
       "antigravity-cli"
-      "antigravity-ide"
       "audacity"
       "chatgpt"
       "claude"
       "claude-code"
       "codex"
       "copilot-cli"
+      "cursor"
       "font-jetbrains-mono-nerd-font"
       "firefox@developer-edition"
       "ghostty"
       "google-chrome"
       "google-gemini"
+      "grok-bot"
+      "grok-build"
       "iina"
       "istat-menus@6"
       "little-snitch"
@@ -68,8 +69,10 @@ in {
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
+      "Copilot" = 6738511300;
       "Darkroom" = 953286746;
       "Flighty" = 1358823008;
+      "Golf" = 6545262709;
       "Gyroflow" = 6447994244;
       "Home Assistant" = 1099568401;
       "Microsoft Excel" = 462058435;
