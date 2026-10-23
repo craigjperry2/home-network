@@ -48,11 +48,6 @@
       flake = false;
     };
 
-    arthur-ficial-tap = {
-      url = "github:arthur-ficial/homebrew-tap";
-      flake = false;
-    };
-
     whatcable-tap = {
       url = "github:darrylmorley/homebrew-whatcable";
       flake = false;

@@ -7,7 +7,6 @@ _: {
   homebrew = {
     brews = [];
     casks = [
-      "aldente"
       "lm-studio"
       "steam"
     ];

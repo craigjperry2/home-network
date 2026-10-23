@@ -34,26 +34,27 @@ in {
     taps = builtins.attrNames config.nix-homebrew.taps;
 
     brews = [
-      "arthur-ficial/homebrew-tap/apfel"
+      "agent-browser"
       "imessage-exporter"
     ];
     casks = [
       "agentsview"
       "amp-app"
-      "antigravity"
       "antigravity-cli"
-      "antigravity-ide"
       "audacity"
       "chatgpt"
       "claude"
       "claude-code"
       "codex"
       "copilot-cli"
+      "cursor"
       "font-jetbrains-mono-nerd-font"
       "firefox@developer-edition"
       "ghostty"
       "google-chrome"
       "google-gemini"
+      "grok-bot"
+      "grok-build"
       "iina"
       "istat-menus@6"
       "little-snitch"
@@ -68,8 +69,10 @@ in {
     ];
     masApps = {
       "AdGuard for Safari" = 1440147259;
+      "Copilot" = 6738511300;
       "Darkroom" = 953286746;
       "Flighty" = 1358823008;
+      "Golf" = 6545262709;
       "Gyroflow" = 6447994244;
       "Home Assistant" = 1099568401;
       "Microsoft Excel" = 462058435;
@@ -197,13 +200,9 @@ in {
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
-      "arthur-ficial/homebrew-tap" = inputs.arthur-ficial-tap;
       "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
     trust = {
-      formulae = [
-        "arthur-ficial/homebrew-tap/apfel"
-      ];
       casks = [
         "darrylmorley/homebrew-whatcable/whatcable"
       ];
