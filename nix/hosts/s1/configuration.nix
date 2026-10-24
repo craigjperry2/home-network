@@ -101,6 +101,7 @@ in {
   environment = {
     shells = with pkgs; [zsh];
     systemPackages = with pkgs; [
+      inputs.media-importer.packages.${stdenv.hostPlatform.system}.default
       smartmontools
       zfs
     ];
@@ -149,6 +150,11 @@ in {
         tsssrstack = {
           class = "ActiveConnection";
           ports = toString config.services.tsssrstack.httpsPort;
+        };
+        # Stay awake while any media-importer command runs, even detached from an SSH session.
+        media-importer = {
+          class = "Processes";
+          processes = "media-importer";
         };
         no-suspend-file = {
           class = "ExternalCommand";
