@@ -12,8 +12,9 @@
 
     # tsssrstack web app (package + NixOS module), served from s1. Deliberately not following
     # nixpkgs: s1 runs the Node and npm dependencies that the app's own CI built and tested.
-    # Deploy a new version with `nix flake update tsssrstack` and `sns` on s1.
-    tsssrstack.url = "github:craigjperry2/tsssrstack";
+    # Pinned to a release tag, so `nix flake update` (`uu`) never moves it. Deploy a new release by
+    # editing the tag, then `nix flake lock` and `sns` on s1.
+    tsssrstack.url = "github:craigjperry2/tsssrstack/v0.1.0";
 
     # media-importer CLI, installed on s1. Pinned to a release tag, so `nix flake update` (`uu`)
     # never moves it; not following nixpkgs, for the same reason as tsssrstack. Deploy a new
