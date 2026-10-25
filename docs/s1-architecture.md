@@ -62,3 +62,11 @@ If a service update causes issues:
    sudo zfs rollback tank/srv/vms/immich/postgres@autosnap_...
    ```
    *Note: Rollback will destroy any data created since the snapshot was taken.*
+
+### tsssrstack
+tsssrstack is installed from a release tag of
+[craigjperry2/tsssrstack](https://github.com/craigjperry2/tsssrstack)
+(the `tsssrstack` input in `nix/flake.nix`). `uu` never changes the release;
+to deploy a new one, edit the tag in the input URL, run `nix flake lock` and
+`sns`. Migrations run before the new version starts, and the page footer
+shows the deployed version and commit.
