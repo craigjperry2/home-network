@@ -35,9 +35,9 @@ NB: tokens are not managed in this config, you'll have to manually sign in to se
 #### OneDrive via `rclone`
 
 The native Mac App Store OneDrive app is still kept around during the pilot, but
-`rclone` is now configured from nix on the Darwin hosts.
+`rclone` is now configured from nix on the Darwin hosts (`d2`, `r2`) and NixOS host `s1`.
 
-After `darwin-rebuild switch`, bootstrap the `rclone` remote manually:
+After `darwin-rebuild switch` (on macOS) or `nixos-rebuild switch` (on `s1`), bootstrap the `rclone` remote manually:
 
 1. Run `rclone config`
 2. Create a remote named `onedrive`
@@ -55,6 +55,7 @@ The pilot sync roots are:
 
 * `d2` → `/Volumes/d2 data/craig/onedrive-rclone`
 * `r2` → `/Users/craig/onedrive-rclone`
+* `s1` → `/srv/backups/onedrive`
 
 Example bootstrap for `r2`:
 
@@ -65,19 +66,31 @@ rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
 rclone-onedrive-resync
 ```
 
+Example bootstrap for `s1`:
+
+```bash
+cd /srv/backups/onedrive
+touch RCLONE_TEST
+rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
+rclone-onedrive-resync
+```
+
 `--check-access` expects `RCLONE_TEST` to exist on both sides before the first
 `bisync`, so this is a one-time bootstrap step rather than an indication that
 the remote auth is broken.
 
-If you don't want to wait for the next scheduled run after the initial resync,
-kick the agent manually:
+If you don't want to wait for the next scheduled run after the initial resync:
 
-```bash
-launchctl kickstart -k "gui/$(id -u)/org.home-network.rclone-onedrive"
-```
+* On macOS:
+  ```bash
+  launchctl kickstart -k "gui/$(id -u)/org.home-network.rclone-onedrive"
+  ```
+* On NixOS (`s1`):
+  ```bash
+  sudo systemctl start rclone-onedrive-sync.service
+  ```
 
-Use `rclone authorize onedrive` only for headless setups. Local macOS hosts
-should just use `rclone config`.
+Use `rclone authorize onedrive` only for headless setups (like `s1`), or copy the `[onedrive]` block from `~/.config/rclone/rclone.conf` on a configured Darwin machine. Local macOS hosts should just use `rclone config`.
 
 Because the pilot uses separate local paths, rollback is straightforward: stop
 using the `onedrive-rclone` folder and continue with the native OneDrive app
