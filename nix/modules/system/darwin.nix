@@ -14,7 +14,17 @@
 in {
   users.users.craig.home = "/Users/craig";
 
-  networking.search = ["home.craigjperry.com"];
+  networking = {
+    # nix-darwin applies DNS settings only to the named services that exist.
+    knownNetworkServices = [
+      "Wi-Fi"
+      "Ethernet"
+      "Ethernet Adaptor"
+      "USB 10/100/1000 LAN"
+      "Thunderbolt Ethernet"
+    ];
+    search = ["home.craigjperry.com"];
+  };
 
   environment.systemPackages = [
     pkgs.neovim
