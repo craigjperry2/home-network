@@ -4,6 +4,8 @@
   inputs,
   ...
 }: {
+  networking.search = ["home.craigjperry.com"];
+
   nixpkgs.overlays = [
     (
       _: _prev: {

@@ -14,6 +14,8 @@
 in {
   users.users.craig.home = "/Users/craig";
 
+  networking.search = ["home.craigjperry.com"];
+
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
