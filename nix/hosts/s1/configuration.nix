@@ -65,6 +65,7 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./onedrive.nix
     inputs.tsssrstack.nixosModules.default
   ];
 
