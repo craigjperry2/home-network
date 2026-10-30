@@ -47,6 +47,7 @@ in {
 
     brews = [
       "agent-browser"
+      "herdr"
       "imessage-exporter"
     ];
     casks = [
