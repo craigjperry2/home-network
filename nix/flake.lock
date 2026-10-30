@@ -285,16 +285,16 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1792916166,
-        "narHash": "sha256-2RcfZsCiIOO5EB00NEwlNSm34+1sNgMZJZFvTTGug6g=",
+        "lastModified": 1793360300,
+        "narHash": "sha256-rrwCLKvHCYLQzp1bhjaBJ6v0X8OqC+I2pVkkfUCY7GU=",
         "owner": "craigjperry2",
         "repo": "tsssrstack",
-        "rev": "6ff0b78f79ae7dd7d505e69c458f93cdf75dde20",
+        "rev": "eee41cb4ad9dcc14c2863532f499e8595af0543c",
         "type": "github"
       },
       "original": {
         "owner": "craigjperry2",
-        "ref": "v0.1.0",
+        "ref": "v0.2.0",
         "repo": "tsssrstack",
         "type": "github"
       }
