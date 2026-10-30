@@ -133,7 +133,9 @@ in {
       requires = ["srv-backups.mount"];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.systemd}/bin/systemd-inhibit --what=sleep:shutdown --who=rclone-onedrive-sync --why=\"OneDrive sync in progress\" ${pkgs.util-linux}/bin/runuser -u craig -- ${syncScript}/bin/rclone-onedrive-sync";
+        User = "craig";
+        Group = "users";
+        ExecStart = "${syncScript}/bin/rclone-onedrive-sync";
       };
     };
 
