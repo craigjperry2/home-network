@@ -29,6 +29,7 @@ in {
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
+    unstable.herdr
     unstable.nixd
     unstable.alejandra
     unstable.statix
@@ -47,7 +48,6 @@ in {
 
     brews = [
       "agent-browser"
-      "herdr"
       "imessage-exporter"
     ];
     casks = [
