@@ -9,7 +9,7 @@
   nixpkgs.overlays = [
     (
       _: _prev: {
-        inherit (unstable) claude-code codex github-copilot-cli nixd alejandra statix deadnix;
+        inherit (unstable) claude-code codex github-copilot-cli herdr nixd alejandra statix deadnix;
       }
     )
   ];
@@ -21,6 +21,7 @@
     claude-code
     codex
     github-copilot-cli
+    herdr
     curl
     ghostty.terminfo
     htop
