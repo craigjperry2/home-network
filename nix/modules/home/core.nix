@@ -301,7 +301,7 @@
         }
 
         # Auto-start zellij for SSH connections
-        if [[ -n "$SSH_CONNECTION" ]]; then
+        if [[ -n "$SSH_CONNECTION" && "$TERM_PROGRAM" != "herdr" ]]; then
             export ZELLIJ_AUTO_ATTACH=true
             eval "$(zellij setup --generate-auto-start zsh)"
         fi
