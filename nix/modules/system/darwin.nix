@@ -53,6 +53,7 @@ in {
     casks = [
       "agentsview"
       "amp-app"
+      "anomalyco/tap/hex"
       "antigravity-cli"
       "audacity"
       "chatgpt"
@@ -213,10 +214,12 @@ in {
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
+      "anomalyco/homebrew-tap" = inputs.anomalyco-tap;
       "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
     trust = {
       casks = [
+        "anomalyco/homebrew-tap/hex"
         "darrylmorley/homebrew-whatcable/whatcable"
       ];
     };

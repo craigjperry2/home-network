@@ -54,6 +54,10 @@
       flake = false;
     };
 
+    anomalyco-tap = {
+      url = "github:anomalyco/homebrew-tap";
+      flake = false;
+    };
     whatcable-tap = {
       url = "github:darrylmorley/homebrew-whatcable";
       flake = false;
