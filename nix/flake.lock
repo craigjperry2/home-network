@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "anomalyco-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793552515,
+        "narHash": "sha256-0j7uBIoHhgp/e3DrQ3ROUxpQWVP5PMIrjswiYOivIoE=",
+        "owner": "anomalyco",
+        "repo": "homebrew-tap",
+        "rev": "90f026479df60445d133032d968b01ea4e75d6af",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "antigravity-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -250,6 +266,7 @@
     },
     "root": {
       "inputs": {
+        "anomalyco-tap": "anomalyco-tap",
         "antigravity-nix": "antigravity-nix",
         "brew-src": "brew-src",
         "home-manager": "home-manager",
