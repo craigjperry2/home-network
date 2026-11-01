@@ -150,7 +150,7 @@ in {
     '';
 
     launchd.agents."org.home-network.rclone-onedrive" = {
-      enable = true;
+      enable = false;
       config = {
         Label = "org.home-network.rclone-onedrive";
         ProcessType = "Background";
