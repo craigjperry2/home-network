@@ -9,7 +9,9 @@
     hold what differs from the shared modules
   * `hosts/installer/` — USB installer ISO (`nix build ./nix#installer-iso`,
     see `docs/installer.md`)
-  * `modules/system/{linux,darwin}.nix` — shared system config per platform
+  * `modules/system/{linux,darwin}.nix` — shared system config per platform;
+    `onedrive-rclone-menubar.json` pins the menu-bar app release every Mac
+    installs
   * `modules/home/{linux,darwin}.nix` — shared Home Manager config per
     platform; both import `core.nix` (packages, programs, shell)
   * `modules/home/neovim.nix`, `vscode.nix`, `s1-tools.nix`,
@@ -17,7 +19,8 @@
     live alongside in `neovim/` and `vscode/`
   * `lib/ssh-keys.nix` — SSH public keys for Linux hosts and the installer
   * `pkgs/` — local package definitions
-  * `scripts/bump-deps-pr.sh` — `nix flake update` and open a PR (`uu` alias)
+  * `scripts/bump-deps-pr.sh` — `nix flake update`, pin the menu-bar app's
+    latest release, and open a PR (`uu` alias)
 * `scripts/` — self-contained Python scripts with their own dev shell (see
   `scripts/AGENTS.md`)
 * `fcos/` — Fedora CoreOS Ignition config (converted to JSON via `butane`)

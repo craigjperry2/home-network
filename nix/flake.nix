@@ -24,6 +24,11 @@
     # Darwin packages
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
 
+    # OneDrive rclone menu-bar app's nix-darwin module, installed on every Mac. The release it
+    # installs is pinned in modules/system/onedrive-rclone-menubar.json; `uu` moves this input and
+    # refreshes that pin to the latest GitHub release.
+    onedrive-rclone-menubar.url = "github:craigjperry2/onedrive-rclone-mac-menubar";
+
     # Home Manager
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -132,6 +137,7 @@
           home-manager.darwinModules.home-manager
           (hmConfig ./modules/home/darwin.nix ./hosts/${host}/home.nix)
           nix-homebrew.darwinModules.nix-homebrew
+          inputs.onedrive-rclone-menubar.darwinModules.default
         ];
       };
   in {

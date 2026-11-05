@@ -36,6 +36,11 @@ in {
     unstable.deadnix
   ];
 
+  # Menu-bar app in /Applications/Nix Apps. `uu` refreshes the pinned release.
+  programs.onedrive-rclone-menubar =
+    {enable = true;}
+    // builtins.fromJSON (builtins.readFile ./onedrive-rclone-menubar.json);
+
   homebrew = {
     enable = true;
     onActivation = {
