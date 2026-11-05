@@ -71,6 +71,7 @@ in {
       "grok-build"
       "iina"
       "istat-menus@6"
+      "jetbrains-air"
       "little-snitch"
       "obsidian"
       "orbstack"
