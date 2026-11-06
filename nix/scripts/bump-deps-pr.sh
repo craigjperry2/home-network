@@ -69,6 +69,16 @@ run git -C "$repo_root" switch -c "$branch_name" "$base_branch"
 
 run nix flake update --flake "$nix_dir"
 
+# Pin the menu-bar app to its latest release. GitHub records each release
+# asset's sha256, so the zip need not be downloaded to hash it.
+menubar_pin=nix/modules/system/onedrive-rclone-menubar.json
+menubar_release=$(gh release view --repo craigjperry2/onedrive-rclone-mac-menubar --json tagName,assets \
+  --jq '.tagName[1:] as $v | .assets[] | select(.name == "OneDriveRcloneMenubar-\($v).zip") | "\($v) \(.digest)"')
+read -r menubar_version menubar_digest <<<"$menubar_release"
+[ -n "${menubar_digest:-}" ] || die "latest onedrive-rclone-mac-menubar release has no app zip"
+menubar_hash=$(nix hash convert --hash-algo sha256 --to sri "${menubar_digest#sha256:}")
+printf '{\n  "version": "%s",\n  "hash": "%s"\n}\n' "$menubar_version" "$menubar_hash" >"$repo_root/$menubar_pin"
+
 changed_files=$(git -C "$repo_root" diff --name-only)
 if [ -z "$changed_files" ]; then
   run git -C "$repo_root" switch "$base_branch"
@@ -77,9 +87,9 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-if [ "$changed_files" != "nix/flake.lock" ]; then
+if grep -qvxF -e nix/flake.lock -e "$menubar_pin" <<<"$changed_files"; then
   git -C "$repo_root" diff --stat
-  die "expected only nix/flake.lock to change; inspect the working tree"
+  die "expected only nix/flake.lock and $menubar_pin to change; inspect the working tree"
 fi
 
 (
@@ -87,7 +97,7 @@ fi
   run prek run --all-files
 )
 
-run git -C "$repo_root" add nix/flake.lock
+run git -C "$repo_root" add nix/flake.lock "$menubar_pin"
 run git -C "$repo_root" commit -m "$commit_message"
 run git -C "$repo_root" push -u origin "$branch_name"
 
@@ -98,6 +108,7 @@ cat >"$pr_body" <<'EOF'
 ## Summary
 - Update Nix flake lock inputs via nix flake update.
 - Bump nixpkgs, nix-darwin, home-manager, Homebrew sources, and Homebrew taps.
+- Pin the OneDrive rclone menu-bar app to its latest GitHub release.
 
 ## Validation
 - prek run --all-files

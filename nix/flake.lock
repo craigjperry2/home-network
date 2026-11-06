@@ -264,6 +264,21 @@
         "type": "github"
       }
     },
+    "onedrive-rclone-menubar": {
+      "locked": {
+        "lastModified": 1793895313,
+        "narHash": "sha256-vlmPwZm8ydNMD76JsjFT6RiQTCHx1k/EE/A3Ryvt+1Y=",
+        "owner": "craigjperry2",
+        "repo": "onedrive-rclone-mac-menubar",
+        "rev": "5bbe4c965b4f76e39013b267ad8050d4f016c665",
+        "type": "github"
+      },
+      "original": {
+        "owner": "craigjperry2",
+        "repo": "onedrive-rclone-mac-menubar",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "anomalyco-tap": "anomalyco-tap",
@@ -278,6 +293,7 @@
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "onedrive-rclone-menubar": "onedrive-rclone-menubar",
         "tsssrstack": "tsssrstack",
         "whatcable-tap": "whatcable-tap"
       }
