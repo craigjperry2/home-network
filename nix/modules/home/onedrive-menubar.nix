@@ -19,7 +19,7 @@
       configPath = "${config.home.homeDirectory}/.config/rclone/rclone.conf";
       remoteName = "onedrive";
       inherit (config.homeNetwork.onedriveMenubar) localPath;
-      intervalSeconds = 600;
+      intervalSeconds = 1800;
     };
   };
 }
