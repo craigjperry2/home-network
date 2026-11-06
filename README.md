@@ -34,22 +34,10 @@ NB: tokens are not managed in this config, you'll have to manually sign in to se
 
 #### OneDrive via `rclone`
 
-The native Mac App Store OneDrive app is still kept around during the pilot, but
-`rclone` is now configured from nix on the Darwin hosts (`d2`, `r2`) and NixOS host `s1`.
-
-After `darwin-rebuild switch` (on macOS) or `nixos-rebuild switch` (on `s1`), bootstrap the `rclone` remote manually:
-
-1. Run `rclone config`
-2. Create a remote named `onedrive`
-3. Complete the Microsoft login flow in your browser
-4. Verify access with `rclone lsd onedrive:`
-5. Create the `RCLONE_TEST` sentinel file in the local sync root
-6. Create the same sentinel remotely with `rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST`
-7. Run `rclone-onedrive-resync` once to seed the local mirror before the background
-   launch agent takes over
-
-This rollout uses `rclone bisync`, not `rclone mount`, so `macFUSE` is not
-required.
+The native Mac App Store OneDrive app is still kept around during the pilot.
+Alongside it, `rclone bisync` syncs OneDrive on the Darwin hosts (`d2`, `r2`)
+and the NixOS host `s1`. This uses `bisync`, not `rclone mount`, so `macFUSE`
+is not required.
 
 The pilot sync roots are:
 
@@ -57,23 +45,34 @@ The pilot sync roots are:
 * `r2` → `/Users/craig/onedrive-rclone`
 * `s1` → `/srv/backups/onedrive`
 
-Example bootstrap for `r2`:
+##### macOS: menu-bar app
 
-```bash
-cd /Users/craig/onedrive-rclone
-touch RCLONE_TEST
-rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
-rclone-onedrive-resync
-```
+Every Mac installs the
+[OneDrive Rclone Menubar](https://github.com/craigjperry2/onedrive-rclone-mac-menubar)
+app (in `/Applications/Nix Apps`) and `rclone`. The app owns the schedule,
+sign-in, first resync and recovery, so nix configures no sync path, script or
+launch agent. After `darwin-rebuild switch`, launch the app, choose **Set Up
+OneDrive…** from its menu-bar icon, and pick the host's sync root above. To use
+an existing `onedrive` remote and mirror without a fresh resync, edit the app's
+`settings.json` instead (see the app's README).
 
-Example bootstrap for `s1`:
+##### NixOS (`s1`)
 
-```bash
-cd /srv/backups/onedrive
-touch RCLONE_TEST
-rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
-rclone-onedrive-resync
-```
+After `nixos-rebuild switch`, bootstrap the `rclone` remote manually:
+
+1. Run `rclone authorize onedrive` on a machine with a browser, or copy the
+   `[onedrive]` block from `~/.config/rclone/rclone.conf` on a configured Mac
+2. Create a remote named `onedrive` with `rclone config`, pasting that token
+3. Verify access with `rclone lsd onedrive:`
+4. Create the `RCLONE_TEST` sentinel on both sides and seed the mirror once
+   before the hourly timer takes over:
+
+   ```bash
+   cd /srv/backups/onedrive
+   touch RCLONE_TEST
+   rclone copyto RCLONE_TEST onedrive:/RCLONE_TEST
+   rclone-onedrive-resync
+   ```
 
 `--check-access` expects `RCLONE_TEST` to exist on both sides before the first
 `bisync`, so this is a one-time bootstrap step rather than an indication that
@@ -81,16 +80,9 @@ the remote auth is broken.
 
 If you don't want to wait for the next scheduled run after the initial resync:
 
-* On macOS:
-  ```bash
-  launchctl kickstart -k "gui/$(id -u)/org.home-network.rclone-onedrive"
-  ```
-* On NixOS (`s1`):
-  ```bash
-  sudo systemctl start rclone-onedrive-sync.service
-  ```
-
-Use `rclone authorize onedrive` only for headless setups (like `s1`), or copy the `[onedrive]` block from `~/.config/rclone/rclone.conf` on a configured Darwin machine. Local macOS hosts should just use `rclone config`.
+```bash
+sudo systemctl start rclone-onedrive-sync.service
+```
 
 Because the pilot uses separate local paths, rollback is straightforward: stop
 using the `onedrive-rclone` folder and continue with the native OneDrive app

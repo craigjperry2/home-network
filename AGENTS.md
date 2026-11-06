@@ -14,9 +14,9 @@
     installs
   * `modules/home/{linux,darwin}.nix` — shared Home Manager config per
     platform; both import `core.nix` (packages, programs, shell)
-  * `modules/home/neovim.nix`, `vscode.nix`, `s1-tools.nix`,
-    `darwin-rclone.nix` — Home Manager feature modules; large config files
-    live alongside in `neovim/` and `vscode/`
+  * `modules/home/neovim.nix`, `vscode.nix`, `s1-tools.nix` — Home Manager
+    feature modules; large config files live alongside in `neovim/` and
+    `vscode/`
   * `lib/ssh-keys.nix` — SSH public keys for Linux hosts and the installer
   * `pkgs/` — local package definitions
   * `scripts/bump-deps-pr.sh` — `nix flake update`, pin the menu-bar app's
