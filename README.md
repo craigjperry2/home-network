@@ -34,12 +34,11 @@ NB: tokens are not managed in this config, you'll have to manually sign in to se
 
 #### OneDrive via `rclone`
 
-The native Mac App Store OneDrive app is still kept around during the pilot.
-Alongside it, `rclone bisync` syncs OneDrive on the Darwin hosts (`d2`, `r2`)
-and the NixOS host `s1`. This uses `bisync`, not `rclone mount`, so `macFUSE`
-is not required.
+`rclone bisync` syncs OneDrive on the Darwin hosts (`d2`, `r2`) and the NixOS
+host `s1`; the native OneDrive app is no longer installed. This uses `bisync`,
+not `rclone mount`, so `macFUSE` is not required.
 
-The pilot sync roots are:
+The sync roots are:
 
 * `d2` → `/Volumes/d2 data/craig/onedrive-rclone`
 * `r2` → `/Users/craig/onedrive-rclone`
@@ -50,11 +49,16 @@ The pilot sync roots are:
 Every Mac installs the
 [OneDrive Rclone Menubar](https://github.com/craigjperry2/onedrive-rclone-mac-menubar)
 app (in `/Applications/Nix Apps`) and `rclone`. The app owns the schedule,
-sign-in, first resync and recovery, so nix configures no sync path, script or
-launch agent. After `darwin-rebuild switch`, launch the app, choose **Set Up
-OneDrive…** from its menu-bar icon, and pick the host's sync root above. To use
-an existing `onedrive` remote and mirror without a fresh resync, edit the app's
-`settings.json` instead (see the app's README).
+first resync and recovery. Home Manager writes its `settings.json`
+(`modules/home/onedrive-menubar.nix`) with the host's sync root from
+`homeNetwork.onedriveMenubar.localPath`, so there is no folder to pick in the
+app. The `onedrive` remote in `~/.config/rclone/rclone.conf` stays manual.
+
+After `darwin-rebuild switch`, launch the app. On a Mac without the remote yet,
+choose **Set Up OneDrive…** to sign in, keeping the sync root nix configured.
+If you choose another folder, the next switch puts nix's back. A mirror
+without bisync state needs `RCLONE_TEST` on both sides and one **Resync…**
+from the menu.
 
 ##### NixOS (`s1`)
 
@@ -83,10 +87,6 @@ If you don't want to wait for the next scheduled run after the initial resync:
 ```bash
 sudo systemctl start rclone-onedrive-sync.service
 ```
-
-Because the pilot uses separate local paths, rollback is straightforward: stop
-using the `onedrive-rclone` folder and continue with the native OneDrive app
-until the `rclone` workflow has been proven.
 
 ### Linux (Tailscale)
 
