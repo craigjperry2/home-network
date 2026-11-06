@@ -29,6 +29,8 @@ in {
   environment.systemPackages = [
     pkgs.neovim
     pkgs.mas
+    # The OneDrive menu-bar app finds rclone in /run/current-system/sw/bin.
+    pkgs.rclone
     unstable.herdr
     unstable.nixd
     unstable.alejandra

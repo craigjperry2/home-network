@@ -2,7 +2,7 @@
 {...}: {
   imports = [
     ./core.nix
-    ./darwin-rclone.nix
+    ./onedrive-menubar.nix
   ];
 
   home = {
