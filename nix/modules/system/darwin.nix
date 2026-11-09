@@ -69,6 +69,7 @@ in {
       "codex"
       "copilot-cli"
       "cursor"
+      "drawio"
       "font-jetbrains-mono-nerd-font"
       "firefox@developer-edition"
       "ghostty"
