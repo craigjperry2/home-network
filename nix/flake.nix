@@ -63,6 +63,10 @@
       url = "github:anomalyco/homebrew-tap";
       flake = false;
     };
+    anthropics-tap = {
+      url = "github:anthropics/homebrew-tap";
+      flake = false;
+    };
     whatcable-tap = {
       url = "github:darrylmorley/homebrew-whatcable";
       flake = false;
