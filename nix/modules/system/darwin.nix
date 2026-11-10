@@ -61,6 +61,7 @@ in {
       "agentsview"
       "amp-app"
       "anomalyco/tap/hex"
+      "ant"
       "antigravity-cli"
       "audacity"
       "chatgpt"
@@ -224,11 +225,13 @@ in {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
       "anomalyco/homebrew-tap" = inputs.anomalyco-tap;
+      "anthropics/homebrew-tap" = inputs.anthropics-tap;
       "darrylmorley/homebrew-whatcable" = inputs.whatcable-tap;
     };
     trust = {
       casks = [
         "anomalyco/homebrew-tap/hex"
+        "anthropics/homebrew-tap/ant"
         "darrylmorley/homebrew-whatcable/whatcable"
       ];
     };

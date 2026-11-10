@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "anthropics-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794251630,
+        "narHash": "sha256-XfE8qSjlZXcztQF8B3T0aTHAoA2CBGsP/sHxfC24RXY=",
+        "owner": "anthropics",
+        "repo": "homebrew-tap",
+        "rev": "b907118259bac0b5149d76b04769933c1697790c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anthropics",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "antigravity-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -282,6 +298,7 @@
     "root": {
       "inputs": {
         "anomalyco-tap": "anomalyco-tap",
+        "anthropics-tap": "anthropics-tap",
         "antigravity-nix": "antigravity-nix",
         "brew-src": "brew-src",
         "home-manager": "home-manager",
