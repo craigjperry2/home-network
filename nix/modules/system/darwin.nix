@@ -66,7 +66,7 @@ in {
       "audacity"
       "chatgpt"
       "claude"
-      "claude-code@latest"
+      "claude-code"
       "codex"
       "copilot-cli"
       "cursor"
